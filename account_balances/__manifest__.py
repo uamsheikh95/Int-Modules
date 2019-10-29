@@ -14,6 +14,9 @@
 	""",
 
 	'author': "Meisour LLC",
+		'images': [
+				   'static/description/AccountBalancepaymentInvoice.png'
+				   ],
 	'website': "http://www.meisour.com",
 
 	# Categories can be used to filter modules in modules listing
