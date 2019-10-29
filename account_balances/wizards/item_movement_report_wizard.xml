@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="item_movement_report_wizard_report_view" model="ir.ui.view">
+				<field name="name">Service report wizard</field>
+				<field name="model">item_movement_report.item_movement_report.wizard</field>
+				<field name="arch" type="xml">
+					<form>
+								<group>
+										<group>
+						<field name="date_from" string="From"/>
+												<field name="product_id" string="Product"/>
+
+								</group>
+										<group>
+						<field name="date_to" string="To"/>
+												<field name="stock_location_id" string="Location"/>
+								</group>
+
+								</group>
+
+
+						<footer>
+									<button name="check_report" string="Print" type="object" default_focus="1" class="oe_highlight" />
+									-
+									<button string="Cancel" class="oe_link" special="cancel" />
+							</footer>
+			</form>
+				</field>
+		</record>
+	<record id="all_item_movement_report_wizard_report_view" model="ir.ui.view">
+		<field name="name">Service report wizard</field>
+		<field name="model">item_movement_report.all_item_movement_report.wizard</field>
+		<field name="arch" type="xml">
+			<form>
+				<group>
+					<group>
+						<field name="date_from" string="From"/>
+						<field name="categ_id" string="Category"/>
+
+					</group>
+					<group>
+						<field name="date_to" string="To"/>
+						<field name="stock_location_id" string="Location"/>
+					</group>
+
+				</group>
+
+
+				<footer>
+					<button name="check_report" string="Print" type="object" default_focus="1" class="oe_highlight" />
+					-
+					<button string="Cancel" class="oe_link" special="cancel" />
+				</footer>
+			</form>
+		</field>
+	</record>
+
+	<record id="action_item_movement_report_wizard_report_view" model="ir.actions.act_window">
+				<field name="name">Generate item movement report</field>
+				<field name="res_model">item_movement_report.item_movement_report.wizard</field>
+				<field name="type">ir.actions.act_window</field>
+				<field name="view_type">form</field>
+				<field name="view_mode">form</field>
+				<field name="view_id" ref="item_movement_report_wizard_report_view"/>
+				<field name="target">new</field>
+		</record>
+	<record id="action_all_item_movement_report_wizard_report_view" model="ir.actions.act_window">
+				<field name="name">Generate All item movement report</field>
+				<field name="res_model">item_movement_report.all_item_movement_report.wizard</field>
+				<field name="type">ir.actions.act_window</field>
+				<field name="view_type">form</field>
+				<field name="view_mode">form</field>
+				<field name="view_id" ref="all_item_movement_report_wizard_report_view"/>
+				<field name="target">new</field>
+		</record>
+		<menuitem name="Item movement" id="item_movement_report.item_movement_report_menu"
+				 parent="stock.menu_warehouse_report"
+				 action="action_item_movement_report_wizard_report_view"
+			sequence="132"/>
+	<menuitem name="Item movement Summery" id="item_movement_report.all_item_movement_report_menu"
+				 parent="stock.menu_warehouse_report"
+				 action="action_all_item_movement_report_wizard_report_view"
+			sequence="133"/>
+
+
+
+</odoo>
