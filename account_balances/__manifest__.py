@@ -2,10 +2,10 @@
 {
 	'name': "Partner & Cash Balances in payment form",
 	'version': '1.0.1',
-	'price': 10.0,
 	'category' : 'Accounting',
-	'license': 'Other proprietary',
-	'currency': 'USD',
+	'license': 'OPL-1',
+	'price': '0.0',
+	'currency': 'EUR',
 	'summary': """View Supplier/Customer, Cash/Bank Balances on payment form.""",
 
 	'description': """
