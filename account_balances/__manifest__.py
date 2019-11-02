@@ -12,6 +12,9 @@
 		- View Payment Journal balance from payment form.
 		- View Payment Journal balance from register payment invoice form.
 	""",
+	'images': [
+			   'static/description/AccountBalancepaymentInvoice.png'
+			   ],
 
 	'author': "Meisour LLC",
 	'website': "http://www.meisour.com",
