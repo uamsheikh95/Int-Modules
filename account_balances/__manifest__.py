@@ -3,8 +3,10 @@
 	'name': "Account Balances",
 	'version': '1.0.1',
 	'category' : 'Accounting',
-	'license': 'Other proprietary',
-	'summary': """This app allow you to view payment journal balances.""",
+	'license': 'OPL-1',
+	'price': '0.0',
+	'currency': 'EUR',
+	'summary': """This module allow you to view payment journal balances.""",
 
 	'description': """
 		- View Payment Journal balance from payment form.
