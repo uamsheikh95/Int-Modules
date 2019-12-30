@@ -1,0 +1,27 @@
+<odoo>
+	<data>
+		<record id="depart_selected_form" model="ir.ui.view">
+            <field name="name">sahan_logistics.depart_selected.form</field>
+            <field name="model">sahan_logistics.depart_selected.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Depart Freight Bookings">
+                    <p class="oe_grey">
+                        Are you sure?
+                    </p>
+                    <footer>
+                        <button string="Depart" name="depart_selected" type="object" default_focus="1" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="action_depart_selected"
+            multi="True"
+            key2="client_action_multi" name="Depart"
+            res_model="sahan_logistics.depart_selected.wizard" src_model="sahan_logistics.freight_booking"
+            view_mode="form" target="new" view_type="form"
+			 />
+	</data>
+</odoo>
+

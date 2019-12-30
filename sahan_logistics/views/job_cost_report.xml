@@ -1,0 +1,107 @@
+<odoo>
+<data>
+
+
+    <report
+        id="action_job_cost_by_detail_report"
+        name="sahan_logistics.job_cost_by_detail_report"
+        model="sahan_logistics.freight_booking"
+        string="Job Ledger"
+        report_type="qweb-pdf"
+        />
+
+    <template id="job_cost_by_detail_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" >
+						<h2>
+							Job Ledger
+						</h2>
+
+						<table class="table table-sm o_main_table">
+							<thead>
+								<tr>
+									 <th class="text-left">Job No.</th>
+									 <th class="text-right">Date</th>
+									 <th class="text-right">Shipment Type</th>
+									 <th class="text-right">Consignee</th>
+									 <th class="text-right">C Phone</th>
+									 <th class="text-right">Total Qty</th>
+									 <th class="text-right">Total Weight</th>
+<!--									 <th class="text-right">Total Invoiced</th>-->
+<!--									 <th class="text-right">Discount</th>-->
+<!--									  <th class="text-right">Amount Paid</th>-->
+<!--									 <th class="text-right">Job Cost</th>-->
+<!--									 <th class="text-right">Profit</th>-->
+								</tr>
+							</thead>
+
+							<tbody>
+								 <tr>
+									 <td class="text-left"><span t-field="doc.name"/></td>
+									 <td class="text-right"><span t-field="doc.job_date"/></td>
+									 <td class="text-right"><span t-field="doc.shipment_type"/></td>
+									 <td class="text-right"><span t-field="doc.partner_id"/></td>
+									 <td class="text-right"><span t-field="doc.partner_id.phone"/></td>
+									 <td class="text-right"><span t-field="doc.qty"/></td>
+									 <td class="text-right"><span t-field="doc.chargeable_weight"/></td>
+<!--										 <td class="text-right"><span t-field="doc.invoice_id.amount_total"/></td>-->
+<!--										 <td class="text-right"><span t-field="doc.discount_total"/></td>-->
+<!--										 <td class="text-right"><span t-field="doc.amount_paid"/></td>-->
+<!--										 <td class="text-right"><span t-field="doc.total_bills"/></td>-->
+<!--										 <td class="text-right"><span t-field="doc.total_debit_credit"/></td>-->
+								 </tr>
+
+							</tbody>
+						</table>
+
+						<table class="table table-sm o_main_table" style="width:30%;float:right">
+								<tbody>
+									<tr class="is-subtotal text-left">
+										<td colspan="99">
+											<strong class="mr16">Total Invoiced</strong>
+											<span style="float:right" t-field="doc.invoice_id.amount_total"/>
+										</td>
+									</tr>
+
+									<tr class="is-subtotal text-left">
+										<td colspan="99">
+											<strong class="mr16">Discount</strong>
+											<span style="float:right" t-field="doc.discount_total"/>
+										</td>
+									</tr>
+
+									<tr class="is-subtotal text-left">
+										<td colspan="99">
+											<strong class="mr16">Amount Paid</strong>
+											<span style="float:right" t-field="doc.amount_paid"/>
+										</td>
+									</tr>
+
+									<tr class="is-subtotal text-left">
+										<td colspan="99">
+											<strong class="mr16">Job Cost</strong>
+											<span style="float:right" t-field="doc.total_bills"/>
+										</td>
+									</tr>
+
+									<tr class="is-subtotal text-left">
+										<td colspan="99">
+											<strong class="mr16">Total</strong>
+											<span style="float:right" t-field="doc.total_debit_credit"/>
+										</td>
+									</tr>
+
+								</tbody>
+						</table>
+
+                    </div>
+                </t>
+            </t>
+
+        </t>
+    </template>
+
+</data>
+</odoo>

@@ -1,0 +1,118 @@
+<odoo>
+	<data>
+
+		
+
+		<report
+			id="action_packing_list_report"
+			name="sahan_logistics.packing_list"
+			file="sahan_logistics.packing_list"
+			model="sahan_logistics.freight_booking"
+			string="Packing List"
+			report_type="qweb-pdf"
+			/>
+
+		<template id="packing_list">
+			<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="doc">
+					<t t-call="web.external_layout">
+						<div class="page" >
+							<h2>
+                                Packing List
+                            </h2>
+
+                            <div id="informations" class="row mt32 mb32">
+								<div class="col-auto mw-100 mb-2">
+									<strong>Description:</strong>
+									<p class="m-0" t-field="doc.name"/>
+								</div>
+
+								<div class="col-auto mw-100 mb-2">
+									<strong>Consignee:</strong>
+									<p class="m-0" t-field="doc.partner_id"/>
+								</div>
+
+								<div class="col-auto mw-100 mb-2">
+									<strong>C Phone:</strong>
+									<p class="m-0" t-field="doc.partner_id.phone"/>
+								</div>
+
+								<div class="col-auto mw-100 mb-2">
+									<strong>Date:</strong>
+									<p class="m-0" t-field="doc.job_date"/>
+								</div>
+
+								<div class="col-auto mw-100 mb-2">
+									<strong>Invoice:</strong>
+									<p class="m-0" t-field="doc.invoice_id"/>
+								</div>
+
+								<div class="col-auto mw-100 mb-2">
+									<strong>Shipment:</strong>
+									<p class="m-0" t-field="doc.shipment_id"/>
+								</div>
+							</div>
+
+                            <table class="table table-sm o_main_table">
+								<thead>
+									<tr>
+										<!-- TODO: remove in master -->
+										<th class="text-left"><span>No</span></th>
+										<th class="text-right"><span>Waybil</span></th>
+										<th colspan="4" class="text-right"><span>Description</span></th>
+										<th class="text-right"><span>Qty</span></th>
+										<th class="text-right"><span>V Weight</span></th>
+										<th class="text-right"><span>A Weight</span></th>
+										<th colspan="2" class="text-right"><span>Remark</span></th>
+									</tr>
+								</thead>
+								<tbody>
+                                    <t t-foreach="doc.packing_list_line_ids" t-as="park">
+										<tr>
+											<td class="text-left"><span t-esc="park_index+1"/></td>
+											<td class="text-right"><span t-field="park.waybil"/></td>
+											<td colspan="4" class="text-right"><span t-field="park.name"/></td>
+											<td class="text-right"><span t-field="park.qty"/></td>
+											<td class="text-right"><span t-field="park.volume_weight"/></td>
+											<td class="text-right"><span t-field="park.actual_weight"/></td>
+											<td colspan="2" class="text-right"><span t-field="park.remarks"/></td>
+										</tr>
+									</t>
+
+								</tbody>
+							</table>
+
+							<table class="table table-sm o_main_table" style="width:30%;float:right">
+								<tbody>
+									<tr class="text-left">
+                                        <td colspan="99">
+                                            <strong class="mr16">Total QTY</strong>
+                                            <span style="float:right" t-field="doc.qty"/>
+                                        </td>
+                                    </tr>
+
+									<tr class="text-left">
+                                        <td colspan="99">
+                                            <strong class="mr16">Total Actual Weight</strong>
+                                            <span style="float:right" t-field="doc.actual_weight"/>
+                                        </td>
+                                    </tr>
+
+									<tr class="text-left">
+                                        <td colspan="99">
+                                            <strong class="mr16">Total Volume Weight</strong>
+                                            <span style="float:right" t-field="doc.chargeable_weight"/>
+                                        </td>
+                                    </tr>
+								</tbody>
+							</table>
+
+						</div>
+					</t>
+				 </t> 
+
+			</t>
+		</template>
+
+	</data>
+</odoo>

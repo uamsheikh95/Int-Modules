@@ -1,0 +1,111 @@
+<odoo>
+	<data>
+
+		
+
+		<report
+        id="action_sahan_airway_report_report"
+        name="sahan_logistics.airway_report_report"
+        file="sahan_logistics.airway_report_report"
+        model="sahan_logistics.freight_booking"
+        string="Airwaybil"
+        report_type="qweb-pdf"
+        />
+
+		<template id="airway_report_report">
+			<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="doc">
+					<t t-call="web.external_layout">
+						<div class="page" >
+							 <h2>
+                                Airwaybil
+                            </h2>
+
+							<div id="informations" class="row mt32 mb32">
+								<div class="col-auto mw-100 mb-2">
+									<strong>Job:</strong>
+									<p class="m-0" t-field="doc.name"/>
+								</div>
+
+								<div class="col-auto mw-100 mb-2">
+									<strong>Date:</strong>
+<!--									<p class="m-0" t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>-->
+									<p class="m-0" t-field="doc.job_date"/>
+								</div>
+
+								<div class="col-auto mw-100 mb-2">
+									<strong>Consignee:</strong>
+									<p class="m-0" t-field="doc.partner_id"/>
+								</div>
+
+								<div class="col-auto mw-100 mb-2">
+									<strong>Invoice:</strong>
+									<p class="m-0" t-field="doc.invoice_id"/>
+								</div>
+							</div>
+
+							<table class="table table-bordered">
+								<tbody>
+									<tr>
+										<td style="width:25%"><strong>Shipment</strong></td>
+										<td style="width:25%"><span t-field="doc.shipment_id"/></td>
+
+										<td style="width:25%"><strong>Customer Ref</strong></td>
+										<td style="width:25%"><span t-field="doc.partner_ref"/></td>
+									</tr>
+									<tr>
+										<td style="width:25%"><strong>Port of Loading</strong></td>
+										<td style="width:25%"><span t-field="doc.port_of_loading_id"/></td>
+
+										<td style="width:25%"><strong>HAWB</strong></td>
+										<td style="width:25%"><span t-field="doc.hawb"/></td>
+									</tr>
+									<tr>
+										<td style="width:25%"><strong>Port of Discharge</strong></td>
+										<td style="width:25%"><span t-field="doc.port_of_discharge_id"/></td>
+
+										<td style="width:25%"><strong>MAWB</strong></td>
+										<td style="width:25%"><span t-field="doc.mawb"/></td>
+									</tr>
+									<tr>
+										<td style="width:25%"><strong>Port of Delivery</strong></td>
+										<td><span t-field="doc.port_of_delivery_id"/></td>
+
+										<td style="width:25%"><strong>QTY</strong></td>
+										<td style="width:25%"><span t-field="doc.qty"/></td>
+									</tr>
+									<tr>
+										<td style="width:25%"><strong>Customs Doc Ref</strong></td>
+										<td style="width:25%"><span t-field="doc.customs_doc_ref"/></td>
+
+										<td style="width:25%"><strong>Actual Weight</strong></td>
+										<td style="width:25%"><span t-field="doc.actual_weight"/></td>
+									</tr>
+
+									<tr>
+										<td style="width:25%"><strong>Carrier</strong></td>
+										<td style="width:25%"><span t-field="doc.carrier_id"/></td>
+
+										<td style="width:25%"><strong>Volume Weight</strong></td>
+										<td style="width:25%"><span t-field="doc.chargeable_weight"/></td>
+									</tr>
+
+									<tr>
+										<td style="width:25%"><strong>Bill of Loading</strong></td>
+										<td style="width:25%"><span t-field="doc.bill_of_landing"/></td>
+
+										<td style="width:25%"><strong>Job Date</strong></td>
+										<td style="width:25%"><span t-field="doc.job_date"/></td>
+									</tr>
+								</tbody>
+							</table>
+
+						</div>
+					</t>
+				 </t> 
+
+			</t>
+		</template>
+
+	</data>
+</odoo>

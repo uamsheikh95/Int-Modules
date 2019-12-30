@@ -1,0 +1,186 @@
+<odoo>
+	<data>
+	
+	<!--INHERIT PROJECT.TASK FORM VIEW-->
+	<record model="ir.ui.view" id="task_view">
+        <field name="name">project.task</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+		<field name="arch" type="xml">
+	
+	
+		
+			<group position="after">
+				<group>
+					<group>
+						<field name='source_location'/>
+					</group>
+					
+					<group>
+						<field name='destination_location'/>
+					</group>
+				</group>
+			</group>
+			
+			
+			<!--<xpath expr="//field[@name='truck_amount']" position="after">
+
+			</xpath>-->
+			
+		</field>
+	</record>
+	
+	
+	
+	<!--INHERIT PRODUCT.PRODUCT FORM VIEW-->
+		<record model="ir.ui.view" id="inherit_product_form_view">
+			<field name="name">product.form</field>
+			<field name="model">product.template</field>
+			<field name="inherit_id" ref="product.product_template_only_form_view"/>
+			<field name="arch" type="xml">
+		
+				
+			<notebook position="before">
+				<div style = "width:30%;margin-left:100px;">
+					<field name = "is_a_move" />
+					<label for="is_a_move">Is a Move</label>
+				</div>
+			</notebook>
+				
+			</field>
+		</record>
+	
+		<!--INHERIT PROJECT.PROJECT FORM VIEW-->
+		<record model="ir.ui.view" id="inherit_project_form_view">
+			<field name="name">project.form</field>
+			<field name="model">project.project</field>
+			<field name="inherit_id" ref="project.edit_project"/>
+			<field name="arch" type="xml">
+			
+				
+				<!--<xpath expr="/form/header" position="inside">
+						<button string="Create Invoice" type="object" name="create_invoice" class="oe_highlight" attrs="{'invisible': [('state', 'in', ['invoiced'])]}"/>
+						<field name="state" widget="statusbar" statusbar_visible="to_invoice,invoiced"/>
+				</xpath>-->
+				
+				<xpath expr="//sheet" position="before">
+					<header>
+						<button string="Create Invoice" type="object" name="create_invoice" class="oe_highlight" attrs="{'invisible': [('state', 'in', ['invoiced'])]}"/>
+						<field name="state" widget="statusbar" statusbar_visible="to_invoice,invoiced"/>
+					</header>
+				</xpath>
+				
+			<!--</xpath>-->
+			
+				<div class="oe_title" position = "replace">
+					<div class="oe_title" style = "width:618px">
+						<h1>
+							<field name="name" placeholder="Project Name"/>
+						</h1>
+					</div>
+				</div>
+				
+				<div class="oe_title" position = "after">
+					<group>
+						<group>
+							<field name="label_tasks" class="oe_inline oe_input_align" string="Name of the tasks"/>
+							<field name='proj_code'/>
+						</group>
+						
+						<group>
+							<field name = "service_type" required = "1" />
+							<field name="analytic_account_id" required="0" readonly="1" context="{'code':'hmmm'}"/>
+						</group>
+					</group>
+				</div>
+			
+				<notebook position="inside">
+				
+					<page string="Cost Estimation" sequence="2">
+						<field name = "cost_estimation_ids" context="{'default_project_id': id}">
+							<tree editable = "bottom">
+								<field name = "item" />
+								<field name = "price_unit" />
+								<field name = "discount" />
+								<field name = "price_disc" />
+								<field name = "quantity" />
+								<field name = "amount" />
+							</tree>
+						</field>
+						
+						<!--<div style = "text-align: right;">
+							<label for="total">Sub Total: </label>
+							<field name = "total" />
+						</div> <br />-->
+						
+						<table class = "table table-condensed" style = "font-size:13px;width:40%;float:right">
+							<tbody>
+								<tr>
+									<td><strong>Sub Total :</strong></td>
+									<td style = "text-align: right;" colspan = "2"><strong><field name = "total" /></strong></td>
+								</tr> 
+								<tr></tr>
+								
+								<tr>
+									<td><strong>Sales Commission (%)</strong></td>
+									<td><field name = "sales_comn" style = "border-bottom:none;text-align:center" /></td>
+									<td style = "text-align: right;"><strong><field name = "sales_comn_total" /></strong></td>
+								</tr>
+								
+								<tr>
+									<td><strong>Profit Margin (%)</strong></td>
+									<td><field name = "profit_margin" style = "border-bottom:none;text-align:center" /></td>
+									<td style = "text-align: right;"><strong><field name = "profit_margin_total" /></strong></td>
+								</tr>
+								
+								<tr>
+									<td><strong>Gross Amount</strong></td>
+									<td colspan = "2" style = "text-align: right;font-size: 14px;"><strong><field name = "gross_amount" /></strong></td>
+								</tr>
+							</tbody>
+						</table>
+						
+					</page>
+					
+					
+					<page string="Packing List" sequence="3">
+			
+						<group>
+							<group>
+								<field name = "no_of_rooms" />
+								<field name = "floor_no" />
+								<field name = "shifting_day" />
+							</group>
+							
+							<group>
+								<field name = "lift_avaliable" />
+								<field name = "free_parking" />
+								<field name = "shifting_time" />
+							</group>
+						</group>
+					
+						<field name = "packing_list_ids" context="{'default_project_id': id}">
+							<tree editable = "bottom">
+								<field name = "item" />
+								<field name = "quantity" />
+								<field name = "length" />
+								<field name = "width" />
+								<field name = "height" />
+								<field name = "measure" />
+								<field name = "volume" />
+								<field name = "fragile" />
+								<field name = "remarks" />
+							</tree>
+						</field>
+						
+						<field name = "quantity_total" style = "margin-left:218px;font-size:14px;font-weight:bold" />
+						<field name = "volume_total" style = "float:right;margin-right:229px;font-size:14px;font-weight:bold" />
+						
+					</page>
+	
+					
+				</notebook>
+			</field>
+		</record>
+	</data>
+</odoo>

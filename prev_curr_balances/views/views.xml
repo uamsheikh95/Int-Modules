@@ -1,0 +1,60 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="prev_curr_balances.list">
+      <field name="name">prev_curr_balances list</field>
+      <field name="model">prev_curr_balances.prev_curr_balances</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+    -->
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="prev_curr_balances.action_window">
+      <field name="name">prev_curr_balances window</field>
+      <field name="res_model">prev_curr_balances.prev_curr_balances</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="prev_curr_balances.action_server">
+      <field name="name">prev_curr_balances server</field>
+      <field name="model_id" ref="model_prev_curr_balances_prev_curr_balances"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="prev_curr_balances" id="prev_curr_balances.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="prev_curr_balances.menu_1" parent="prev_curr_balances.menu_root"/>
+    <menuitem name="Menu 2" id="prev_curr_balances.menu_2" parent="prev_curr_balances.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="prev_curr_balances.menu_1_list" parent="prev_curr_balances.menu_1"
+              action="prev_curr_balances.action_window"/>
+    <menuitem name="Server to list" id="prev_curr_balances" parent="prev_curr_balances.menu_2"
+              action="prev_curr_balances.action_server"/>
+    -->
+  </data>
+</odoo>

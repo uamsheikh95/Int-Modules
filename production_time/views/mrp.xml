@@ -1,0 +1,15 @@
+<odoo>
+  <record id="mrp_production_time" model="ir.ui.view">
+        <field name="name">mrp.production.form1</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view" />
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+               <!-- CUSTOMIZATIONS -->
+               <xpath expr="//field[@name='origin']" position="after">
+                 <field name="production_time" string="Mechine Working Time" />
+              </xpath>
+        </field>
+    </record>
+
+</odoo>
