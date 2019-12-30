@@ -1,0 +1,36 @@
+<odoo>
+  <data>
+    <template id="add_partner_balance_to_invoice" inherit_id="account.report_invoice_document">
+        <!-- <xpath expr="//div[@id='informations']" position="inside">
+          <t t-if="o.type == 'out_invoice'">
+            <div class="col-auto mw-100 mb-2" t-if="o.state != 'draft'">
+                <strong>Previous Balance:</strong>
+                <p t-field="o.partner_balance" t-options='{"widget": "monetary"}'/>
+            </div>
+
+
+            <div class="col-auto mw-100 mb-2" t-if="o.state != 'draft'">
+                <strong>Current Balance:</strong>
+                <p t-field="o.current_balance" t-options='{"widget": "monetary"}'/>
+            </div>
+        </t>
+        </xpath> -->
+
+        <xpath expr="//div[@class='clearfix']//div[@id='total']//div" position="before">
+          <div style="width:30%;padding-top: 12px;position:absolute" t-if="o.state != 'draft'">
+
+                  <span style="float:right"><strong>Previous Balance : </strong><span t-field="o.partner_balance" t-options='{"widget": "monetary"}'/></span><br/>
+                  <span style="float:right"><strong>Current Balance : </strong><span t-field="o.current_balance" t-options='{"widget": "monetary"}'/></span>
+                  <!-- <td><strong>Current Balance</strong></td>
+                  <td class="text-right">
+                    <p t-field="o.current_balance" t-options='{"widget": "monetary"}'/>
+                  </td>
+                </tr>
+              </tbody>
+            </table> -->
+          </div>
+        </xpath>
+
+    </template>
+  </data>
+</odoo>

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <report
+        id="action_advance_payment_receipt"
+        name="account_balances.advance_payment_receipt"
+        model="account.payment"
+        string="Advance Payment Receipt"
+        report_type="qweb-html"
+    />
+
+    <template id="advance_payment_receipt">
+      <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+          <t t-call="web.internal_layout">
+            <div class="page">
+              <div style="border: 1px solid #000;padding:35px;box-sizing:border-box;">
+                <h1 style="background: #fff; width: 325px;border:1px solid;padding:4px;margin: auto auto; margin-top: -36px;margin-bottom:20px;">Payment Receipt</h1>
+
+                <table style="width:100%">
+                  <tbody>
+                    <td style="width:2%"><strong>No. </strong></td>
+                    <td nowrap="nowrap" style="width:12%;text-align:center;text-decoration:underline"><span t-field="doc.name"/></td>
+                    <td></td>
+                    <td></td>
+                    <td style="width:18%;text-align:right"><strong>Date: </strong></td>
+                    <td nowrap="nowrap" style="width:12%;text-align:center;text-decoration:underline"><span t-field="doc.payment_date"/></td>
+                  </tbody>
+                </table>
+
+                <table style="width:100%;    margin-top: 40px;">
+                  <tbody>
+                    <tr style="height:35px;">
+                      <td nowrap="nowrap" style="width:15%">
+                        <t t-if="doc.payment_type == 'inbound'">
+                          <strong>Received from: </strong>
+                        </t>
+
+                        <t t-if="doc.payment_type == 'outbound'">
+                          <strong>Paid to: </strong>
+                        </t>
+                      </td>
+                      <td colspan="5" style="border-bottom:2px solid #000"><span t-field="doc.partner_id"/></td>
+					  <td style="text-align:center;border-bottom:2px solid #000"><span t-field="doc.amount"/></td>
+
+                    </tr>
+
+                    <tr t-if="doc.check_amount_in_words" style="height:35px;">
+                      <td style="width:12%"><strong>In words: </strong></td>
+                      <td colspan="6" style="border-bottom:2px solid #000"><span t-field="doc.check_amount_in_words"/></td>
+                    </tr>
+
+                    <tr style="height:35px;">
+                      <td style="width:12%"><strong>Memo: </strong></td>
+                      <td colspan="6" style="border-bottom:2px solid #000"><span t-field="doc.communication"/></td>
+                    </tr>
+                    <tr style="height:35px;">
+                      <td style="width:12%"><strong>Amt Due: </strong></td>
+
+                      <t t-set="amount_due" t-value="0"/>
+                      <td style="text-align:center;border-bottom:2px solid #000">
+                        <t t-if="doc.state == 'draft'">
+                          <t t-set="amount_due" t-value="doc.partner_id.credit"/>
+                          <span t-esc="'%.2f'% amount_due"/>
+                        </t>
+
+                        <t t-if="doc.state != 'draft'">
+                          <t t-set="amount_due" t-value="doc.partner_id.credit+doc.amount"/>
+                          <span t-esc="'%.2f'% amount_due"/>
+                        </t>
+                      </td>
+
+                      <td style="text-align:center;border-bottom:2px solid #000"></td>
+
+                      <td style="width:12%;text-align:center"><strong>Amt Paid: </strong></td>
+                      <td style="text-align:center;border-bottom:2px solid #000"><span t-field="doc.amount"/></td>
+
+                      <td style="width:12%;text-align:center"><strong>Balance: </strong></td>
+                      <td style="text-align:center;border-bottom:2px solid #000">
+                        <t t-set="balance" t-value="amount_due+doc.amount"/>
+                        <span t-esc="'%.2f'% balance" t-field-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                      </td>
+                    </tr>
+
+                    <tr style="height:35px;">
+                      <td nowrap="nowrap" style="width:12%"><strong>Payment Method: </strong></td>
+                      <td style="text-align:center;border-bottom:2px solid #000">
+                        <t t-if="doc.payment_method_id.code == 'manual'">
+                          Cash
+                        </t>
+                        <t t-if="doc.payment_method_id.code == 'check_printing'">
+                          Check
+                        </t>
+                      </td>
+
+                      <t t-if="doc.payment_method_id.code == 'check_printing'">
+                        <td style="width:12%;text-align:center"><strong>Check no. </strong></td>
+                        <td style="text-align:center;border-bottom:2px solid #000">100019</td>
+                      </t>
+
+                    </tr>
+                  </tbody>
+                </table>
+
+                <table style="width:100%;margin-top:20px">
+                  <tbody>
+                    <td style="width:12%"><strong>Received by:</strong></td>
+                    <td nowrap="nowrap" style="width:12%;text-align:center;border-bottom:2px solid #000"><span t-field="doc.create_uid"/></td>
+                    <td></td>
+                    <td></td>
+                    <td style="width:12%;text-align:right"><strong>Signature: </strong></td>
+                    <td style="width:17%;text-align:center;border-bottom:2px solid #000"></td>
+                  </tbody>
+                </table>
+              </div>
+
+<!-- Copy -->
+              <div style="margin:auto auto;border-bottom:3px dashed #000;margin: 45px 0 45px 0;"></div>
+
+              <div style="border: 1px solid #000;padding:35px;box-sizing:border-box;position:relative">
+                <h1 style="background: #fff; width: 435px;border:1px solid;padding:4px;margin: auto auto; margin-top: -36px;margin-bottom:20px;">Payment Receipt(Copy)</h1>
+
+                <table style="width:100%">
+                  <tbody>
+                    <td style="width:2%"><strong>No. </strong></td>
+                    <td nowrap="nowrap" style="width:12%;text-align:center;text-decoration:underline"><span t-field="doc.name"/></td>
+                    <td></td>
+                    <td></td>
+                    <td style="width:18%;text-align:right"><strong>Date: </strong></td>
+                    <td nowrap="nowrap" style="width:12%;text-align:center;text-decoration:underline"><span t-field="doc.payment_date"/></td>
+                  </tbody>
+                </table>
+
+                <table style="width:100%;    margin-top: 40px;">
+                  <tbody>
+                    <tr style="height:35px;">
+                      <td nowrap="nowrap" style="width:15%">
+                        <t t-if="doc.payment_type == 'inbound'">
+                          <strong>Received from: </strong>
+                        </t>
+
+                        <t t-if="doc.payment_type == 'outbound'">
+                          <strong>Paid to: </strong>
+                        </t>
+                      </td>
+                      <td colspan="5" style="border-bottom:2px solid #000"><span t-field="doc.partner_id"/></td>
+					  <td style="text-align:center;border-bottom:2px solid #000"><span t-field="doc.amount"/></td>
+
+                    </tr>
+
+                    <tr t-if="doc.check_amount_in_words" style="height:35px;">
+                      <td style="width:12%"><strong>In words: </strong></td>
+                      <td colspan="6" style="border-bottom:2px solid #000"><span t-field="doc.check_amount_in_words"/></td>
+                    </tr>
+
+                    <tr style="height:35px;">
+                      <td style="width:12%"><strong>Memo: </strong></td>
+                      <td colspan="6" style="border-bottom:2px solid #000"><span t-field="doc.communication"/></td>
+                    </tr>
+                    <tr style="height:35px;">
+                      <td style="width:12%"><strong>Amt Due: </strong></td>
+
+                      <t t-set="amount_due" t-value="0"/>
+                      <td style="text-align:center;border-bottom:2px solid #000">
+                        <t t-if="doc.state == 'draft'">
+                          <t t-set="amount_due" t-value="doc.partner_id.credit"/>
+                          <span t-esc="'%.2f'% amount_due"/>
+                        </t>
+
+                        <t t-if="doc.state != 'draft'">
+                          <t t-set="amount_due" t-value="doc.partner_id.credit+doc.amount"/>
+                          <span t-esc="'%.2f'% amount_due"/>
+                        </t>
+                      </td>
+
+                      <td style="text-align:center;border-bottom:2px solid #000"></td>
+
+                      <td style="width:12%;text-align:center"><strong>Amt Paid: </strong></td>
+                      <td style="text-align:center;border-bottom:2px solid #000"><span t-field="doc.amount"/></td>
+
+                      <td style="width:12%;text-align:center"><strong>Balance: </strong></td>
+                      <td style="text-align:center;border-bottom:2px solid #000">
+                        <t t-set="balance" t-value="amount_due+doc.amount"/>
+                        <span t-esc="'%.2f'% balance" t-field-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                      </td>
+                    </tr>
+
+                    <tr style="height:35px;">
+                      <td nowrap="nowrap" style="width:12%"><strong>Payment Method: </strong></td>
+                      <td style="text-align:center;border-bottom:2px solid #000">
+                        <t t-if="doc.payment_method_id.code == 'manual'">
+                          Cash
+                        </t>
+                        <t t-if="doc.payment_method_id.code == 'check_printing'">
+                          Check
+                        </t>
+                      </td>
+
+                      <t t-if="doc.payment_method_id.code == 'check_printing'">
+                        <td style="width:12%;text-align:center"><strong>Check no. </strong></td>
+                        <td style="text-align:center;border-bottom:2px solid #000">100019</td>
+                      </t>
+
+                    </tr>
+                  </tbody>
+                </table>
+
+                <table style="width:100%;margin-top:20px">
+                  <tbody>
+                    <td style="width:12%"><strong>Received by:</strong></td>
+                    <td nowrap="nowrap" style="width:12%;text-align:center;border-bottom:2px solid #000"><span t-field="doc.create_uid"/></td>
+                    <td></td>
+                    <td></td>
+                    <td style="width:12%;text-align:right"><strong>Signature: </strong></td>
+                    <td style="width:17%;text-align:center;border-bottom:2px solid #000"></td>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </t>
+        </t>
+      </t>
+    </template>
+</odoo>

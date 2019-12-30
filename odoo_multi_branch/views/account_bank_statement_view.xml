@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<data>
+				<record id="view_bank_statement_form_inherit_company_branch" model="ir.ui.view">
+						<field name="name">account.bank.statement.inherit.company.branch</field>
+						<field name="model">account.bank.statement</field>
+						<field name="inherit_id" ref="account.view_bank_statement_form"/>
+						<field name="arch" type="xml">
+								<xpath expr="//field[@name='company_id']" position="after">
+										<field name="company_branch_id" groups="odoo_multi_branch.group_multi_branches" widget="selection" options="{'no_create': True}"/>
+								</xpath>
+								<xpath expr="//notebook/page/field[@name='line_ids']/tree/field[@name='partner_id']" position="replace">
+									<field name="company_branch_id"  invisible="1"/>
+									<field name="partner_id" domain="['|', ('parent_id', '=', False), ('is_company', '=', True),'|',('company_branch_id', '=', company_branch_id),('company_branch_id', '=',False)]"
+											 context="{'default_supplier': 1}"
+											 attrs="{'readonly' : [('journal_entry_ids', '!=', [])] }"/>
+								</xpath>
+						</field>
+				</record>
+		</data>
+</odoo>

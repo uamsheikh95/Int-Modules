@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<data>
+				<record id="partner_branch_report_view_pivot" model="ir.ui.view">
+						<field name="name">odoo_multi_branch.partner.branch.report.pivot</field>
+						<field name="model">odoo_multi_branch.partner.branch.report.view</field>
+						<field name="arch" type="xml">
+								<pivot string="Receivable Analysis">
+										<field name="res_company_branch" type="row"/>
+										<field name="total"  type="measure"/>
+								</pivot>
+						</field>
+				</record>
+
+				<record id="partner_branch_report_view_graph" model="ir.ui.view">
+						<field name="name">Receivables Summary Graph</field>
+						<field name="model">odoo_multi_branch.partner.branch.report.view</field>
+						<field name="arch" type="xml">
+								<graph string="Receivable Analysis">
+										<field name="res_company_branch" type="row"/>
+										<field name="partner_id" />
+										<field name="total" type="measure"/>
+								</graph>
+						</field>
+				</record>
+				<record id="partner_branch_report_view_search" model="ir.ui.view">
+					 <field name="name">Summary Search</field>
+					 <field name="model">odoo_multi_branch.partner.branch.report.view</field>
+					 <field name="priority" eval="8" />
+						 <field name="arch" type="xml">
+							 <search string="Search">
+								 <field name="partner_id" />
+								 <field name="total" />
+								 <field name="res_company_branch" />
+							 </search>
+					 </field>
+			 </record>
+
+				<record id="action_partner_branch_view_report" model="ir.actions.act_window">
+						<field name="res_model">odoo_multi_branch.partner.branch.report.view</field>
+						<field name="name">Receivables Summary By Branch</field>
+						<!-- <field name="view_type">form</field> -->
+						<field name="view_mode">graph,pivot</field>
+				</record>
+				<menuitem action="odoo_multi_branch.action_partner_branch_view_report" id="menu_partner_branch_report" name="Receivables Summary" parent="account.account_reports_management_menu" sequence="101"/>
+		</data>
+</odoo>
