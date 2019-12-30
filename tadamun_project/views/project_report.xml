@@ -1,0 +1,829 @@
+<odoo>
+<data>
+    <template id="background_layout" inherit_id="web.external_layout_background">
+        <xpath expr="//div[@class='header o_background_header']" position="replace">
+            <div class="header o_background_header">
+                <div class="col-xs-12 text-center">
+                    <img t-if="company.logo" style = "max-height:105px;max-width:400px" src="/tadamun_project/static/src/img/Picture1.png"/>
+                </div>
+
+                <div class="clearfix mb8"/>
+            </div>
+
+        </xpath>
+
+
+
+
+    </template>
+
+    <report
+        id="action_project_report"
+        name="tadamun_project.project_report"
+        file="tadamun_project.project_report"
+        model="project.project"
+        string="Project"
+        report_type="qweb-pdf"
+        />
+
+    <template id="project_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" >
+                        <div class="row">
+                        	<div class="col-md-12">
+                        		<div class="">
+									<!--Coverpage-->
+									<h3 class="text-center">Coverpage</h3>
+								
+                                    <table class = "table table-bordered" style = "font-size : 11px">
+										<tbody>
+											<tr>
+												<td nowrap="nowrap"><strong>Project Title</strong></td>
+												<td colspan = "5"><span t-field="doc.project_title"/></td>
+											</tr>
+											
+											<tr>
+												<td nowrap="nowrap"><strong>Fund Project Code</strong></td>
+												<td colspan = "3"><span t-field="doc.fund_project_code"/></td>
+
+												<td nowrap="nowrap"><strong>External/Organization's Project Code</strong></td>
+												<td colspan = "3"><span t-field="doc.organizations_project_code"/></td>
+											</tr>
+											
+											<tr>
+												<td nowrap="nowrap"><strong>Project Location</strong></td>
+												<td colspan = "3"><span t-field="doc.project_location.name"/></td>
+
+												<td nowrap="nowrap"><strong>Project Budget in US$</strong></td>
+												<td colspan = "3"><span t-field="doc.project_budget_in_us"/></td>
+											</tr>
+											
+											<tr>
+												<td ><strong>Planned Start Date</strong></td>
+												<td colspan = "3"><span t-field="doc.planned_start_date"/></td>
+
+												<td ><strong>Planned End Date</strong></td>
+												<td colspan = "3"><span t-field="doc.planned_end_date"/></td>
+											</tr>
+											
+											<tr>
+												<td ><strong>Actual Start Date</strong></td>
+												<td colspan = "3"><span t-field="doc.actual_start_date"/></td>
+
+												<td ><strong>Actual End Date</strong></td>
+												<td colspan = "3"><span t-field="doc.actual_end_date"/></td>
+											</tr>
+											
+											<tr>
+												<td ><strong>Project Duration</strong></td>
+												<td colspan = "5"><span t-field="doc.project_duration"/></td>
+											</tr>
+											
+											<tr>
+												<td ><strong>Project Summery</strong></td>
+												<td colspan = "5"><span t-field="doc.project_summery"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									<table class = "table table-bordered" style = "font-size : 11px">
+										<tbody>
+											<tr>
+												<td></td>
+												<td><strong>Boys</strong></td>
+												<td><strong>Girls</strong></td>
+												<td><strong>Men</strong></td>
+												<td><strong>Women</strong></td>
+												<td><strong>Total</strong></td>
+											</tr>
+											
+											<tr>
+												<td>Direct Beneficieries</td>
+												<td><span t-field="doc.boys"/></td>
+												<td><span t-field="doc.girls"/></td>
+												<td><span t-field="doc.men"/></td>
+												<td><span t-field="doc.women"/></td>
+												<td><span t-field="doc.no_of_beneficieries"/></td>
+											</tr>
+											
+											<tr>
+												<td></td>
+												<td colspan = "4"></td>
+												<td><span t-field="doc.no_of_beneficieries"/></td>
+											</tr>
+											
+											<tr>
+												<td colspan = "6"><strong>Total Beneficieries Include the  Following :</strong></td>
+											</tr>
+											<tr>
+												<t t-foreach="doc.beneficiery_ids" t-as="beneficiery">
+													<tr>
+														<td><span t-field="beneficiery.bef_type"/></td>
+														<td><span t-field="beneficiery.boys"/></td>
+														<td><span t-field="beneficiery.girls"/></td>
+														<td><span t-field="beneficiery.men"/></td>
+														<td><span t-field="beneficiery.women"/></td>
+														<td><span t-field="beneficiery.no_of_beneficieries"/></td>
+													</tr>
+												</t>
+											</tr>
+										</tbody>
+									</table>
+									
+									<table class="table table-bordered" style="font-size: 11px">
+										<tbody>
+											<tr>
+												<td nowrap="nowrap"><strong>Indirect Beneficieries</strong></td>
+												<td colspan = "2"><span t-field="doc.indirect_beneficieries"/></td>
+
+												<td nowrap="nowrap"><strong>Catchment Population</strong></td>
+												<td colspan = "2"><span t-field="doc.catchment_population"/></td>
+											</tr>
+											
+											<tr>
+												<td nowrap="nowrap"><strong>Link with the Allocation Strategy</strong></td>
+												<td colspan = "5"><span t-field="doc.link_with_alloc"/></td>
+											</tr>
+											
+										</tbody>
+									</table>
+									
+									<table class="table table-bordered" style="font-size: 11px">
+										<tbody>
+											<tr>
+												<td colspan="5"><strong>Sub-Grants to Implementing Partners</strong></td>
+											</tr>
+											<tr>
+												<td colspan="3"></td>
+												<td colspan="2"><strong>Has other funding been secured  for this project</strong><span t-field="doc.has_other_funding" style="margin-left:5px"/></td>
+											</tr>
+											<tr style="color:#666666;">
+												<td><strong>Partner Name</strong></td>
+												<td><strong>Partner Type</strong></td>
+												<td><strong>Partner Type in US</strong></td>
+
+												<td><strong>Source</strong></td>
+												<td><strong>US$</strong></td>
+												
+											</tr>
+											<tr>
+												<td><span t-field="doc.partner_name" style="width:100%;"/></td>
+												<td><span t-field="doc.parnter_type.name" style="width:100%;"/></td>
+												<td><span t-field="doc.parnter_budget_in_us" style="width:100%;"/></td>
+												
+
+												
+												<td><span t-field="doc.source"/></td>
+												<td><span t-field="doc.source_budget_in_us"/></td>
+											</tr>
+											<tr>
+												<td style="text-align:left;"><strong>Total</strong></td>
+												<td colspan="2"><span t-field="doc.partner_budget_total" style="width:100%;text-align:right" string="Total"/></td>
+												
+												
+												<td style="text-align:left;"><strong>Total</strong></td>
+												<td><span t-field="doc.source_budget_total" style="width:100%;text-align:right"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									<table class = "table table-bordered" style = "font-size : 11px">
+										<tbody>
+											<tr>
+												<td colspan = "6"><strong style="width:100%;height:49px;padding-left:10px;padding-top:13px">Organization focal point details</strong></td>
+											</tr>
+											
+											<tr>
+												<td style="text-align:left;"><strong>Name</strong></td>
+												<td colspan="2"><span t-field="doc.org_name" style="width:100%;text-align:right" string="Total"/></td>
+												
+												
+												<td style="text-align:left;"><strong>Title</strong></td>
+												<td colspan="2"><span t-field="doc.title" style="width:100%;text-align:right"/></td>
+											</tr>
+											
+											<tr>
+												<td style="text-align:left;"><strong>Tel</strong></td>
+												<td colspan="2"><span t-field="doc.tel" style="width:100%;text-align:right" string="Total"/></td>
+												
+												
+												<td style="text-align:left;"><strong>Email</strong></td>
+												<td colspan="2"><span t-field="doc.email" style="width:100%;text-align:right"/></td>
+											</tr>
+											
+										</tbody>
+									</table>
+									
+									<table class = "table table-bordered" style = "font-size : 11px">
+										<tbody>
+											<tr>
+												<td colspan = "4"><strong>Contacts</strong></td>
+											</tr>
+											
+											<tr>
+												<td><strong>Contact Name</strong></td>
+												<td><strong>Title</strong></td>
+												<td><strong>Email</strong></td>
+												<td><strong>Total</strong></td>
+											</tr>
+											
+											<t t-foreach="doc.contacts" t-as="contact">
+												<tr>
+													<td><span t-field="contact.contact_name"/></td>
+													<td><span t-field="contact.title"/></td>
+													<td><span t-field="contact.email"/></td>
+													<td><span t-field="contact.phone"/></td>
+												</tr>
+											</t>
+											
+										</tbody>
+									</table>
+									
+									
+									<table class = "table table-bordered">
+										<tbody>
+											<tr>
+												<td nowrap="nowrap"><strong>Comments for Coverpage</strong></td>
+												<td colspan = "5"><span t-field="doc.leave_comment"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									
+									<!--Background-->
+									<h3 class="text-center">Background</h3>
+									
+									<table class = "table table-bordered">
+										<tbody>
+										
+											<tr>
+												<td nowrap="nowrap"><strong>Humanitarian Context Analysis</strong></td>
+												<td colspan = "5"><span t-field="doc.humanitarian_context"/></td>
+											</tr>
+											
+											<tr>
+												<td nowrap="nowrap"><strong>Need Assesment</strong></td>
+												<td colspan = "5"><span t-field="doc.need_assessment"/></td>
+											</tr>
+											
+											<tr>
+												<td nowrap="nowrap"><strong>Description of Beneficieries</strong></td>
+												<td colspan = "5"><span t-field="doc.description_of_beneficiaries"/></td>
+											</tr>
+											
+											<tr>
+												<td nowrap="nowrap"><strong>Grant Request Justification</strong></td>
+												<td colspan = "5"><span t-field="doc.grant_request"/></td>
+											</tr>
+											
+										</tbody>
+									</table>
+									
+									
+									<table class = "table table-bordered">
+										<tbody>
+											<tr>
+												<td nowrap="nowrap"><strong>Comments for Background</strong></td>
+												<td colspan = "5"><span t-field="doc.leave_comment2"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									
+									<!--Logical Framework-->
+									<h3 class="text-center">Logical Framework</h3>
+									
+									<table class = "table table-bordered">
+										<tbody>
+										
+											<tr>
+												<td nowrap="nowrap"><strong>Overall Project Objectivie</strong></td>
+												<td colspan = "5"><span t-field="doc.overall_project_objective"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									
+									<table class="table table-bordered"  style="font-size: 11px">
+										<tbody>
+											<tr>
+												<td><strong>Cluster Objectives</strong></td>
+												<td><strong>Humanitrian Response Plan (HRP) Objectives</strong></td>
+												<td><strong>Percentage of Activities</strong></td>
+											</tr>
+											<tr>
+												<td><span t-field="doc.cluster_objectives.name" style="width:100%;"/></td>
+												<td><span t-field="doc.hrp_objectives.name" style="width:100%;"/></td>
+												<td><span t-field="doc.percentage_of_activities" style="width:100%;"/></td>
+											</tr>
+											<tr>
+												<td colspan="2" style="text-align:right;"><strong>Total Percentage</strong></td>
+												<td><span t-field="doc.total_percentage" style="width:100%;"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									
+									<table class = "table table-bordered">
+										<tbody>
+										
+											<tr>
+												<td nowrap="nowrap"><strong>Constribution to Cluster<br />/Sector Objectives</strong></td>
+												<td colspan = "5"><span t-field="doc.sector_objectives"/></td>
+											</tr>
+											
+											<tr>
+												<td nowrap="nowrap"><strong>Project Type</strong></td>
+												<td colspan = "5"><span t-field="doc.project_type"/></td>
+											</tr>
+											
+										</tbody>
+									</table>
+									
+									<table class="table table-bordered"  style="font-size: 13px">
+										<tbody>
+											<tr>
+												<td><strong>Outcome</strong></td>
+												<td colspan = "6"><strong>Description</strong></td>
+											</tr>
+											<t t-foreach="doc.outcome_ids" t-as="outcome">
+												<tr>
+													<td nowrap="nowrap"><span t-field="outcome.name"/></td>
+													<td colspan = "6"><span t-field="outcome.desc"/></td>
+												</tr>
+												
+												<t t-foreach="outcome.output_ids" t-as="output">
+													
+													<tr style = "height:15px;"></tr>
+													
+													<tr style = "border-top : 1px solid rebeccapurple">
+														<td nowrap="nowrap"><span t-field="output.name"/></td>
+														<td colspan = "6"><span t-field="output.desc"/></td>
+													</tr>
+													
+													<tr><td colspan = "7"><strong>Indicators</strong></td></tr>
+													
+													<tr>
+														<td><strong>Code</strong></td>
+														<td><strong>Type</strong></td>
+														<td><strong>Cluster</strong></td>
+														<td colspan = "2"><strong>Indicator</strong></td>
+														<td nowrap="nowrap"><strong>Total End-Cycle Target</strong></td>
+														<td><strong>Actions</strong></td>
+													</tr>
+													
+													<t t-foreach="output.indicator_ids" t-as="indicator">
+														<tr>
+															<td nowrap="nowrap"><span t-field="indicator.name"/></td>
+															<td><span t-field="indicator.type"/></td>
+															<td><span t-field="indicator.cluster"/></td>
+															<td colspan = "2"><span t-field="indicator.indicator"/></td>
+															<td><span t-field="indicator.total_end_cycle"/></td>
+															<td><span t-field="indicator.means_of_verification"/></td>
+														</tr>
+													</t>
+													
+													<tr><td colspan = "7"><strong>Activities</strong></td></tr>
+													
+													
+													<t t-foreach="output.activity_ids" t-as="activity">
+														<tr>
+															<td nowrap="nowrap"><span t-field="activity.name"/></td>
+															<td colspan = "6"><span t-field="activity.desc"/></td>
+														</tr>
+													</t>
+													
+													
+												</t>
+												
+												
+											</t>
+											<tr style = "height : 15px;"></tr>
+										</tbody>
+									</table>
+									
+									<table class = "table table-bordered">
+										<tbody>
+											<tr>
+												<td nowrap="nowrap"><strong>Additional Targes</strong></td>
+												<td colspan = "5"><span t-field="doc.additional_targets"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									<table class = "table table-bordered">
+										<tbody>
+											<tr>
+												<td nowrap="nowrap"><strong>Comments for Logical Framework</strong></td>
+												<td colspan = "5"><span t-field="doc.leave_comment3"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									
+									<!--Workplan-->
+									<h3 class="text-center">Workplan</h3>
+									
+									<table class = "table table-bordered" style = "font-size:12px;">
+										<tbody>
+											<tr>
+												<td style = "width : 61px;"><strong>Activity</strong></td>
+												<td colspan="2"><strong>Activity Description(Month)</strong></td>
+												<td><strong>Year</strong></td>
+												<td colspan="3"><strong>Months</strong></td>
+											</tr>
+											
+											<t t-foreach="doc.activity_ids" t-as="activity">
+												<tr>
+												
+													<td nowrap="nowrap"><span t-field="activity.name"/></td>
+													<td colspan="2" style="width:70%"><span t-field="activity.desc"/></td>
+													<td><span t-field="activity.date_project"/></td>
+													
+													<td colspan="3">
+														<t t-foreach="activity.workplan_months" t-as="workplan">
+															<span t-field="workplan.name" style="border:1px solid #dddddd;padding:3px;border-radius:18px;margin-left:2px;font-weight:bold"/> 
+														</t>
+													</td>
+												</tr>
+											</t>
+										</tbody>
+									</table>
+									
+									<table class = "table table-bordered">
+										<tbody>
+											<tr>
+												<td nowrap="nowrap"><strong>Comments for Workplan</strong></td>
+												<td colspan = "5"><span t-field="doc.leave_comment3"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									
+									<!--M and R Details-->
+									<h3 class="text-center">M and R Details</h3>
+									
+									<table class = "table table-bordered">
+										<tbody>
+											<tr>
+												<td nowrap="nowrap"><strong>Monitoring and Reporting Plan</strong></td>
+												<td colspan = "5"><span t-field="doc.monitoring_plan"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									<table class = "table table-bordered">
+										<tbody>
+											<tr>
+												<td nowrap="nowrap"><strong>Comments for M and R Details</strong></td>
+												<td colspan = "5"><span t-field="doc.leave_comment5"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									
+									<!--Other Info-->
+									<h3 class="text-center">Other Info</h3>
+									
+									<table class = "table table-bordered">
+										<tbody>
+											<tr>
+												<td nowrap="nowrap"><strong>Accountability to Affected Populations</strong></td>
+												<td colspan = "5"><span t-field="doc.accountability"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									<table class = "table table-bordered">
+										<tbody>
+											<tr>
+												<td nowrap="nowrap"><strong>Implemention Plan</strong></td>
+												<td colspan = "5"><span t-field="doc.implementation_plam"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									<table class = "table table-bordered">
+										<tbody>
+											<tr>
+												<td nowrap="nowrap"><strong>Coordination with Other Organizations in Project Area</strong></td>
+											</tr>
+											
+											<tr>
+												<td colspan = "6"><strong>Coordinated Organizations</strong></td>
+											</tr>
+											
+											<t t-foreach="doc.cordination_with_orgs" t-as="cordinate">
+												<tr>
+													<td colspan = "6"><span t-field="cordinate.name"/></td>
+												</tr>
+											</t>
+											
+										</tbody>
+									</table>
+									
+									<table class="table table-bordered" style="font-size: 11px">
+										<tbody>
+											<tr>
+												<td nowrap="nowrap"><strong>Name of the Organization</strong></td>
+												<td colspan = "2"><span t-field="doc.name_of_the_org"/></td>
+
+												<td nowrap="nowrap"><strong>Areas/Activities of collaboration and rationale</strong></td>
+												<td colspan = "2"><span t-field="doc.areas_and_activities"/></td>
+											</tr>
+											
+											<tr>
+												<td nowrap="nowrap"><strong>Enviromental Marker Code</strong></td>
+												<td colspan = "2"><span t-field="doc.enviromentalmarker.name"/></td>
+
+												<td nowrap="nowrap"><strong>Gender Marker Code</strong></td>
+												<td colspan = "2"><span t-field="doc.gendermarker.name"/></td>
+											</tr>
+											
+										</tbody>
+									</table>
+									
+									<table class = "table table-bordered">
+										<tbody>
+											<tr>
+												<td nowrap="nowrap"><strong>Justify Chosen Gender Marker Code</strong></td>
+												<td colspan = "5"><span t-field="doc.justify_chosen"/></td>
+											</tr>
+										</tbody>	
+									</table>
+								
+									<table class = "table table-bordered">
+										<tbody>
+											<tr>
+												<td nowrap="nowrap"><strong>Projection Mainstreaming</strong></td>
+												<td colspan = "5"><span t-field="doc.protection_mainstreaming"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									<table class = "table table-bordered">
+										<tbody>
+											<tr>
+												<td nowrap="nowrap"><strong>Safety and Security</strong></td>
+												<td colspan = "5"><span t-field="doc.safety_and_security"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									<table class = "table table-bordered">
+										<tbody>
+											<tr>
+												<td colspan = "2"><strong>Access</strong></td>
+												<td colspan = "5"><span t-field="doc.access"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									<table class = "table table-bordered">
+										<tbody>
+											<tr>
+												<td nowrap="nowrap"><strong>Comment for Other Info</strong></td>
+												<td colspan = "5"><span t-field="doc.leave_comment6"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									
+									<!--Budgets-->
+									<h3 class="text-center">Budgets</h3>
+									
+									<table class="table table-bordered"  style="font-size: 11px">
+										<tbody>
+											<tr>
+												<td colspan = "10"><strong>1. Staff and Other Personal Costs</strong></td>
+											</tr>
+											
+											<tr>
+												<td><strong>Code</strong></td>
+												<td nowrap="nowrap"><strong>Budget Line Description</strong></td>
+												<td colspan="2"><strong>Remarks</strong></td>
+												<td nowrap="nowrap"><strong>D/S (Direct/Support)</strong></td>
+												<td nowrap="nowrap"><strong>Unit Quantity</strong></td>
+												<td nowrap="nowrap"><strong>Unit Cost</strong></td>
+												<td nowrap="nowrap"><strong>Duration (per month, per day or lump sum)</strong></td>
+												<td nowrap="nowrap"><strong>Total Cost % charged to donor</strong></td>
+												<td><strong>Total</strong></td>
+											</tr>
+											<t t-foreach="doc.staff_ids" t-as="staff">
+												<tr>
+													<td><span t-field="staff.budget_code"/></td>
+													<td><span t-field="staff.budget_line_description"/></td>
+													<td colspan="2"><span t-field="staff.remarks"/></td>
+													<td><span t-field="staff.d_and_s"/></td>
+													<td><span t-field="staff.unit_quantity"/></td>
+													<td><span t-field="staff.unit_cost"/></td>
+													<td><span t-field="staff.duration"/></td>
+													<td><span t-field="staff.total_cost"/></td>
+													<td><span t-field="staff.total"/></td>
+												</tr>
+												
+											</t>
+											<tr>
+												<td style = "width:30%"><strong>Total</strong></td>
+												<td style = "width:70%">><span t-field="doc.staff_total"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									<table class="table table-bordered"  style="font-size: 11px">
+										<tbody>
+											<tr>
+												<td colspan = "10"><strong>2. Supplies, Commodities, Materials</strong></td>
+											</tr>
+											
+											<tr>
+												<td><strong>Code</strong></td>
+												<td nowrap="nowrap"><strong>Budget Line Description</strong></td>
+												<td colspan="2"><strong>Remarks</strong></td>
+												<td nowrap="nowrap"><strong>D/S (Direct/Support)</strong></td>
+												<td nowrap="nowrap"><strong>Unit Quantity</strong></td>
+												<td nowrap="nowrap"><strong>Unit Cost</strong></td>
+												<td nowrap="nowrap"><strong>Duration (per month, per day or lump sum)</strong></td>
+												<td nowrap="nowrap"><strong>Total Cost % charged to donor</strong></td>
+												<td><strong>Total</strong></td>
+											</tr>
+											<t t-foreach="doc.supplies_ids" t-as="supply">
+												<tr>
+													<td><span t-field="supply.budget_code"/></td>
+													<td><span t-field="supply.budget_line_description"/></td>
+													<td colspan="2"><span t-field="supply.remarks"/></td>
+													<td><span t-field="supply.d_and_s"/></td>
+													<td><span t-field="supply.unit_quantity"/></td>
+													<td><span t-field="supply.unit_cost"/></td>
+													<td><span t-field="supply.duration"/></td>
+													<td><span t-field="supply.total_cost"/></td>
+													<td><span t-field="supply.total"/></td>
+												</tr>
+												<tr>
+													<td></td>
+													<td colspan="8"><span t-field="supply.budget_desc"/></td>
+												</tr>
+											</t>
+											<tr>
+												<td coslpan = "2"><strong>Total</strong></td>
+												<td coslpan = "7"><span t-field="doc.supplies_total"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									<table class="table table-bordered"  style="font-size: 11px">
+										<tbody>
+											<tr>
+												<td colspan = "10"><strong>3. Equipment</strong></td>
+											</tr>
+											
+											<tr>
+												<td><strong>Code</strong></td>
+												<td nowrap="nowrap"><strong>Budget Line Description</strong></td>
+												<td colspan="2"><strong>Remarks</strong></td>
+												<td nowrap="nowrap"><strong>D/S (Direct/Support)</strong></td>
+												<td nowrap="nowrap"><strong>Unit Quantity</strong></td>
+												<td nowrap="nowrap"><strong>Unit Cost</strong></td>
+												<td nowrap="nowrap"><strong>Duration (per month, per day or lump sum)</strong></td>
+												<td nowrap="nowrap"><strong>Total Cost % charged to donor</strong></td>
+												<td><strong>Total</strong></td>
+											</tr>
+											<t t-foreach="doc.equimpent_ids" t-as="equimpent">
+												<tr>
+													<td><span t-field="equimpent.budget_code"/></td>
+													<td><span t-field="equimpent.budget_line_description"/></td>
+													<td colspan="2"><span t-field="equimpent.remarks"/></td>
+													<td><span t-field="equimpent.d_and_s"/></td>
+													<td><span t-field="equimpent.unit_quantity"/></td>
+													<td><span t-field="equimpent.unit_cost"/></td>
+													<td><span t-field="equimpent.duration"/></td>
+													<td><span t-field="equimpent.total_cost"/></td>
+													<td><span t-field="equimpent.total"/></td>
+												</tr>
+												<tr>
+													<td></td>
+													<td colspan="8"><span t-field="equimpent.budget_desc"/></td>
+												</tr>
+											</t>
+											<tr>
+												<td coslpan = "2"><strong>Total</strong></td>
+												<td coslpan = "7"><span t-field="doc.equimpent_total"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									<table class="table table-bordered"  style="font-size: 11px">
+										<tbody>
+											<tr>
+												<td colspan = "10"><strong>4. Travel/Transportation</strong></td>
+											</tr>
+											
+											<tr>
+												<td><strong>Code</strong></td>
+												<td nowrap="nowrap"><strong>Budget Line Description</strong></td>
+												<td colspan="2"><strong>Remarks</strong></td>
+												<td nowrap="nowrap"><strong>D/S (Direct/Support)</strong></td>
+												<td nowrap="nowrap"><strong>Unit Quantity</strong></td>
+												<td nowrap="nowrap"><strong>Unit Cost</strong></td>
+												<td nowrap="nowrap"><strong>Duration (per month, per day or lump sum)</strong></td>
+												<td nowrap="nowrap"><strong>Total Cost % charged to donor</strong></td>
+												<td><strong>Total</strong></td>
+											</tr>
+											<t t-foreach="doc.travel_or_transportation_ids" t-as="travel">
+												<tr>
+													<td><span t-field="travel.budget_code"/></td>
+													<td><span t-field="travel.budget_line_description"/></td>
+													<td colspan="2"><span t-field="travel.remarks"/></td>
+													<td><span t-field="travel.d_and_s"/></td>
+													<td><span t-field="travel.unit_quantity"/></td>
+													<td><span t-field="travel.unit_cost"/></td>
+													<td><span t-field="travel.duration"/></td>
+													<td><span t-field="travel.total_cost"/></td>
+													<td><span t-field="travel.total"/></td>
+												</tr>
+												<tr>
+													<td></td>
+													<td colspan="8"><span t-field="travel.budget_desc"/></td>
+												</tr>
+											</t>
+											<tr>
+												<td coslpan = "2"><strong>Total</strong></td>
+												<td coslpan = "7"><span t-field="doc.general_operating_total"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									<table class="table table-bordered"  style="font-size: 11px">
+										<tbody>
+											<tr>
+												<td colspan = "10"><strong>5. General Operating and Other Direct Costs</strong></td>
+											</tr>
+											
+											<tr>
+												<td><strong>Code</strong></td>
+												<td nowrap="nowrap"><strong>Budget Line Description</strong></td>
+												<td colspan="2"><strong>Remarks</strong></td>
+												<td nowrap="nowrap"><strong>D/S (Direct/Support)</strong></td>
+												<td nowrap="nowrap"><strong>Unit Quantity</strong></td>
+												<td nowrap="nowrap"><strong>Unit Cost</strong></td>
+												<td nowrap="nowrap"><strong>Duration (per month, per day or lump sum)</strong></td>
+												<td nowrap="nowrap"><strong>Total Cost % charged to donor</strong></td>
+												<td><strong>Total</strong></td>
+											</tr>
+											<t t-foreach="doc.general_operating_ids" t-as="general">
+												<tr>
+													<td><span t-field="general.budget_code"/></td>
+													<td><span t-field="general.budget_line_description"/></td>
+													<td colspan="2"><span t-field="general.remarks"/></td>
+													<td><span t-field="general.d_and_s"/></td>
+													<td><span t-field="general.unit_quantity"/></td>
+													<td><span t-field="general.unit_cost"/></td>
+													<td><span t-field="general.duration"/></td>
+													<td><span t-field="general.total_cost"/></td>
+													<td><span t-field="general.total"/></td>
+												</tr>
+												<tr>
+													
+													<td colspan="8"><span t-field="general.budget_desc"/></td>
+												</tr>
+											</t>
+											<tr>
+												<td coslpan = "2"><strong>Total</strong></td>
+												<td coslpan = "7"><span t-field="doc.travel_or_transportation_total"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									<table class="table table-bordered"  style="font-size: 11px">
+										<tbody>
+											<tr>
+												<td coslpan = "2"><strong>Grand Total For Direct Cost</strong></td>
+												<td coslpan = "4"><span t-field="doc.direct_cost_total"/></td>
+											</tr>
+											
+											<tr>
+												<td coslpan = "2"><strong>Project Support Cost (PSC) Rate (insert percentage, not to exceed 7 per cent)</strong></td>
+												<td coslpan = "4"><span t-field="doc.project_support_cost"/></td>
+											</tr>
+											
+											<tr>
+												<td coslpan = "2"><strong>Grand Total For Both Direct and Support Costs</strong></td>
+												<td coslpan = "4"><span t-field="doc.direct_cost_and_support_total"/></td>
+											</tr>
+										</tbody>
+									</table>
+									
+                        		</div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+
+        </t>
+    </template>
+
+</data>
+</odoo>

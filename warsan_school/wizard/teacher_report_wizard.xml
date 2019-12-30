@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="teacher_wizard_form" model="ir.ui.view">
+			<field name="name">warsan_school.teacher_wizard.form</field>
+			<field name="model">warsan_school.teacher_wizard</field>
+			<field name="arch" type="xml">
+			   <form>
+					<group>
+
+						<group>
+							<field name="teacher_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" />
+							<field name="date_to" />
+						</group>
+
+
+						<group>
+							<field name="date_from" />
+						</group>
+					</group>
+
+					<footer>
+						<button name="get_report" string="Get Report" type="object" class="oe_highlight"/>
+						<button string="Cancel" special="cancel"/>
+					</footer>
+
+			   </form>
+			</field>
+		</record>
+
+		<record id="action_teacher_wizard_form" model="ir.actions.act_window">
+			<field name="name">Teachers Wizard</field>
+			<field name="res_model">warsan_school.teacher_wizard</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="teacher_wizard_form"/>
+			<field name="target">new</field>
+		</record>
+
+
+		<!-- MenuItem Reporting -->
+		
+		<menuitem id="teacher_wizard_form_menu" name="Teachers" parent="school_reporting_menu" action="action_teacher_wizard_form" />
+
+	</data>
+</odoo>

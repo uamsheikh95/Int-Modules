@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+      <record model="ir.ui.view" id="payment_request_search_view">
+          <field name="name">dalkom_payment_request.payment_request.search</field>
+          <field name="model">dalkom_payment_request.payment_request</field>
+          <field name="arch" type="xml">
+              <search>
+                  <filter string="To Submit" icon="terp-accessories-archiver"
+                    domain="[('state','=','to_submit')]"
+                    name="to_submit"/>
+                  <filter string="Submitted" icon="terp-accessories-archiver"
+                    domain="[('state','=','submitted')]"
+                    name="submitted"/>
+                  <filter string="Approved" icon="terp-accessories-archiver"
+                    domain="[('state','=','approved')]"
+                    name="approved"/>
+                  <filter string="Refused" icon="terp-accessories-archiver"
+                    domain="[('state','=','refused')]"
+                    name="refused"/>
+                  <field name="name" string="Ref. No"/>
+                  <field name="state"/>
+                  <field name="date"/>
+                  <field name="approve_by"/>
+                  <field name="payment_journal"/>
+                  <field name="registered"/>
+              </search>
+          </field>
+      </record>
+      <record model="ir.ui.view" id="payment_request_tree_view">
+          <field name="name">payment_request.tree</field>
+          <field name="model">dalkom_payment_request.payment_request</field>
+          <field name="arch" type="xml">
+              <tree string="Payment Request" default_order='create_date desc' decoration-danger="state=='refused'"  decoration-success="state=='approved'">
+
+                  <field name="date"/>
+                  <field name="name" string="Ref"/>
+                  <field name="description" />
+                  <field name="approve_by" />
+                  <field name="registered" />
+                  <field name="payment_journal" />
+                  <field name="total_amount" />
+                  <field name="approved_by" />
+                  <field name="cfo_confirmed" />
+                  <field name="state" />
+              </tree>
+          </field>
+      </record>
+      <record id="payment_request_refuse_wizard_view_form" model="ir.ui.view">
+          <field name="name">dalkom_payment_request.refuse.wizard.form</field>
+          <field name="model">dalkom_payment_request.refuse.wizard</field>
+          <field name="arch" type="xml">
+              <form string="Payment refuse reason">
+                  <separator string="Reason to refuse Payment"/>
+                  <field name="reason"/>
+                  <footer>
+                      <button string='Refuse' name="payment_request_refuse_reason" type="object" class="oe_highlight"/>
+                      <button string="Cancel" class="oe_link" special="cancel"/>
+                  </footer>
+             </form>
+          </field>
+      </record>
+
+      <record id="payment_request_refuse_wizard_action" model="ir.actions.act_window">
+          <field name="name">Refuse Payment</field>
+          <field name="res_model">dalkom_payment_request.refuse.wizard</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">form</field>
+          <field name="view_id" ref="payment_request_refuse_wizard_view_form"/>
+          <field name="target">new</field>
+      </record>
+
+      <record id="payment_request_line_refuse_wizard_view_form" model="ir.ui.view">
+          <field name="name">dalkom_payment_request.refuse_line.wizard.form</field>
+          <field name="model">dalkom_payment_request.refuse_line.wizard</field>
+          <field name="arch" type="xml">
+              <form string="Payment refuse reason">
+                  <separator string="Reason to refuse Payment"/>
+                  <field name="reason"/>
+                  <footer>
+                      <button string='Refuse' name="payment_request_refuse_reason" type="object" class="oe_highlight"/>
+                      <button string="Cancel" class="oe_link" special="cancel"/>
+                  </footer>
+             </form>
+          </field>
+      </record>
+
+      <record id="payment_request_line_refuse_wizard_action" model="ir.actions.act_window">
+          <field name="name">Refuse Payment</field>
+          <field name="res_model">dalkom_payment_request.refuse_line.wizard</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">form</field>
+          <field name="view_id" ref="payment_request_line_refuse_wizard_view_form"/>
+          <field name="target">new</field>
+      </record>
+      <record model="ir.ui.view" id="payment_request_view">
+          <field name="name">payment_request.form</field>
+          <field name="model">dalkom_payment_request.payment_request</field>
+          <field name="arch" type="xml">
+              <form string="Payment Request Form" >
+                  <header>
+                <button string="Approve" type="object" name="approve" class="oe_highlight"
+                          attrs="{
+                          'invisible': [('state', 'in', ['approved','to_submit','refused'])]}" groups="dalkom_payment_request.group_manager"/>
+                <button string="Submit to Manager" type="object" name="confirm" class="oe_highlight"
+                      attrs="{
+                      'invisible': [('state', 'in', ['approved','submitted','refused'])]}"/>
+              <button string="CFO Confirm" type="object" name="cfo_confirm" class="oe_highlight"
+                    attrs="{
+                    'invisible': [('cfo_confirmed', '=', True)]}" groups="dalkom_payment_request.group_cfo"/>
+              <button string="Send Email" type="object" name="send_payment_request_mail" class="oe_highlight"
+                  attrs="{
+                  'invisible': [('email_sent', '=', True)]}"
+                    />
+              <button string="Refuse" type="action" name="%(dalkom_payment_request.payment_request_refuse_wizard_action)d" class="oe_highlight"
+                    attrs="{
+                    'invisible': [('state', 'in', ['approved','to_submit','refused'])]}"
+                     context="{'payment_request_id':active_id}" groups="dalkom_payment_request.group_manager"
+
+                            />
+                <button string="Add to Cash Register" type="object" name="register" class="oe_highlight"
+                      attrs="{
+                      'invisible': ['|',('registered','=',True),('state','not in',['approved'])]
+                      }"
+
+
+                              />
+              	    <!--This will create the statusbar, thanks to the widget. -->
+              	    <field name="state" widget="statusbar" statusbar_visible="to_submit,submitted,approved"/>
+                  </header>
+                <sheet>
+                    <div class="oe_button_box">
+                        <button name="action_get_attachment_view" class="oe_stat_button" icon="fa-book" type="object">
+                            <field name="attachment_number" widget="statinfo" string="Documents"/>
+                        </button>
+                    </div>
+                    <h1 class="mt0">
+                        <div attrs="{'invisible': [('name','=',False)]}">
+                            <field name="name" readonly="1" class="oe_inline" attrs="{'invisible': [('name','=',False)]}"/>
+                        </div>
+                    </h1>
+                      <group>
+                          <group>
+                            <field name="registered" invisible="True"/>
+                            <field name="cfo_confirmed" invisible="True"/>
+                            <field name="description" />
+                            <field name="email_sent" invisible="True"/>
+                            <field name="date" attrs="{'readonly': [('state', 'in', ['approved','refused'])]}" required="1"/>
+                            <field name="payment_journal" options="{'no_create': True}" required="1"/>
+                          </group>
+                          <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="cash_register_id" options="{'no_create': True}" required="1"/>
+							<field name="create_uid" invisible="1" readonly="1" options="{'no_create': True}"/>
+                            <field name="approve_by" attrs="{'readonly': [('state', 'in', ['approved','refused'])]}" options="{'no_create': True}" required="1"/>
+                              </group>
+                      </group>
+                      <notebook>
+                          <page string="Payment Request Line">
+                              <field name="payment_request_line_ids" widget="one2many_list" attrs="{'readonly': [('state', 'in', ['approved','refused'])]}">
+                                  <tree string="Detail" editable="bottom" decoration-danger="state=='refused'">
+                                    <field name="state" invisible="True"/>
+                                      <field name="date"/>
+                                      <field name="name"  />
+                                      <field name="partner_id"  />
+                                      <field name="bill_ref"  />
+                                      <field name="amount"  />
+                                      <field name="attachment_number" string=" "/>
+                                      <button name="action_get_attachment_view" string="View Attachments" type="object" icon="fa-paperclip"/>
+                                      <field name="state" readonly="True" />
+                                      <field name="refused_reason" readonly="True" />
+                                      <button name="%(dalkom_payment_request.payment_request_line_refuse_wizard_action)d"
+                                        type="action"
+                                        string="Refuse"
+                                        icon="fa-times"
+                                        attrs="{'invisible': [('state', 'in', ['approved','to_submit','refused'])]}"
+                                        context="{'payment_request_line_id':active_id}"
+                                        groups="dalkom_payment_request.group_manager"/>
+
+                                  </tree>
+                              </field>
+                              <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                  <field name="total_amount" widget="monetary" />
+                                  </group>
+
+                          </page>
+                      </notebook>
+                </sheet>
+                  <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+              </form>
+          </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="payment_request_list_action">
+          <field name="name">Payment Request</field>
+          <field name="res_model">dalkom_payment_request.payment_request</field>
+          <field name="view_type">form</field>
+          <field name="view_id" ref="payment_request_tree_view"/>
+          <field name="view_mode">tree,form</field>
+          <field name="context">{'search_default_to_submit': 1}</field>
+
+
+      </record>
+      <menuitem name="Payment Requests" id="payment_request_menu_root"
+             sequence="100"
+             web_icon="dalkom_payment_request,static/description/menu_icon.png"
+             groups="dalkom_payment_request.group_user" />
+
+
+      <menuitem name="To Submit"
+          id="payment_request"
+          action="payment_request_list_action"
+          parent="payment_request_menu_root"
+          groups="dalkom_payment_request.group_user"
+
+
+          />
+
+  </data>
+  </odoo>

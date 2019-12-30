@@ -1,0 +1,49 @@
+<odoo>
+		<data>
+				<record model="ir.ui.view" id="payment_form_view">
+						<field name="name">account.payment</field>
+						<field name="model">account.payment</field>
+						<field name="inherit_id" ref="account.view_account_payment_form"/>
+						<field name="arch" type="xml">
+								<sheet position="inside">
+										<field name="company_id" invisible="1"/>
+
+										<xpath expr="field[@name='journal_id']" position="after">
+												<field name="payment_account_ids" widget="one2many_list" attrs="{'invisible': [('payment_type', '!=', 'payment_to_account')],'readonly':[('state','!=','draft')]}">
+														<tree string="Account" editable="bottom">
+																<field name="account_id" domain="[('id', '!=', payment_journal_account_id)]"/>
+																<field name="name"/>
+																<field name="account_type" invisible="1"/>
+																<field name="payment_journal_account_id" invisible="1"/>
+																<field name="partner_id" attrs="{'required':['|',('account_type','=', 'Receivable'),('account_type','=', 'Payable')]}"/>
+																<field name="account_analytic_id" groups="analytic.group_analytic_accounting" domain="[('company_id', '=', parent.company_id)]"/>
+																<field name="amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+														</tree>
+												</field>
+												<group class="oe_subtotal_footer oe_right" colspan="2" name="total_amount" attrs="{'invisible': [('payment_type', '!=', 'payment_to_account')]}">
+														<field name="total_accounts_amount" widget="monetary"/>
+												</group>
+										</xpath>
+								</sheet>
+						</field>
+				</record>
+				<record id="action_account_payment_to_accounts" model="ir.actions.act_window">
+						<field name="name">Payment to Accounts</field>
+						<field name="res_model">account.payment</field>
+						<field name="view_type">form</field>
+						<field name="view_mode">tree,kanban,form,graph</field>
+						<field name="context">{'default_payment_type': 'payment_to_account'}</field>
+						<field name="domain">[('payment_type', '=', 'payment_to_account')]</field>
+						<field name="view_id" ref="account.view_account_payment_tree"/>
+						<field name="form_view_id" ref="payment_form_view"/>
+						<field name="help" type="html">
+								<p class="oe_view_nocontent_create">
+									Click to register a payment and pay to an Account/Expenses
+								</p>
+						</field>
+				</record>
+
+				<menuitem action="action_account_payment_to_accounts" id="menu_finance_payment_to_account" name="Payment on account" parent="account.menu_finance_payables_documents" sequence="100"/>
+
+		</data>
+</odoo>

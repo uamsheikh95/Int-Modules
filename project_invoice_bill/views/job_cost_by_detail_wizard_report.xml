@@ -1,0 +1,259 @@
+<odoo>
+<data>
+
+
+    <report
+        id="action_job_cost_by_detail_wizard"
+        name="project_invoice_bill.job_cost_by_detail_wizard_report"
+        model="project_invoice_bill.job_cost_by_detail_wizard_report"
+        string="Job Cost by Detail"
+        report_type="qweb-pdf"
+        />
+
+    <template id="job_cost_by_detail_wizard_report">
+        <t t-call="web.html_container">
+
+                <t t-call="web.external_layout">
+                    <div class="page" >
+                        <div class="row mt0 mb4">
+
+                        	<div class="col-md-12">
+                        		<div class="">
+
+									<table class="table table-condensed" style="font-size: 12px;">
+                                        <tbody>
+											<tr>
+												<td colspan="4"><h3 class="text-center">Job Cost by Detail</h3></td>
+											</tr>
+                                            <tr>
+												<td><strong>Project:</strong></td>
+												<td><span t-esc="project_name"/></td>
+												<td><strong>Partner:</strong></td>
+												<td><span t-esc="partner_name"/></td>
+											</tr>
+
+											<tr>
+												<td><strong>From:</strong></td>
+												<td><span t-esc="date_from"/></td>
+												<td><strong>To:</strong></td>
+												<td><span t-esc="date_to"/></td>
+											</tr>
+
+											<tr>
+												<td><strong>Debit/Credit:</strong></td>
+												<td><span t-esc="debit_or_credit"/></td>
+												<td><strong>Type:</strong></td>
+												<td><span t-esc="summary_or_detail"/></td>
+
+											</tr>
+
+											<tr>
+												<td><strong>Sort by:</strong></td>
+												<td><span t-esc="sort"/></td>
+
+												<td></td>
+											</tr>
+										</tbody>
+									</table>
+
+									<t t-if="summary_or_detail == 'summary'">
+
+										 <table class="table table-condensed" style="font-size: 12px;border:1px solid black">
+											<tbody>
+												<tr>
+													<td><strong>Job</strong></td>
+													<td><strong>Partner</strong></td>
+													<!--Debit conditions-->
+													<t t-if="debit_or_credit == 'all'">
+														<td><strong>Total Debit</strong></td>
+													</t>
+
+													<t t-if="debit_or_credit == 'debit'">
+														<td><strong>Total Debit</strong></td>
+													</t>
+													<!--End condition-->
+
+													<!--Credit conditions-->
+													<t t-if="debit_or_credit == 'all'">
+														<td><strong>Total Credit</strong></td>
+													</t>
+
+													<t t-if="debit_or_credit == 'credit'">
+														<td><strong>Total Credit</strong></td>
+													</t>
+													<!--End condition-->
+
+													<t t-if="debit_or_credit == 'all'">
+														<td><strong>Total</strong></td>
+													</t>
+												</tr>
+
+												<t t-foreach="project" t-as="line">
+													<tr>
+														<td><span t-field="line.name"/></td>
+														<td><span t-field="line.partner_id.name"/></td>
+														<!--Debit conditions-->
+														<t t-if="debit_or_credit == 'all'">
+															<td><span t-field="line.debit_total"/></td>
+														</t>
+
+														<t t-if="debit_or_credit == 'debit'">
+															<td><span t-field="line.debit_total"/></td>
+														</t>
+														<!--End condition-->
+
+
+														<!--Credit conditions-->
+														<t t-if="debit_or_credit == 'all'">
+															<td><span t-field="line.credit_total"/></td>
+														</t>
+
+														<t t-if="debit_or_credit == 'credit'">
+															<td><span t-field="line.credit_total"/></td>
+														</t>
+														<!--End condition-->
+
+														<t t-if="debit_or_credit == 'all'">
+															<td><span t-field="line.total_debit_credit"/></td>
+														</t>
+
+
+													</tr>
+												</t>
+
+											</tbody>
+										 </table>
+
+									</t>
+
+
+									<t t-if="summary_or_detail == 'detail'">
+
+										 <table class="table table-condensed" style="font-size: 12px;border:1px solid black">
+											<tbody>
+
+												<t t-foreach="project" t-as="line">
+													<h3><span t-field="line.name" /></h3>
+													<h5><strong>Analytic Acc: </strong><span t-field="line.analytic_account_id" /></h5>
+													<h5><strong>Partner: </strong><span t-field="line.partner_id" /></h5>
+													<table class="table table-condensed" style="font-size: 12px">
+														<tbody>
+															<tr>
+																<td><strong>Date</strong></td>
+																<td><strong>JNL</strong></td>
+																<td><strong>Journal Entry</strong></td>
+																<td><strong>Account</strong></td>
+																<td colspan="3"><strong>Label</strong></td>
+																<!--Debit conditions-->
+																<t t-if="debit_or_credit == 'all'">
+																	<td><strong>Debit</strong></td>
+																</t>
+
+																<t t-if="debit_or_credit == 'debit'">
+																	<td><strong>Debit</strong></td>
+																</t>
+																<!--End condition-->
+
+																<!--Credit conditions-->
+																<t t-if="debit_or_credit == 'all'">
+																	<td><strong>Credit</strong></td>
+																</t>
+
+																<t t-if="debit_or_credit == 'credit'">
+																	<td><strong>Credit</strong></td>
+																</t>
+																<!--End condition-->
+															</tr>
+
+															<t t-foreach="line.account_move_line_ids" t-as="move">
+																<tr>
+																	<td><span t-field="move.date" /></td>
+																	<td><span t-field="move.journal_id.code" /></td>
+																	<td><span t-field="move.move_id" /></td>
+																	<td><span t-field="move.account_id" /></td>
+																	<td colspan="3"><span t-field="move.name" /></td>
+																	<td><span t-field="move.debit" /></td>
+																	<td><span t-field="move.credit" /></td>
+																</tr>
+															</t>
+															<tr>
+																<td></td>
+																<td></td>
+																<td></td>
+																<td></td>
+																<td></td>
+																<td></td>
+																<td></td>
+																<!--Debit conditions-->
+																<t t-if="debit_or_credit == 'all'">
+																	<td><span t-field="line.debit_total"/></td>
+																</t>
+
+																<t t-if="debit_or_credit == 'debit'">
+																	<td><span t-field="line.debit_total"/></td>
+																</t>
+																<!--End condition-->
+
+
+																<!--Credit conditions-->
+																<t t-if="debit_or_credit == 'all'">
+																	<td><span t-field="line.credit_total"/></td>
+																</t>
+
+																<t t-if="debit_or_credit == 'credit'">
+																	<td><span t-field="line.credit_total"/></td>
+																</t>
+																<!--End condition-->
+															</tr>
+
+															<tr>
+																<td></td>
+																<td></td>
+																<td></td>
+																<td></td>
+																<td></td>
+																<td></td>
+																<td></td>
+																<td>
+																	<t t-if="debit_or_credit == 'all'">
+																		<t t-if="line.debit_total &gt; line.credit_total">
+																			<strong>Loss</strong>
+																		</t>
+																		<t t-if="line.debit_total &lt; line.credit_total">
+																			<strong>Profit</strong>
+																		</t>
+																	</t>
+
+																</td>
+																<td>
+																	<t t-if="debit_or_credit == 'all'">
+																		<span t-field="line.total_debit_credit" />
+																	</t>
+																</td>
+
+															</tr>
+
+														</tbody>
+													</table>
+
+												</t>
+
+											</tbody>
+										 </table>
+
+									</t>
+                                   
+
+
+                        		</div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+
+
+    </template>
+
+</data>
+</odoo>

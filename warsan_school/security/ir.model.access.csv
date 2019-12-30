@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_warsan_school_class_manager,warsan_school.class,model_warsan_school_class,group_school_manager,1,1,1,1
+access_warsan_school_registration_manager,.registration,model_warsan_school_registration,group_school_manager,1,1,1,1

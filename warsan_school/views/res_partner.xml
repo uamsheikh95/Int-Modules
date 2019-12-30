@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+
+<!--    <record model="ir.ui.view" id="student_form">-->
+<!--        <field name="name">res.partner.student</field>-->
+<!--        <field name="model">res.partner</field>-->
+<!--        <field name="inherit_id" ref="base.view_partner_form"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--&lt;!&ndash;            <xpath expr="//notebook" position="inside">&ndash;&gt;-->
+<!--&lt;!&ndash;                <page string="Registred Classes">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <field name="reg_class_ids">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <tree create="false" delete="false" edit="false">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="name" string="Code" />&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="class_id" string="Class" />&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="course_id" string="Course" />&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="reg_date" string="Registration Date" />&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="ammount_fee" string="Amount Fee" />&ndash;&gt;-->
+<!--&lt;!&ndash;                        </tree>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </field>&ndash;&gt;-->
+<!--&lt;!&ndash;                </page>&ndash;&gt;-->
+<!--&lt;!&ndash;            </xpath>&ndash;&gt;-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record model="ir.ui.view" id="teacher_form">
+        <field name="name">res.partner.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Classes">
+                    <field name="class_ids">
+                        <tree create="false" delete="false" edit="false">
+                            <field name="name" string="Code" />
+                            <field name="course_id" string="Course" />
+                            <field name="date_start" string="From" />
+                            <field name="date_end" string="To" />
+                            <field name="time_in" string="Time In" />
+                            <field name="time_out" string="Time Out" />
+                            <field name="state" string="Class State" />
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,197 @@
+<odoo>
+<data>
+    <template id="background_layout" inherit_id="web.external_layout_background">
+        <xpath expr="//div[@class='header o_background_header']" position="replace">
+            <div class="header o_background_header">
+                <div class="col-xs-12 text-center">
+                    <img t-if="company.logo" style = "max-height:105px;max-width:400px" src="/tadamun_project/static/src/img/Picture1.png"/>
+                </div>
+
+                <div class="clearfix mb8"/>
+            </div>
+
+        </xpath>
+
+
+
+
+    </template>
+
+    <report
+        id="action_weekly_report"
+        name="tadamun_project.weekly_report"
+        file="tadamun_project.weekly_report"
+        model="project.project"
+        string="Weekly Report"
+        report_type="qweb-pdf"
+        />
+
+    <template id="weekly_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" >
+                        <div class="row">
+                            <h3 class="text-center">TASS Weekly Project Status Report</h3>
+                        	<div class="col-md-12">
+                        		<div class="">
+                                    <table class = "table table-bordered">
+										<tbody>
+											<tr>
+											
+												<td nowrap="nowrap"><strong>Project Type</strong></td>
+												<td colspan="2">
+											
+													<t t-foreach="doc.project_type" t-as="cluster">
+														   <span t-field="cluster.name"/> - 
+													</t>
+												</td>
+												
+												<td nowrap="nowrap"><strong>Reporting Period</strong></td>
+												<td>
+													<strong>From</strong><br/><br/>
+													<strong>To</strong>
+												</td>
+												<td style="width:200px">
+													<span t-field="doc.from_date_w_r" />
+													<span t-field="doc.to_date_w_r" />
+												</td>
+											</tr>
+											
+											<tr>
+												<td nowrap="nowrap"><strong>Project Name</strong></td>
+												<td colspan="6"><span t-field="doc.name" /></td>
+											</tr>
+											
+											<tr>
+												<td nowrap="nowrap"><strong>Project Description</strong></td>
+												<td colspan="6"><span t-field="doc.project_summery" /></td>
+											</tr>
+											
+											<tr>
+											
+												<td nowrap="nowrap"><strong>Name of person completing this report: <br/>(incl. title and e-mail address)</strong></td>
+												<td colspan="2"><span t-field="doc.name_of_person_w_r"/></td>
+												
+												<td nowrap="nowrap"><strong>Project Location</strong></td>
+												<td colspan="2"><span t-field="doc.project_location"  /></td>
+											</tr>
+										</tbody>
+									</table>
+									
+									<table class="table table-bordered" style="width:33.3%;float:left;" >
+										<tbody>
+											<tr>
+												<td><strong>Completed Tasks/Activities</strong></td>
+											</tr>
+											
+											<t t-foreach="doc.task_ids" t-as="task">
+												<t t-if="task.stage_id.name == 'Completed'">
+													<tr><td><span t-field="task.name"/></td></tr>
+												</t>
+											</t>
+										</tbody>
+									</table>
+									
+									<table class="table table-bordered" style="font-size: 12px;width:33.4%;float:left;">
+										<tbody>
+											<tr>
+												<td colspan="5"><strong>Beneficiaries</strong></td>
+											</tr>
+											<tr>
+												<td><strong>Boy</strong></td>
+												<td><strong>Girl</strong></td>
+												<td><strong>Women</strong></td>
+												<td><strong>Men</strong></td>
+												<td><strong>Total</strong></td>
+											</tr>
+											<tr>
+												<td><span t-field="doc.boys_w_r"/></td>
+												<td><span t-field="doc.girls_w_r"/></td>
+												<td><span t-field="doc.men_w_r"/></td>
+												<td><span t-field="doc.women_w_r"/></td>
+												<td><span t-field="doc.no_of_beneficieries_w_r"/></td>
+											</tr>
+											
+										</tbody>
+									</table>
+									
+									<table class="table table-bordered" style="width:33.3%;float:left;" >
+										<tbody>
+											<tr>
+												<td><strong>Remarks</strong></td>
+											</tr>
+											
+											<t t-foreach="doc.weekly_remarks_ids" t-as="weekly_rem">
+												<tr><td><span t-field="weekly_rem.name"/></td></tr>
+											</t>
+										</tbody>
+									</table>
+									
+									
+									<table class="table table-bordered" style="width:49.8%;float:left;">
+										<tbody>
+											<tr>
+												<td><strong>Tasks in Progress</strong></td>
+											</tr>
+											
+											<t t-foreach="doc.inprogress_tasks_ids" t-as="in_progress">
+												<tr><td><span t-field="in_progress.name"/></td></tr>
+											</t>
+										</tbody>
+									</table>
+									
+									<table class="table table-bordered" style="width:49.4%;float:left;">
+										<tbody>
+											<tr>
+												<td><strong>Tasks to Begin Next Week</strong></td>
+											</tr>
+											
+											<t t-foreach="doc.next_week_tasks_ids" t-as="next_Week">
+												<tr><td><span t-field="next_Week.name"/></td></tr>
+											</t>
+										</tbody>
+									</table>
+									
+									
+									<table class="table table-bordered" style="width:49.8%;float:left;">
+										<tbody>
+											<tr>
+												<td><strong>Unforeseen Challengs Met</strong></td>
+											</tr>
+											
+											<t t-foreach="doc.unforeseen_ids" t-as="unforeseen">
+												<tr><td><span t-field="unforeseen.name"/></td></tr>
+											</t>
+										</tbody>
+									</table>
+									
+									<table class="table table-bordered" style="width:49.4%;float:left;">
+										<tbody>
+											<tr>
+												<td><strong>Possible Solutions Adopted or Planned to Dopt</strong></td>
+											</tr>
+											
+											<t t-foreach="doc.possible_solutions_ids" t-as="possible">
+												<tr><td><span t-field="possible.name"/></td></tr>
+											</t>
+										</tbody>
+									</table>
+
+
+
+
+                        		</div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+
+        </t>
+    </template>
+
+</data>
+</odoo>
+
+

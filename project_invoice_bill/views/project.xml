@@ -1,0 +1,118 @@
+<odoo>
+    <!--INHERIT PROJECT.PROJECT FORM VIEW-->
+	<record model="ir.ui.view" id="inherit_project_form_view">
+		<field name="name">project.form</field>
+		<field name="model">project.project</field>
+		<field name="inherit_id" ref="project.edit_project"/>
+		<field name="arch" type="xml">
+
+
+            <!--Invoice and Bill Buttons-->
+
+            <div class="oe_button_box" position="inside">
+                <button type="object"  name="bill_create"
+                    class="oe_stat_button"
+                    icon="fa-pencil-square-o">
+                    <field name="bill_count" widget="statinfo" string="Bills" />
+
+                    <field name='bill_ids' invisible="1" context="{'default_project_id': id}"/>
+                </button>
+
+                 <button type="object"  name="invoice_create"
+                    class="oe_stat_button"
+                    icon="fa-pencil-square-o">
+                    <field name="invoice_count" widget="statinfo" string="Invoices" />
+
+                    <field name='invoice_ids' invisible="1" context="{'default_project_id': id}"/>
+                </button>
+
+			</div>
+
+			<xpath expr="//notebook" position="inside">
+				<page string="Move">
+					<field name="account_move_line_ids">
+						<tree>
+							<field name="date" />
+							<field name="move_id" />
+							<field name="journal_id" />
+							<field name="name" />
+							<field name="ref" />
+							<field name="partner_id" />
+							<field name="account_id" />
+							<field name="analytic_account_id" />
+							<field name="full_reconcile_id" />
+							<field name="debit" />
+							<field name="credit" />
+							<field name="date_maturity" />
+						</tree>
+					</field>
+
+
+
+					<table class="table table-condensed" style="width:263px;float:right">
+
+						<tbody>
+							<tr>
+								<td>Total Credit: </td>
+								<td><field name="credit_total" /></td>
+							</tr>
+
+							<tr>
+								<td>Total Debit: </td>
+								<td><field name="debit_total" /></td>
+							</tr>
+
+							<tr>
+								<td><strong>Balance: </strong></td>
+								<td><field name="total_debit_credit" /></td>
+							</tr>
+
+
+						</tbody>
+					</table>
+
+
+<!--					<group class="oe_subtotal_footer oe_right">-->
+<!--						<div class="oe_subtotal_footer_separator oe_inline">-->
+<!--							<label for="total_debit_credit" string="Balance"/>-->
+<!--						</div>-->
+<!--						<field name="total_debit_credit" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary"/>-->
+<!--					</group>-->
+				</page>
+			</xpath>
+
+
+
+        </field>
+    </record>
+
+    <!--INHERIT PROJECT.PROJECT TREE VIEW-->
+
+	<record model="ir.ui.view" id="project_kanban_view_extened">
+	          <field name="name">res.project.kanban.view.extened</field>
+	          <field name="inherit_id" ref="project.view_project_kanban"/>
+	          <field name="model">project.project</field>
+	          <field name="arch" type="xml">
+
+							<div class="o_kanban_card_content" >
+										<div class="o_kanban_primary_left">
+												<div class="o_primary" position="after">
+													<ul>
+                            <li><strong>Total Invoices: </strong><field name="total_invoices" widget="monetary" options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+													 - <strong># Invoices: </strong><field name="invoice_count"/> </li>
+														<li><strong>Total Bills: </strong><field name="total_bills" widget="monetary" options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+													 - <strong># Bills: </strong><field name="bill_count"/></li>
+                          </ul>
+												</div>
+												<div t-if="record.alias_name.value and record.alias_domain.value">
+														<span><i class="fa fa-envelope"/> <t t-esc="record.alias_id.value"/></span>
+												</div>
+										</div>
+							</div>
+	          </field>
+	      </record>
+
+
+
+
+</odoo>

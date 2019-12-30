@@ -1,0 +1,1140 @@
+<odoo>
+<data>
+
+		<!--Activity-->
+	<record model="ir.ui.view" id="activity_form_view">
+		<field name="name">tadamun_project.activity.form</field>
+		<field name="model">tadamun_project.activities</field>
+		<field name="arch" type="xml">
+			<form string="Create Activity">
+				<table class="table table-bordered"  style="font-size: 13px">
+					<tbody>
+						<tr>
+							<td style="width:30%"><field name="name" style="width:100%;" placeholder="Output"/></td>
+							<td colspan="14" style="width:70%"><field name="desc" style="width:100%;" placeholder="Output Description"/></td>
+						</tr>
+						
+						<tr>
+							<td><strong>Year</strong></td>
+							<td><strong></strong></td>
+							
+						</tr>
+						<tr>
+							<td><field name="date_project"/></td>
+							<td><field name="workplan_months" widget="many2many_tags"/></td>
+
+						</tr>
+					</tbody>
+				</table>
+				
+			</form>
+		</field>
+	</record>
+
+
+	<!--Outcome-->
+	<record model="ir.ui.view" id="outcome_form_view">
+		<field name="name">tadamun_project.outcome.form</field>
+		<field name="model">tadamun_project.outcome</field>
+		<field name="arch" type="xml">
+			<form string="Create Outcome">
+				<table class="table table-bordered"  style="font-size: 13px">
+					<tbody>
+						<tr>
+							<td style="width:30%"><field name="name" style="width:100%;" placeholder="Outcome"/></td>
+							<td style="width:50%"><field name="desc" style="width:100%;" placeholder="Outcome Description"/></td>
+							<!--<td style="width:20%"><field name="get_proj_id" style="width:100%;"/></td>-->
+						</tr>
+					</tbody>
+				</table>
+				
+				<field name="output_ids" nolabel="1" context="{'default_outcome_id': id}">
+					<tree>
+						<field name="name" style="width:30%"/>
+						<field name="desc" style="width:70%"/>
+					</tree>
+				</field>
+				
+			</form>
+		</field>
+	</record>
+	
+	<!--Output-->
+	<record model="ir.ui.view" id="educationoutput_form_view">
+		<field name="name">tadamun_project.educationoutput.form</field>
+		<field name="model">tadamun_project.output</field>
+		<field name="arch" type="xml">
+			<form string="Create Output">
+				<table class="table table-bordered"  style="font-size: 13px">
+					<tbody>
+						<tr>
+							<td style="width:30%"><field name="name" style="width:100%;" placeholder="Output"/></td>
+							<td style="width:70%"><field name="desc" style="width:100%;" placeholder="Output Description"/></td>
+						</tr>
+						
+					</tbody>
+				</table>
+				
+				<group>
+					<field name="indicator_ids" context="{'default_output_id': id}">
+						<tree editable="bottom">
+							<field name="name"/>
+							<field name="type"/>
+							<field name="cluster"/>
+							<field name="indicator"/>
+							<field name="total_end_cycle"/>
+							<field name="means_of_verification"/>
+						</tree>
+					</field>
+				</group>
+				
+				<group>
+					<field name="activity_ids" context="{'default_output_id': id}">
+						<tree editable="bottom">
+							<field name="name"/>
+							<field name="desc"/>
+							<!--<field name="project_id"/>-->
+						</tree>
+					</field>
+				</group>
+				
+			</form>
+		</field>
+	</record>
+
+
+
+<record model="ir.ui.view" id="generaloperating_form_view">
+		<field name="name">tadamun_project.generaloperating.form</field>
+		<field name="model">tadamun_project.generaloperating</field>
+		<field name="arch" type="xml">
+			<form>				
+				<table class="table table-bordered"  style="font-size: 11px">
+						<tbody>
+							<tr style="background-color:#189ad3;color:white;">
+								<td><strong>Code</strong></td>
+								<td><strong>Budget Line Description</strong></td>
+								<td colspan="2"><strong>Remarks</strong></td>
+								<td><strong>D/S (Direct/Support)</strong></td>
+								<td><strong>Unit Quantity</strong></td>
+								<td><strong>Unit Cost</strong></td>
+								<td><strong>Duration (per month, per day or lump sum)</strong></td>
+								<td><strong>Total Cost % charged to CHF</strong></td>
+								<td><strong>Total</strong></td>
+							</tr>
+							<tr>
+								<td><field name="budget_code"/></td>
+								<td><field name="budget_line_description"/></td>
+								<td colspan="2"><field name="remarks"/></td>
+								<td><field name="d_and_s"/></td>
+								<td><field name="unit_quantity"/></td>
+								<td><field name="unit_cost"/></td>
+								<td><field name="duration"/></td>
+								<td><field name="total_cost"/></td>
+								<td><field name="total"/></td>
+							</tr>
+							
+						</tbody>
+				</table>
+			</form>
+		</field>
+</record>
+
+
+	
+	
+    <record model="ir.ui.view" id="project_view">
+        <field name="name">tadamun-project.project</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+		
+			<!--<xpath expr="//notebook/page[3]" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>-->
+			
+			<notebook position="inside">
+			
+			
+				
+				
+			
+				<page string="Cover Page">
+					<group>
+						<field name="project_title"/>
+					</group>
+					<group>
+						<group>
+							<field name="fund_project_code"/>
+							<field name="project_location"/>
+						</group>
+						<group>
+							<field name="organizations_project_code"/>
+							<field name="project_budget_in_us"/>						
+						</group>
+					</group>
+					<group>
+						<group>
+							<field name="planned_start_date"/>
+							<field name="actual_start_date"/>
+						</group>
+						<group>
+							<field name="planned_end_date"/>
+							<field name="actual_end_date"/>
+						</group>
+					</group>
+					
+					<group>
+						<group>
+						</group>
+						<group>
+							<div>
+								<label for="project_duration" string="Project Duration"/> ( <field name="project_duration" class="oe_inline"/> days )
+							</div>
+						</group>
+					</group>
+					
+					<group>
+						<field name="project_summery"/>
+					</group>
+					
+					
+					<label for="boys" style="border:1px solid #dddddd;width:100%;padding:5px;" string="Beneficieries"/>
+					<group>
+						<group>
+							<field name="boys"/>
+							<field name="girls"/>
+						</group>
+						<group>
+							<field name="men"/>
+							<field name="women"/>
+						</group>
+						<group>
+							<field name="no_of_beneficieries"/>
+						</group>
+					</group>
+					<group>
+						<field name="beneficiery_ids"  context="{'default_project_id': id}">
+							<tree string="Total Beneficieries Includeing the Following" editable="bottom">
+								<field name="bef_type"/>
+								<field name="boys"/>
+								<field name="girls"/>
+								<field name="men"/>
+								<field name="women"/>
+								<field name="no_of_beneficieries"/>
+							</tree>
+						</field>
+					</group>
+					
+					<group>
+						<field name="total_other_beneficiaries"/>
+					</group>
+					
+					
+					<group style = "border-top:1px solid silver;">
+						<group>
+							<field name="indirect_beneficieries"/>
+						</group>
+						<group>
+							<field name="catchment_population"/>
+						</group>
+					</group>
+					
+					<group>
+						<field name="link_with_alloc"/>
+					</group>
+					
+					
+					
+					<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+					
+					<table class="table table-bordered" style="font-size: 13px">
+						<tbody>
+							<tr style="background-color:#189ad3;color:white;">
+								<td colspan="6"><h4>Sub-Grants to Implementing Partners</h4></td>
+							</tr>
+							<tr>
+								<td colspan="3"></td>
+								<td colspan="2"><label for="has_other_funding" string="Has other funding been secured  for this project?"/><field name="has_other_funding" style="margin-left:5px"/><strong>Yes</strong></td>
+							</tr>
+							<tr style="color:#666666;">
+								<td><strong>Partner Name</strong></td>
+								<td><strong>Partner Type</strong></td>
+								<td><strong>Partner Type in US</strong></td>
+
+								<td><strong>Source</strong></td>
+								<td><strong>US$</strong></td>
+								
+							</tr>
+							<tr>
+								<td><field name="partner_name" style="width:100%;"/></td>
+								<td><field name="parnter_type" style="width:100%;"/></td>
+								<td><field name="parnter_budget_in_us" style="width:100%;"/></td>
+								
+
+								
+								<td><field name="source"/></td>
+								<td><field name="source_budget_in_us"/></td>
+							</tr>
+							<tr>
+								<td style="text-align:left;"><strong>Total</strong></td>
+								<td colspan="2"><field name="partner_budget_total" style="width:100%;text-align:right" string="Total"/></td>
+								
+								
+								<td style="text-align:left;"><strong>Total</strong></td>
+								<td colspan="2"><field name="source_budget_total" style="width:100%;text-align:right"/></td>
+							</tr>
+						</tbody>
+					</table>
+					
+					<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+					<group>
+						<label for="boys"  style="background-color:#189ad3;color:white;width:100%;height:49px;padding-left:10px;padding-top:13px;font-size:17px" string="Organization focal point details"/>
+						<group>
+							<field name="org_name"/>
+						</group>
+						<group>
+							<field name="title"/>
+						</group>
+						<group>
+							<field name="tel"/>
+						</group>
+						<group>
+							<field name="email"/>
+						</group>
+					</group>
+					
+					<group>
+						<field name="contacts" context="{'default_project_id': id}">
+							<tree editable="bottom">
+								<field name="contact_name"/>
+								<field name="title"/>
+								<field name="email"/>
+								<field name="phone"/>
+							</tree>
+						</field>
+					</group>
+					<group>
+						<field name="leave_comment"/>
+					</group>
+				</page>
+				
+				<page string="Background">
+
+					<group>
+						<field name="humanitarian_context"/>
+					</group>
+					
+					<group>
+						<field name="need_assessment"/>
+					</group>
+					
+					<group>
+						<field name="description_of_beneficiaries"/>
+					</group>
+					
+					<group>
+						<field name="grant_request"/>
+					</group>
+					
+					<group>
+						<field name="complementarity"/>
+					</group>
+					
+					<group>
+						<field name="leave_comment2" style="marginTop:15px;"/>
+					</group>
+					
+				</page>
+				
+				<page string="Logical Framework">
+					
+					<group>
+						<field name="overall_project_objective"/>
+					</group>
+					
+					<table class="table table-bordered"  style="font-size: 13px">
+						<tbody>
+							<tr style="background-color:#189ad3;color:white;">
+								<td><strong>Cluster Objectives</strong></td>
+								<td><strong>Humanitrian Response Plan (HRP) Objectives</strong></td>
+								<td><strong>Percentage of Activities</strong></td>
+							</tr>
+							<tr>
+								<td><field name="cluster_objectives" style="width:100%;"/></td>
+								<td><field name="hrp_objectives" style="width:100%;"/></td>
+								<td><field name="percentage_of_activities" style="width:100%;"/></td>
+							</tr>
+							<tr>
+								<td colspan="2" style="text-align:right;"><strong>Total Percentage</strong></td>
+								<td><field name="total_percentage" style="width:100%;"/></td>
+							</tr>
+						</tbody>
+					</table>
+					
+					<group>
+						<field name="sector_objectives"/>
+					</group>
+					
+					<group>
+						<field name="project_type" widget="many2many_tags"/>
+					</group>
+					
+					<field name="outcome_ids">
+						<tree>
+							<field name="name" style="width:30%"/>
+							<field name="desc" style="width:70%"/>
+						</tree>
+					</field>
+						
+					<group>
+						<field name="additional_targets" style="marginTop:15px;"/>
+					</group>
+					
+					<group>
+						<field name="leave_comment3" style="marginTop:15px;"/>
+					</group>
+						
+					
+					
+							
+				</page>
+				
+				<page string="Workplan">
+					<field name="activity_ids" context="{'default_project_id': id}"><!-- edit="true" editable="bottom"-->
+						<tree editable="bottom" create="false">
+							<field name="name"/>
+							<field name="desc" string="Description (Month)" nolabel="1" style="width:30%" readonly="1"/>
+							<field name="date_project" string="Year"/>
+							<!--<field name="year_to" string="To"/>-->
+							<field name="workplan_months" widget="many2many_tags" options="{'no_create': True, 'no_create_edit':True}"/>
+						</tree>
+					</field>
+					
+					<group>
+						<field name="leave_comment4" style="marginTop:15px;"/>
+					</group>
+					
+				</page>
+				
+				<page string="M and R Details">
+					<group>
+						<field name="monitoring_plan"/>
+					</group>
+					
+					<group>
+						<field name="leave_comment5"/>
+					</group>
+				</page>
+				
+				<page string="Other Info">
+				
+					<group>
+						<field name="accountability"/>
+					</group>
+					
+					<group>
+						<field name="implementation_plam"/>
+					</group>
+					
+					<group>
+						<field name="cordination_with_orgs" context="{'default_project_id': id}">
+							<tree editable="bottom">
+								<field name="name"/>
+							</tree>
+						</field>
+					</group>
+			
+					
+					<group>
+						<group>
+							<field name="name_of_the_org"/>
+						</group>
+						
+						<group>
+							<field name="areas_and_activities"/>
+						</group>
+					</group>
+					
+					<group>
+						<group>
+							<field name="enviromentalmarker"/>
+						</group>
+						
+						<group>
+							<field name="gendermarker"/>
+						</group>
+					</group>
+					
+					<group>
+						<field name="justify_chosen"/>
+					</group>
+					
+					<group>
+						<field name="protection_mainstreaming"/>
+					</group>
+					
+					<group>
+						<field name="safety_and_security"/>
+					</group>
+					
+					<group>
+						<field name="access"/>
+					</group>
+					
+					<group>
+						<field name="leave_comment6"/>
+					</group>
+				</page>
+				
+				<page string="Budget">
+					<label for="staff_ids" string="1. Staff and Other Personal Costs" style="border:1px solid 189ad3; background-color: #189ad3;color:white;width:100%;margin-top:15px;"/>
+					<field name="staff_ids" context="{'default_project_id': id}">
+						<tree editable="bottom">
+							<field name="budget_code"/>
+							<field name="budget_line_description"/>
+							<field name="d_and_s"/>
+							<field name="unit_quantity"/>
+							<field name="unit_cost"/>
+							<field name="duration"/>
+							<field name="remarks" style="width:200px;"/>
+							<field name="total_cost"/>
+							<field name="total"/>
+						</tree>
+					</field>
+					<!--STAFF TOTAL-->
+					<group>
+						<field name="staff_total"/>
+					</group>
+					
+					<label for="supplies_ids" string="2. Supplies, Commodities and Materials" style="border:1px solid 189ad3; background-color: #189ad3;color:white;width:100%;margin-top:15px;"/>
+					<field name="supplies_ids" context="{'default_project_id': id}">
+						<tree editable="bottom">
+							<field name="budget_code"/>
+							<field name="budget_line_description"/>
+							<field name="d_and_s"/>
+							<field name="unit_quantity"/>
+							<field name="unit_cost"/>
+							<field name="duration"/>
+							<field name="remarks" style="width:200px;"/>
+							<field name="total_cost"/>
+							<field name="total"/>
+						</tree>
+					</field>
+					
+					<!--Constructal TOTAL-->
+					<group>
+						<field name="supplies_total"/>
+					</group>
+					
+					<label for="equimpent_ids" string="3. Equipment" style="border:1px solid 189ad3; background-color: #189ad3;color:white;width:100%;margin-top:15px;"/>
+					<field name="equimpent_ids" context="{'default_project_id': id}">
+						<tree editable="bottom">
+							<field name="budget_code"/>
+							<field name="budget_line_description"/>
+							<field name="d_and_s"/>
+							<field name="unit_quantity"/>
+							<field name="unit_cost"/>
+							<field name="duration"/>
+							<field name="remarks" style="width:200px;"/>
+							<field name="total_cost"/>
+							<field name="total"/>
+						</tree>
+					</field>
+					
+					<!--Equipment TOTAL-->
+					<group>
+						<field name="equimpent_total"/>
+					</group>
+					
+					
+					<label for="travel_or_transportation_ids" string="4. Travel/Transportation" style="border:1px solid 189ad3; background-color: #189ad3;color:white;width:100%;margin-top:15px;"/>
+					<field name="travel_or_transportation_ids" context="{'default_project_id': id}">
+						<tree editable="bottom">
+							<field name="budget_code"/>
+							<field name="budget_line_description"/>
+							<field name="d_and_s"/>
+							<field name="unit_quantity"/>
+							<field name="unit_cost"/>
+							<field name="duration"/>
+							<field name="remarks" style="width:200px;"/>
+							<field name="total_cost"/>
+							<field name="total"/>
+						</tree>
+					</field>
+					
+					<!--Travel TOTAL-->
+					<group>
+						<field name="travel_or_transportation_total"/>
+					</group>
+
+					
+					<label for="general_operating_ids" string="5. General Operating and Other Direct Costs" style="border:1px solid 189ad3; background-color: #189ad3;color:white;width:100%;margin-top:15px;"/>
+					<field name="general_operating_ids" context="{'default_project_id': id}">
+						<tree editable="bottom">
+							<field name="budget_code"/>
+							<field name="budget_line_description"/>
+							<field name="d_and_s"/>
+							<field name="unit_quantity"/>
+							<field name="unit_cost"/>
+							<field name="duration"/>
+							<field name="remarks" style="width:200px;"/>
+							<field name="total_cost"/>
+							<field name="total"/>
+						</tree>
+					</field>
+					
+					<!--General Operating TOTAL-->
+					<group>
+						<field name="general_operating_total"/>
+					</group>
+					
+					
+					<separator/>
+					<!--ALL BUDGETS TOTAL-->
+					
+					<group style="background-color:#fff0aa;">
+						<field name="direct_cost_total"/>
+					</group>
+					
+					<group>
+						<field name="project_support_cost" style="width:40%"/>
+					</group>
+					
+					<group style="background-color:#fff0aa;">
+						<field name="direct_cost_and_support_total"/>
+					</group>
+				</page>
+				
+				
+				<page string="Reports">
+				
+					<!--Weekly Report-->
+					
+					<p style="margin-top:30px;width:100%">
+						<a style = "width:100%" class="btn btn-primary" data-toggle="collapse" href="#weekly" role="button" aria-expanded="false" aria-controls="collapseExample">
+							Weekly Report
+						</a>
+					</p>
+					<div class="collapse" id="weekly">
+						<div class="card card-body">
+						
+							<br/>
+							<br/>
+							<h3 class="text-center">TASS Weekly Project Status Report</h3>
+							<br/>
+							<br/>
+						
+							<table class = "table table-bordered">
+								<tbody>
+									<tr>
+									
+										<td nowrap="nowrap"><strong>Project Type</strong></td>
+										<td style="background-color:#ddd" colspan="2">
+											<!-- <field name="project_type" widget="many2many_tags" /> -->
+										</td>
+										
+										<td nowrap="nowrap"><strong>Reporting Period</strong></td>
+										<td>
+											<strong>From</strong><br/><br/>
+											<strong>To</strong>
+										</td>
+										<td style="width:200px">
+											<field name="from_date_w_r" />
+											<field name="to_date_w_r" />
+										</td>
+									</tr>
+									
+									<tr>
+										<td nowrap="nowrap"><strong>Project Name</strong></td>
+										<td style="background-color:#ddd" colspan="6">	
+											<!-- <field name="name" /> -->
+										</td>
+									</tr>
+									
+									<tr>
+										<td nowrap="nowrap"><strong>Project Description</strong></td>
+										<td style="background-color:#ddd" colspan="6">
+											<!-- <field name="project_summery" /> -->
+										</td>
+									</tr>
+									
+									<tr>
+									
+										<td nowrap="nowrap"><strong>Name of person completing this report: <br/>(incl. title and e-mail address)</strong></td>
+										<td colspan="2"><field name="name_of_person_w_r"/></td>
+										
+										<td nowrap="nowrap"><strong>Project Location</strong></td>
+										<td style="background-color:#ddd" colspan="2">
+											<!-- <field name="project_location"  /> -->
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							
+							<field name="completed_task_ids" style="width:33.3%;float:left;" >
+								<tree create="false" edit="false" delete="false">
+									<field name="name" string="Completed Tasks/Activities"/>
+								</tree>
+							</field>
+							
+							<table class="table table-bordered" style="font-size: 12px;width:33.4%;float:left;">
+								<tbody>
+									<tr>
+										<td colspan="5"><strong>Beneficiaries</strong></td>
+									</tr>
+									<tr>
+										<td><strong>Boy</strong></td>
+										<td><strong>Girl</strong></td>
+										<td><strong>Women</strong></td>
+										<td><strong>Men</strong></td>
+										<td><strong>Total</strong></td>
+									</tr>
+									<tr>
+										<td><field name="boys_w_r"/></td>
+										<td><field name="girls_w_r"/></td>
+										<td><field name="men_w_r"/></td>
+										<td><field name="women_w_r"/></td>
+										<td><field name="no_of_beneficieries_w_r"/></td>
+									</tr>
+									
+								</tbody>
+							</table>
+							
+							<field name="weekly_remarks_ids" style="width:33.3%;float:left;" context="{'default_project_id': id}" >
+								<tree editable="bottom">
+									<field name="name" string="Remarks"/>
+								</tree>
+							</field>
+							
+							<field name="inprogress_tasks_ids" style="width:49.8%;float:left;" context="{'default_project_id': id}" >
+								<tree editable="bottom">
+									<field name="name" string="Tasks in Progress"/>
+								</tree>
+							</field>
+							
+							<field name="next_week_tasks_ids" style="width:49.4%;float:left;margin-left:4px" context="{'default_project_id': id}" >
+								<tree editable="bottom">
+									<field name="name" string="Tasks to Begin Next Week"/>
+								</tree>
+							</field>
+							
+							<field name="unforeseen_ids" style="width:49.8%;float:left;" context="{'default_project_id': id}" >
+								<tree editable="bottom">
+									<field name="name" string="Unforeseen Challengs Met"/>
+								</tree>
+							</field>
+							
+							<field name="possible_solutions_ids" style="width:49.4%;float:left;margin-left:4px" context="{'default_project_id': id}" >
+								<tree editable="bottom">
+									<field name="name" string="Possible Solutions Adopted or Planned to Dopt"/>
+								</tree>
+							</field>
+					
+							
+						</div>
+					</div>
+
+
+					
+					
+					<!--Monthly Report-->
+					
+					<p style="width:100%;">
+						<a style = "width:100%" class="btn btn-primary" data-toggle="collapse" href="#monthly" role="button" aria-expanded="false" aria-controls="collapseExample">
+							Monthly Report
+						</a>
+					</p>
+					<div class="collapse" id="monthly">
+						<div class="card card-body">
+						
+							<br/>
+							<br/>
+							<h3 class="text-center">TASS Monthly Project Status Report</h3>
+							<br/>
+							<br/>
+						
+							<table class = "table table-bordered">
+								<tbody>
+									<tr>
+									
+										<td nowrap="nowrap"><strong>Project Type</strong></td>
+										<td style="background-color:#ddd" colspan="2">
+											<!-- <field name="project_type" widget="many2many_tags" /> -->
+										</td>
+										
+										<td nowrap="nowrap"><strong>Reporting Period</strong></td>
+										<td>
+											<strong>From</strong><br/><br/>
+											<strong>To</strong>
+										</td>
+										<td style="width:200px">
+											<field name="from_date_w_r" />
+											<field name="to_date_w_r" />
+										</td>
+									</tr>
+									
+									<tr>
+										<td nowrap="nowrap"><strong>Project Name</strong></td>
+										<td style="background-color:#ddd" colspan="6">	
+											<!-- <field name="name" /> -->
+										</td>
+									</tr>
+									
+									<tr>
+										<td nowrap="nowrap"><strong>Project Description</strong></td>
+										<td style="background-color:#ddd" colspan="6">
+											<!-- <field name="project_summery" /> -->
+										</td>
+									</tr>
+									
+									<tr>
+									
+										<td nowrap="nowrap"><strong>Name of person completing this report: <br/>(incl. title and e-mail address)</strong></td>
+										<td colspan="2"><field name="name_of_person_w_r"/></td>
+										
+										<td nowrap="nowrap"><strong>Project Location</strong></td>
+										<td style="background-color:#ddd" colspan="2">
+											<!-- <field name="project_location"  /> -->
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							
+							<table class="table table-bordered" style="font-size:12px;">
+								<tbody>
+								
+									<tr>
+										<td style="width:182px"><strong>Project Overview</strong></td>
+										<td colspan="6"><field name="project_overview" /></td>
+									</tr>
+									
+									<tr>
+										<td style="width:182px"><strong>Summary Project Acheivment Per Output</strong></td>
+										<td colspan="6"><field name="sum_proj_acheiv" /></td>
+									</tr>
+									
+								</tbody>
+							</table>
+							
+							
+							<table class="table table-bordered" style="font-size:12px;width:33.3%;float:left;">
+								<tbody>
+									<tr>
+										<td><strong>Output</strong></td>
+										<td><strong>Activity</strong></td>
+										<td><strong>Monthly Planned<br/>Beneficiary Target</strong></td>
+									</tr>
+
+									<tr>
+										<td style="background-color:#ddd"></td>
+										<td style="background-color:#ddd"></td>
+										<td><field name="monthly_palanned_bef" /></td>
+									</tr>
+									
+									<tr>
+										<td style="background-color:#ddd"></td>
+										<td style="background-color:#ddd"></td>
+										<td></td>
+									</tr>
+
+								</tbody>
+							</table>
+
+							
+							
+							<table class="table table-bordered" style="font-size: 12px;width:33.4%;float:left;">
+								<tbody>
+									<tr>
+										<td colspan="5"><strong>Beneficiaries</strong></td>
+									</tr>
+									<tr>
+										<td><strong>Boy</strong></td>
+										<td><strong>Girl</strong></td>
+										<td><strong>Women</strong></td>
+										<td><strong>Men</strong></td>
+										<td><strong>Total</strong></td>
+									</tr>
+									<tr>
+										<td><field name="boys_m_r"/></td>
+										<td><field name="girls_m_r"/></td>
+										<td><field name="men_m_r"/></td>
+										<td><field name="women_m_r"/></td>
+										<td><field name="no_of_beneficieries_m_r"/></td>
+									</tr>
+									
+								</tbody>
+							</table>
+							
+							<field name="monthly_remarks_ids" style="width:33.3%;float:left;" context="{'default_project_id': id}" >
+								<tree editable="bottom">
+									<field name="name" string="Remarks"/>
+								</tree>
+							</field>
+							
+							
+							<table class="table table-bordered" style="font-size:12px;">
+								<tbody>
+								
+									<tr>
+										<td style="width:182px" colspan="1"><strong>Challenges</strong></td>
+										<td colspan="6"><field name="challenges" /></td>
+									</tr>
+									
+									<tr>
+										<td style="width:182px" colspan="1"><strong>Human Intersting Stories</strong></td>
+										<td colspan="6"><field name="human_stories" /></td>
+									</tr>
+									
+								</tbody>
+							</table>
+							
+							<table class="table table-bordered" style="font-size:12px;">
+								<tbody>
+								
+									<tr>
+										<td><strong>Photos</strong></td>
+									</tr>
+									
+									<tr>
+										<td colspan="6"><field name="photos" widget="many2many_binary" /></td>
+									</tr>
+									
+								</tbody>
+							</table>
+							
+							
+							
+					
+							
+						</div>
+
+
+					</div>
+					
+					
+					<!--Quarter Report-->
+					
+					<p style="width:100%;">
+						<a style = "width:100%" class="btn btn-primary" data-toggle="collapse" href="#quarter" role="button" aria-expanded="false" aria-controls="collapseExample">
+							Quarter Report
+						</a>
+					</p>
+					<div class="collapse" id="quarter">
+						<div class="card card-body">
+						
+							<br/>
+							<br/>
+							<h3 class="text-center">TASS Quarter Project Status Report</h3>
+							<br/>
+							<br/>
+						
+							<table class = "table table-bordered">
+								<tbody>
+
+									<tr>
+										<td nowrap="nowrap"><strong>Project Title</strong></td>
+										<td style="background-color:#ddd" colspan="6">
+											<!-- <field name="project_title" /> -->
+										</td>
+									</tr>
+									
+									<tr>
+										<td nowrap="nowrap"><strong>Donor</strong></td>
+										<td colspan="6"><field name="donor" /></td>
+									</tr>
+									
+									<tr>
+										<td nowrap="nowrap"><strong>Project Location</strong></td>
+										<td style="background-color:#ddd" colspan="6">
+											<!-- <field name="project_location" /> -->
+										</td>
+									</tr>
+									
+									<tr>
+										<td nowrap="nowrap"><strong>Project Type (Sector)</strong></td>
+										<td style="background-color:#ddd" colspan="6">
+											<!-- <field name="project_type" widget="many2many_tags" /> -->
+										</td>
+									</tr>
+									
+									<tr>
+										<td nowrap="nowrap"><strong>Quarter of Reporting</strong></td>
+										<td colspan="6"><field name="quarter_of_reporting"/></td>
+									</tr>
+
+								</tbody>
+							</table>
+							
+							
+							<table class = "table table-bordered">
+								<tbody>
+									<tr>
+										<td style="width: 46%"><strong>Overall Project Objective:</strong></td>
+										<td style="background-color:#ddd" colspan="2">
+											<!-- <field name="overall_project_objective" readonly="0"/> -->
+										</td>
+									</tr>
+									
+									<tr>
+										<td>
+											<strong>Introduction</strong> (State general important information concerning the focus this quarter, progress,
+																			changes in context)
+										</td>
+										<td colspan="6"><field name="introduction" /></td>
+									</tr>
+									
+								</tbody>
+							</table>
+							
+							<h5>Progress Against Logframe Indicators</h5>
+							
+							<table class="table table-bordered" style="font-size:12px;">
+								<tbody>
+									<tr>
+										<td><strong>Output</strong></td>
+										<td><strong>Activity</strong></td>
+										<td><strong>Indicator</strong></td>
+										<td><strong>Project Target</strong></td>
+										<td><strong>Quarter Planned Target</strong></td>
+										<td><strong>Quarter Planned Budget</strong></td>
+									</tr>
+
+									<tr>
+										<td style="background-color:#ddd"></td>
+										<td style="background-color:#ddd"></td>
+										<td style="background-color:#ddd"></td>
+										<td><field name="project_target" /></td>
+										<td><field name="quarter_target" /></td>
+										<td><field name="quarter_budget" /></td>
+									</tr>
+									
+									<tr>
+										<td style="background-color:#ddd"></td>
+										<td style="background-color:#ddd"></td>
+										<td style="background-color:#ddd"></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+
+								</tbody>
+							</table>
+							
+							
+							<table class="table table-bordered" style="font-size: 12px;width:33.4%;float:left;">
+								<tbody>
+									<tr>
+										<td colspan="5"><strong>Beneficiaries</strong></td>
+									</tr>
+									<tr>
+										<td><strong>Boy</strong></td>
+										<td><strong>Girl</strong></td>
+										<td><strong>Women</strong></td>
+										<td><strong>Men</strong></td>
+										<td><strong>Total</strong></td>
+									</tr>
+									<tr>
+										<td><field name="boys_q_r"/></td>
+										<td><field name="girls_q_r"/></td>
+										<td><field name="men_q_r"/></td>
+										<td><field name="women_q_r"/></td>
+										<td><field name="no_of_beneficieries_q_r"/></td>
+									</tr>
+									
+								</tbody>
+							</table>
+
+
+							<table class="table table-bordered" style="font-size: 12px;width:33.3%;float:left;">
+								<tbody>
+									<tr>
+										<td><strong>Remaining Target</strong></td>
+									</tr>
+									
+									<tr>
+										<td><field name="remaining_target"/></td>
+									</tr>
+									
+								</tbody>
+							</table>
+							
+							<field name="quarter_remarks_ids" style="width:33.3%;float:left;" context="{'default_project_id': id}" >
+								<tree editable="bottom">
+									<field name="name" string="Remarks"/>
+								</tree>
+							</field>
+							
+							
+							<h3>Achievements Per Outcome</h3>
+							
+							<table class="table table-bordered" style="font-size: 12px;float:left;width:100%;background-color:#ddd">
+								<tbody>
+									<tr>
+										<td><strong>Output</strong></td>
+									</tr>
+									
+									
+								</tbody>
+							</table>
+							
+							<table class = "table table-bordered">
+								<tbody>
+
+									<tr>
+										<td><strong>Lessons Learned</strong></td>
+										<td colspan="6"><field name="lessons_learned" /></td>
+									</tr>
+									
+									<tr>
+										<td><strong>Challenges</strong></td>
+										<td colspan="6"><field name="challenges_quarter" /></td>
+									</tr>
+									
+									<tr>
+										<td><strong>Annex</strong></td>
+										<td colspan="6"><field name="annex" /></td>
+									</tr>
+									
+									<tr>
+										<td><strong>Case Studies</strong></td>
+										<td colspan="6"><field name="case_studies" /></td>
+									</tr>
+									
+									<tr>
+										<td><strong>Human Intersting Story</strong></td>
+										<td colspan="6"><field name="human_stories_quarter"/></td>
+									</tr>
+									
+								
+									<tr>
+										<td colspan="7"><strong>Activity Photos</strong></td>
+									</tr>
+									
+									<tr>
+										<td colspan="6"><field name="activity_photos" widget="many2many_binary" /></td>
+									</tr>
+									
+									<tr>
+										<td><strong>Next Quarter Workplan</strong></td>
+										<td colspan="6"><field name="next_quarter_plan"/></td>
+									</tr>
+
+								</tbody>
+							</table>
+							
+						</div>
+
+
+					</div>
+					
+				</page>
+				
+			</notebook>
+			
+		</field>
+	</record>
+	
+</data>
+</odoo>

@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<odoo>
+<data>
+
+    <report
+        id="action_payment_report"
+        name="add_payment_to_cash_register.payment_report"
+        file="add_payment_to_cash_register.payment_report"
+        model="account.payment"
+        string="P/R Voucher"
+        report_type="qweb-html"
+        />
+	<template id="payment_report">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="doc">
+				<t t-call="web.external_layout">
+					<div class="page">
+						<div style="width:100%;padding:15px;border:1px solid #dee2e6;margin-bottom:10px;text-align:center;">
+							<t t-if="doc.payment_type == 'outbound'">
+								<h3 class="text-center">Payment Voucher</h3>
+							</t>
+							
+							<t t-if="doc.payment_type == 'inbound'">
+								<h3 class="text-center">Receipt Voucher</h3>
+							</t>
+							
+							<t t-if="doc.payment_type == 'transfer'">
+								<h3 class="text-center">Cash Transfer</h3>
+							</t>
+						</div>
+						<div class="row">
+							
+									
+							<div class="col-md-12">
+								<div class="">
+                                    <table class="table table-bordered" style="font-size: 13px">
+                                        <tbody style="border:none;">
+											<tr style="border:none;">
+												<td><strong>Date:</strong></td>
+												<td colspan="2"><span t-field="doc.payment_date"/></td>
+												
+												<td><strong>Payment Type:</strong></td>
+												<td><span t-field="doc.payment_type"/></td>
+											</tr>
+											
+											<tr style="border:none;">
+												<t t-if="doc.payment_type == 'outbound'">
+													<td><strong>Pay to:</strong></td>
+												</t>
+												
+												<t t-if="doc.payment_type == 'inbound'">
+													<td><strong>Receipt From:</strong></td>
+												</t>
+												
+												<td colspan="2"><span t-field="doc.partner_type"/></td>
+												
+												<td><strong>Payment No:</strong></td>
+												<td><span t-field="doc.name"/></td>
+											</tr>
+											
+											<tr style="border:none;">
+												<td><strong>Amount:</strong></td>
+												<td colspan="2"><span t-field="doc.amount"/></td>
+												
+												<td><strong>Journal Entry:</strong></td>
+												<td><span t-field="doc.move_name"/></td>
+											</tr>
+											
+											<tr style="border:none;">
+												<td><strong>Amount in words:</strong></td>
+												<td colspan="2"><!--<span t-field="doc.women"/>--></td>
+												
+												<td><strong>Payment Journal:</strong></td>
+												<td><span t-field="doc.journal_id"/></td>
+											</tr>
+											
+											<tr style="border:none;">
+												<td><strong>Check#/Memo:</strong></td>
+												<td colspan="2"><span t-field="doc.communication"/></td>
+												
+												<t t-if="doc.register">
+													<td><strong>Registered:</strong></td>
+													<t t-if="doc.register == 'True'">
+														<td>Y</td>
+													</t>
+													
+													<t t-if="doc.register == 'False'">
+														<td>N</td>
+													</t>
+												</t>
+											</tr>
+											
+											<tr style="border:none;">
+												<td><strong>Sign:</strong></td>
+												<td colspan="2">-------------------------</td>
+												
+												<td><strong>Authorized by</strong></td>
+												<td><span t-field="doc.create_uid"/></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>								
+							</div>
+						</div>
+					</div>
+							
+				</t>
+			</t>
+		</t>
+	</template>
+
+</data>
+</odoo>

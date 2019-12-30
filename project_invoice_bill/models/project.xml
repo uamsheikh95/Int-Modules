@@ -1,0 +1,49 @@
+<odoo>
+    <!--INHERIT PROJECT.PROJECT FORM VIEW-->
+	<record model="ir.ui.view" id="project_form_view">
+		<field name="name">project.form</field>
+		<field name="model">project.project</field>
+		<field name="inherit_id" ref="project.edit_project"/>
+		<field name="arch" type="xml">
+
+
+            <!--Invoice and Bill Buttons-->
+
+            <div class="oe_button_box" position="inside">
+                <button type="object"  name="bill_create"
+                    class="oe_stat_button"
+                    icon="fa-pencil-square-o">
+                    <field name="bill_count" widget="statinfo" string="Vendor Bills" />
+
+                    <field name='bill_ids' invisible="1"/>
+                </button>
+
+                 <button type="object"  name="invoice_create"
+                    class="oe_stat_button"
+                    icon="fa-pencil-square-o">
+                    <field name="invoice_count" widget="statinfo" string="Customer Invoices" />
+
+                    <field name='invoice_ids' invisible="1"/>
+                </button>
+
+			</div>
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Bills">
+                    <field name='invoice_ids' context="{'default_project_id': id, 'default_type': 'out_invoice'}">
+                        <tree domain="[('type', '=', 'out_invoice'), ('project_id', '=', id)]">
+                            <field name='partner_id'/>
+                            <field name='origin'/>
+                        </tree>
+                    </field>
+
+                    <field name='bill_count'/>
+                </page>
+            </xpath>
+
+
+
+        </field>
+    </record>
+	
+</odoo>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+
+    <report
+        id="action_teacher_report_wizard"
+        name="warsan_school.teacher_wizard_report"
+        model="warsan_school.teacher_wizard_report"
+        string="Teacher Report"
+        report_type="qweb-pdf"
+        />
+
+    <template id="teacher_wizard_report">
+        <t t-call="web.html_container">
+
+                <t t-call="web.external_layout">
+                    <div class="page" >
+
+						<h2>
+							Teachers Report
+						</h2>
+
+						<!--Search criteria-->
+						<div id="informations" class="row mt32 mb32">
+
+							<t t-if="teacher_id">
+								<div class="col-auto mw-100 mb-2" style="margin-left:30px">
+									<strong>Teacher:</strong>
+									<p class="m-0" t-esc="teacher_name"/>
+								</div>
+							</t>
+
+							<t t-if="date_from">
+								<div class="col-auto mw-100 mb-2">
+									<strong>From:</strong>
+									<p class="m-0" t-esc="date_from"/>
+								</div>
+							</t>
+
+							<t t-if="date_to">
+								<div class="col-auto mw-100 mb-2">
+									<strong>To:</strong>
+									<p class="m-0" t-esc="date_to"/>
+								</div>
+							</t>
+						</div>
+							<table class="table table-sm o_main_table">
+
+								<thead>
+									<tr>
+										 <th class="text-left">Class Code</th>
+										 <th class="text-right">Course</th>
+										<t t-if="teacher_id">
+											<th class="text-right">Teacher</th>
+										</t>
+										 <th class="text-right">Date Start</th>
+										 <th class="text-right">Date Emd</th>
+										 <th class="text-right">Time In</th>
+										 <th class="text-right">Time Out</th>
+										 <th class="text-right">State</th>
+									</tr>
+								</thead>
+
+
+								<tbody>
+									<t t-foreach="classes" t-as="c">
+										 <tr>
+											 <td class="text-left"><span t-field="c.name"/></td>
+											 <td class="text-right"><span t-field="c.course_id"/></td>
+											 <t t-if="teacher_id">
+												<td class="text-right"><span t-field="c.teacher_id"/></td>
+											</t>
+											 <td class="text-right"><span t-field="c.date_start"/></td>
+											 <td class="text-right"><span t-field="c.date_end"/></td>
+											 <td class="text-right"><span t-field="c.time_in"/></td>
+											 <td class="text-right"><span t-field="c.time_out"/></td>
+											 <td class="text-right"><span t-field="c.state"/></td>
+										 </tr>
+									</t>
+								</tbody>
+							</table>
+                    </div>
+                </t>
+            </t>
+
+
+    </template>
+
+</data>
+</odoo>

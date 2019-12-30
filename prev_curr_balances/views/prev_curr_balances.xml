@@ -1,0 +1,24 @@
+<odoo>
+  <data>
+	
+		<template id="add_partner_balance_to_invoice" inherit_id="account.report_invoice_document">
+				<xpath expr="//div[@class='row mt32 mb32']" position="inside">
+
+			<t t-if="o.type == 'out_invoice'">
+				  <div class="col-xs-2">
+					  <strong>Prev Balance:</strong>
+					  <p t-field="o.partner_balance" t-options='{"widget": "monetary"}'/>
+				  </div>
+
+
+				  <div class="col-xs-2">
+					  <strong>Current Balance:</strong>
+					  <p t-field="o.current_balance" t-options='{"widget": "monetary"}'/>
+				  </div>
+			</t>
+				</xpath>
+			
+		</template>
+	
+  </data>
+</odoo>

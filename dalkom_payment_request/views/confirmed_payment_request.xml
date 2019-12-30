@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="confirmed_payment_request_search_view">
+        <field name="name">dalkom_payment_request.payment_request.search</field>
+        <field name="model">dalkom_payment_request.payment_request</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter string="Approved" icon="terp-accessories-archiver"
+                  domain="[('state','=','approved')]"
+                  name="approved"/>
+                <filter string="Refused" icon="terp-accessories-archiver"
+                  domain="[('state','=','refused')]"
+                  name="refused"/>
+                <filter string="Submitted" icon="terp-accessories-archiver"
+                  domain="[('state','=','submitted')]"
+                  name="submitted"/>
+                <field name="name" string="Ref. No"/>
+                <field name="state"/>
+                <field name="date"/>
+                <field name="payment_journal"/>
+                <field name="create_uid"/>
+                <field name="registered"/>
+            </search>
+        </field>
+    </record>
+      <record model="ir.ui.view" id="waiting_payment_request_tree_view">
+          <field name="name">cargo.tree</field>
+          <field name="model">dalkom_payment_request.payment_request</field>
+          <field name="arch" type="xml">
+              <tree string="Payment Request" default_order='create_date desc'>
+
+                  <field name="date"/>
+                  <field name="name" string="Ref"/>
+                  <field name="description" />
+                  <field name="create_uid"  string="Submitted By"/>
+                  <field name="registered" />
+                  <field name="payment_journal" />
+                  <field name="total_amount" />
+                  <field name="approved_by" />
+                  <field name="cfo_confirmed" />
+                  <field name="state" />
+
+              </tree>
+          </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="waiting_payment_request_list_action">
+          <field name="name">Submitted</field>
+          <field name="res_model">dalkom_payment_request.payment_request</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+          <field name="search_view_id" ref="confirmed_payment_request_search_view"/>
+          <field name="view_id" ref="waiting_payment_request_tree_view"/>
+          <field name="context">{'search_default_submitted': 1}</field>
+          <field name="domain">[('state','=','submitted')]</field>
+      </record>
+
+      <menuitem name="To Approve"
+          id="waiting_payment_request"
+          action="waiting_payment_request_list_action"
+          parent="payment_request_menu_root"
+          groups="dalkom_payment_request.group_manager"
+          />
+
+
+  </data>
+  </odoo>

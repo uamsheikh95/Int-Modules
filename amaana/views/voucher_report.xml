@@ -1,0 +1,349 @@
+<odoo>
+	<data>
+
+		<template id="background_layout" inherit_id="web.internal_layout">
+        <xpath expr="//div[@class='header']" position="replace">
+            <div class="header">
+            <div class="row">
+                <div class="col-xs-3">
+                    <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+                </div>
+                <div class="col-xs-2 col-xs-offset-2 text-center" style="margin-left: 0; width: 270px;">
+                    <span>  </span>
+                </div>
+                <div class="col-xs-2 col-xs-offset-3 text-right">
+                    <ul class="list-inline">
+                        <li><span class="page"/></li>
+                        <li>/</li>
+                        <li><span class="topage"/></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        </xpath>
+
+
+
+
+    </template>
+
+
+		<report
+        id="action_voucher_report"
+        name="amaana.voucher_report"
+        file="amaana.voucher_report"
+        model="amaana.amaana"
+        string="Voucher"
+        report_type="qweb-html"
+        />
+
+		<template id="voucher_report">
+			<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="doc">
+					 <t t-call="web.internal_layout">
+						 <div class="row">
+							 <h1 class="text-center" style="font-size: 26px; font-weight: bold; margin: 0;">Aziz Comercial</h1>
+							 <p class="text-center">LUANDA,ANGOLA</p>
+							 <h6 class="text-center">Telephone:</h6>
+							 <h2 class="text-center" style="font-size: 21px; font-weight: bold;margin:0">Deposit</h2>
+                             <h6 class="text-center" style="margin: 5px 0 20px 0;font-weight: bold; font-family: arial;">User ID/Name : <span t-field="doc.create_uid" /></h6>
+
+							 <table class = "table table-bordered" style="width:67%;float:left;margin-left: 67px;">
+								<tbody>
+									<tr>
+										<td style="width:20%;"><strong>Ref.No</strong></td>
+										<td style="width:30%;" class="text-left"><span t-field="doc.name" /></td>
+
+										<td style="width:20%;"><strong>Trans Date</strong></td>
+										<td style="width:30%;" class="text-left"><span t-field="doc.date" /></td>
+									</tr>
+
+									<tr>
+                                        <t t-if="doc.type == 'deposit'">
+										    <td style="width:20%;"><strong>Cr A/C</strong></td>
+                                        </t>
+
+                                        <t t-if="doc.type == 'withdraw'">
+										    <td style="width:20%;"><strong>Dr A/C</strong></td>
+                                        </t>
+
+                                        <t t-if="doc.type == 'transfer'">
+										    <td style="width:20%;"><strong>Dr A/C</strong></td>
+                                        </t>
+
+										<td style="width:30%;" class="text-left"><span t-field="doc.partner_id.ref" /></td>
+
+										<td colspan="2" class="text-left"><span t-field="doc.partner_id" /></td>
+									</tr>
+
+                                    <t t-if="doc.type == 'transfer'">
+                                        <tr>
+                                            <td style="width:20%;"><strong>Cr A/C</strong></td>
+                                            <td style="width:30%;" class="text-left"><span t-field="doc.partner_id_to.ref" /></td>
+                                            <td colspan="2" class="text-left"><span t-field="doc.partner_id_to" /></td>
+                                        </tr>
+                                    </t>
+
+                                    <t t-if="doc.show_balance">
+                                        <tr>
+                                            <td style="width:20%;"><strong>Amount</strong></td>
+                                            <td style="width:20%;" class="text-left"><span t-field="doc.amount" /></td>
+
+                                            <td style="width:20%;"><strong>Balance</strong></td>
+                                            <td style="width:20%;" class="text-left"><span t-field="doc.balance" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:20%;"><strong>Am In Words</strong></td>
+                                            <td colspan="3" class="text-left"><t t-esc="doc.numtoword_s(doc.amount)" /></td>
+                                        </tr>
+                                    </t>
+
+                                    <t t-if="not doc.show_balance">
+                                        <tr>
+                                            <td style="width:20%;"><strong>Amount</strong></td>
+                                            <td style="width:20%;" class="text-left"><span t-field="doc.amount" /></td>
+
+                                            <td colspan="2" class="text-left"><t t-esc="doc.numtoword_s(doc.amount)" /></td>
+                                        </tr>
+                                    </t>
+
+									<tr>
+										<td style="width:20%;"><strong>Memo</strong></td>
+
+										<td colspan="3" class="text-left"><span t-field="doc.description" /></td>
+									</tr>
+								</tbody>
+							</table>
+
+							<table style="border:1px solid #ddd;width:15%;float:left;margin-left:10px;height: 149px; font-size: 11px;">
+								<tbody>
+									<tr class="text-center">
+										<td><strong>100</strong></td>
+										<td>x</td>
+										<td>___</td>
+										<td>=</td>
+										<td>_____</td>
+									</tr>
+
+									<tr class="text-center">
+										<td><strong>50</strong></td>
+										<td>x</td>
+										<td>___</td>
+										<td>=</td>
+										<td>_____</td>
+									</tr>
+
+									<tr class="text-center">
+										<td><strong>20</strong></td>
+										<td>x</td>
+										<td>___</td>
+										<td>=</td>
+										<td>_____</td>
+									</tr>
+
+									<tr class="text-center">
+										<td><strong>10</strong></td>
+										<td>x</td>
+										<td>___</td>
+										<td>=</td>
+										<td>_____</td>
+									</tr>
+
+                                    <tr class="text-center">
+										<td><strong>5</strong></td>
+										<td>x</td>
+										<td>___</td>
+										<td>=</td>
+										<td>_____</td>
+									</tr>
+
+                                    <tr class="text-center">
+										<td><strong>1</strong></td>
+										<td>x</td>
+										<td>___</td>
+										<td>=</td>
+										<td>_____</td>
+									</tr>
+
+									<tr class="text-center">
+										<td><strong>Coins</strong></td>
+										<td>x</td>
+										<td>___</td>
+										<td>=</td>
+										<td>_____</td>
+									</tr>
+								</tbody>
+							</table>
+                        </div>
+
+                         <div class="row" style="width:100%;margin-top:20px">
+                             <div class="text-center" style="width:30%;float:left;margin-left: 43px;">
+                                <p><strong>Casheir</strong></p>
+                                 <p style="color:#a9a4a4">_____________________________</p>
+                             </div>
+
+                             <div style="width:30%;float:right;margin-right: 13px;">
+                                <p class="text-center" style="width:225px;"><strong>Depositor/Receiver</strong></p>
+                                 <p style="color:#a9a4a4">_____________________________</p>
+                             </div>
+                         </div>
+
+                         <div class="row" style="width:100%;border: 1px dashed;margin-top:45px"></div>
+
+
+						 <div class="row" style="margin-top:55px">
+							 <h1 class="text-center" style="font-size: 26px; font-weight: bold; margin: 0;">Aziz Comercial</h1>
+							 <p class="text-center">LUANDA,ANGOLA</p>
+							 <h6 class="text-center">Telephone:</h6>
+							 <h2 class="text-center" style="font-size: 21px; font-weight: bold;margin:0">Deposit</h2>
+                             <h6 class="text-center" style="margin: 5px 0 20px 0;font-weight: bold; font-family: arial;">User ID/Name : <span t-field="doc.create_uid" /></h6>
+
+							 <table class = "table table-bordered" style="width:67%;float:left;margin-left: 67px;">
+								<tbody>
+									<tr>
+										<td style="width:20%;"><strong>Ref.No</strong></td>
+										<td style="width:30%;" class="text-left"><span t-field="doc.name" /></td>
+
+										<td style="width:20%;"><strong>Trans Date</strong></td>
+										<td style="width:30%;" class="text-left"><span t-field="doc.date" /></td>
+									</tr>
+
+									<tr>
+                                        <t t-if="doc.type == 'deposit'">
+										    <td style="width:20%;"><strong>Cr A/C</strong></td>
+                                        </t>
+
+                                        <t t-if="doc.type == 'withdraw'">
+										    <td style="width:20%;"><strong>Dr A/C</strong></td>
+                                        </t>
+
+                                        <t t-if="doc.type == 'transfer'">
+										    <td style="width:20%;"><strong>Dr A/C</strong></td>
+                                        </t>
+
+										<td style="width:30%;" class="text-left"><span t-field="doc.partner_id.ref" /></td>
+
+										<td colspan="2" class="text-left"><span t-field="doc.partner_id" /></td>
+									</tr>
+
+                                    <t t-if="doc.type == 'transfer'">
+                                        <tr>
+                                            <td style="width:20%;"><strong>Cr A/C</strong></td>
+                                            <td style="width:30%;" class="text-left"><span t-field="doc.partner_id_to.ref" /></td>
+                                            <td colspan="2" class="text-left"><span t-field="doc.partner_id_to" /></td>
+                                        </tr>
+                                    </t>
+
+                                    <t t-if="doc.show_balance">
+                                        <tr>
+                                            <td style="width:20%;"><strong>Amount</strong></td>
+                                            <td style="width:20%;" class="text-left"><span t-field="doc.amount" /></td>
+
+                                            <td style="width:20%;"><strong>Balance</strong></td>
+                                            <td style="width:20%;" class="text-left"><span t-field="doc.balance" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:20%;"><strong>Am In Words</strong></td>
+                                            <td colspan="3" class="text-left"><t t-esc="doc.numtoword_s(doc.amount)" /></td>
+                                        </tr>
+                                    </t>
+
+                                    <t t-if="not doc.show_balance">
+                                        <tr>
+                                            <td style="width:20%;"><strong>Amount</strong></td>
+                                            <td style="width:20%;" class="text-left"><span t-field="doc.amount" /></td>
+
+                                            <td colspan="2" class="text-left"><t t-esc="doc.numtoword_s(doc.amount)" /></td>
+                                        </tr>
+                                    </t>
+
+									<tr>
+										<td style="width:20%;"><strong>Memo</strong></td>
+
+										<td colspan="3" class="text-left"><span t-field="doc.description" /></td>
+									</tr>
+								</tbody>
+							</table>
+
+							<table style="border:1px solid #ddd;width:15%;float:left;margin-left:10px;height: 149px; font-size: 11px;">
+								<tbody>
+									<tr class="text-center">
+										<td><strong>100</strong></td>
+										<td>x</td>
+										<td>___</td>
+										<td>=</td>
+										<td>_____</td>
+									</tr>
+
+									<tr class="text-center">
+										<td><strong>50</strong></td>
+										<td>x</td>
+										<td>___</td>
+										<td>=</td>
+										<td>_____</td>
+									</tr>
+
+									<tr class="text-center">
+										<td><strong>20</strong></td>
+										<td>x</td>
+										<td>___</td>
+										<td>=</td>
+										<td>_____</td>
+									</tr>
+
+									<tr class="text-center">
+										<td><strong>10</strong></td>
+										<td>x</td>
+										<td>___</td>
+										<td>=</td>
+										<td>_____</td>
+									</tr>
+
+                                    <tr class="text-center">
+										<td><strong>5</strong></td>
+										<td>x</td>
+										<td>___</td>
+										<td>=</td>
+										<td>_____</td>
+									</tr>
+
+                                    <tr class="text-center">
+										<td><strong>1</strong></td>
+										<td>x</td>
+										<td>___</td>
+										<td>=</td>
+										<td>_____</td>
+									</tr>
+
+									<tr class="text-center">
+										<td><strong>Coins</strong></td>
+										<td>x</td>
+										<td>___</td>
+										<td>=</td>
+										<td>_____</td>
+									</tr>
+								</tbody>
+							</table>
+                        </div>
+
+                         <div class="row" style="width:100%;margin-top:20px">
+                             <div class="text-center" style="width:30%;float:left;margin-left: 43px;">
+                                <p><strong>Casheir</strong></p>
+                                 <p style="color:#a9a4a4">_____________________________</p>
+                             </div>
+
+                             <div style="width:30%;float:right;margin-right: 13px;">
+                                <p class="text-center" style="width:225px;"><strong>Depositor/Receiver</strong></p>
+                                 <p style="color:#a9a4a4">_____________________________</p>
+                             </div>
+                         </div>
+
+					 </t>
+				</t>
+
+			</t>
+		</template>
+
+	</data>
+</odoo>

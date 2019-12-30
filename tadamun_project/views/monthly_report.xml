@@ -1,0 +1,235 @@
+<odoo>
+<data>
+    <template id="background_layout" inherit_id="web.external_layout_background">
+        <xpath expr="//div[@class='header o_background_header']" position="replace">
+            <div class="header o_background_header">
+                <div class="col-xs-12 text-center">
+                    <img t-if="company.logo" style = "max-height:105px;max-width:400px" src="/tadamun_project/static/src/img/Picture1.png"/>
+
+                </div>
+
+                <div class="clearfix mb8"/>
+            </div>
+
+
+
+        </xpath>
+
+
+
+
+    </template>
+
+    <report
+        id="action_monthly_report"
+        name="tadamun_project.monthly_report"
+        file="tadamun_project.monthly_report"
+        model="project.project"
+        string="Monthly Report"
+        report_type="qweb-pdf"
+        />
+
+    <template id="monthly_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" >
+                        <div class="row">
+                            <h3 class="text-center">TASS Monthly Project Status Report</h3>
+                        	<div class="col-md-12">
+                        		<div class="">
+                                   <table class = "table table-bordered">
+								<tbody>
+									<tr>
+									
+										<td nowrap="nowrap"><strong>Project Type</strong></td>
+										<td colspan="2">
+											
+											<t t-foreach="doc.project_type" t-as="cluster">
+												   <span t-field="cluster.name"/> - 
+											</t>
+										</td>
+										
+										<td nowrap="nowrap"><strong>Reporting Period</strong></td>
+										<td>
+											<strong>From</strong><br/><br/>
+											<strong>To</strong>
+										</td>
+										<td style="width:200px">
+											<span t-field="doc.from_date_m_r" />
+											<span t-field="doc.to_date_m_r" />
+										</td>
+									</tr>
+									
+									<tr>
+										<td nowrap="nowrap"><strong>Project Name</strong></td>
+										<td colspan="6"><span t-field="doc.name" /></td>
+									</tr>
+									
+									<tr>
+										<td nowrap="nowrap"><strong>Project Description</strong></td>
+										<td colspan="6"><span t-field="doc.project_summery" /></td>
+									</tr>
+									
+									<tr>
+									
+										<td nowrap="nowrap"><strong>Name of person completing this report: <br/>(incl. title and e-mail address)</strong></td>
+										<td colspan="2"><span t-field="doc.name_of_person_m_r"/></td>
+										
+										<td nowrap="nowrap"><strong>Project Location</strong></td>
+										<td colspan="2"><span t-field="doc.project_location"  /></td>
+									</tr>
+								</tbody>
+							</table>
+
+							
+							<table class="table table-bordered" style="font-size:12px;">
+								<tbody>
+								
+									<tr>
+										<td style="width:182px"><strong>Project Overview</strong></td>
+										<td colspan="6"><span t-field="doc.project_overview" /></td>
+									</tr>
+									
+									<tr>
+										<td style="width:182px"><strong>Summary Project Acheivment Per Output</strong></td>
+										<td colspan="6"><span t-field="doc.sum_proj_acheiv" /></td>
+									</tr>
+									
+								</tbody>
+							</table>
+
+							<table class="table table-bordered" style="font-size:12px;width:33.3%;float:left;">
+								<tbody>
+									<tr>
+										<td><strong>Output</strong></td>
+										<td><strong>Activity</strong></td>
+										<td><strong>Monthly Planned<br/>Beneficiary Target</strong></td>
+									</tr>
+									
+
+									<tr>
+									
+										<td>
+											<t t-foreach="doc.outcome_ids" t-as="outcom">
+												
+													<span t-field="outcom.name" /><br/>
+												
+											</t>
+										</td>
+										
+									
+										<td>
+											<t t-foreach="doc.outcome_ids" t-as="outcom">
+												<t t-foreach="outcom.output_ids" t-as="output">
+													<t t-foreach="output.activity_ids" t-as="activity">
+														
+															<span t-field="activity.name" /><br/>
+														
+													</t>
+												</t>
+											</t>
+										</td>
+										
+										<td><span t-field="doc.monthly_palanned_bef" /></td>
+									</tr>
+									
+									<tr>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+
+								</tbody>
+							</table>
+							
+							<table class="table table-bordered" style="font-size: 12px;width:33.4%;float:left;">
+								<tbody>
+									<tr>
+										<td colspan="5"><strong>Beneficiaries</strong></td>
+									</tr>
+									<tr>
+										<td><strong>Boy</strong></td>
+										<td><strong>Girl</strong></td>
+										<td><strong>Women</strong></td>
+										<td><strong>Men</strong></td>
+										<td><strong>Total</strong></td>
+									</tr>
+									<tr>
+										<td><span t-field="doc.boys_m_r"/></td>
+										<td><span t-field="doc.girls_m_r"/></td>
+										<td><span t-field="doc.men_m_r"/></td>
+										<td><span t-field="doc.women_m_r"/></td>
+										<td><span t-field="doc.no_of_beneficieries_m_r"/></td>
+									</tr>
+									
+								</tbody>
+							</table>
+							
+							<table class="table table-bordered" style="width:33.3%;float:left;" >
+								<tbody>
+									<tr>
+										<td><strong>Remarks</strong></td>
+									</tr>
+									
+									<t t-foreach="doc.monthly_remarks_ids" t-as="weekly_rem">
+										<tr><td><span t-field="weekly_rem.name"/></td></tr>
+									</t>
+								</tbody>
+							</table>
+
+							
+							<table class="table table-bordered" style="font-size:12px;">
+								<tbody>
+								
+									<tr>
+										<td style="width:182px" colspan="1"><strong>Challenges</strong></td>
+										<td colspan="6"><span t-field="doc.challenges" /></td>
+									</tr>
+									
+									<tr>
+										<td style="width:182px" colspan="1"><strong>Human Intersting Stories</strong></td>
+										<td colspan="6"><span t-field="doc.human_stories" /></td>
+									</tr>
+									
+								</tbody>
+							</table>
+
+							<table class="table table-bordered" style="font-size:12px;">
+								<tbody>
+								
+									<tr>
+										<td colspan="7"><strong>Photos</strong></td>
+									</tr>
+									
+									<tr>
+										<td colspan="7">
+											
+											<t t-foreach="doc.photos" t-as="photo">
+												   <span t-field="photo.datas" t-field-options='{"widget": "image"}'/> - 
+											</t>
+											
+											<!--<span t-field="doc.photos"/>-->
+										</td>
+									</tr>
+									
+								</tbody>
+							</table>	
+										
+
+
+
+                        		</div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+
+        </t>
+    </template>
+
+</data>
+</odoo>
+
+

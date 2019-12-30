@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<odoo>
+<data>
+
+    <report
+        id="action_invoice_report"
+        name="dalkom_payment_request.payment_req"
+        file="dalkom_payment_request.payment_req"
+        model="dalkom_payment_request.payment_request"
+        string="Payment Req"
+        report_type="qweb-html"
+        />
+	<template id="payment_req">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="doc">
+				<t t-call="web.external_layout">
+					<div class="page">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="">
+                                    <table class="table table-bordered" style="font-size: 13px">
+                                        <tbody>
+										    <tr style="text-align:center;font-size:16px">
+											 PAYMENT REQUEST FORM
+											</tr>
+                                            <tr>
+                                                <td><strong>P.Req #</strong></td>
+                                                <td colspan="2"><span t-field="doc.name"/></td>
+                                                <td><strong>Date</strong></td>
+                    							<td colspan="2"><span t-field="doc.date"/></td>
+                                            </tr>
+											
+                                            <tr>
+                                                <td><strong>Desc:</strong></td>
+                                                <td colspan="2"><span t-field="doc.description"/></td>
+                                                <td><strong>Cash Register	</strong></td>
+                    							<td colspan="2"><span t-field="doc.cash_register_id"/></td>
+                                            </tr>
+											
+                                            <tr>
+                                                <td><strong>P.Journal:</strong></td>
+                                                <td colspan="2"><span t-field="doc.payment_journal"/></td>
+                                                <td><strong>Approved By:</strong></td>
+                    							<td colspan="2"><span t-field="doc.approve_by"/></td>
+                                            </tr>
+
+
+                						</tbody>
+                        			</table>
+									
+                                   <table class="table table-condensed" style="font-size: 14px">
+                                        <tbody>
+											<tr>
+												<td colspan="6"><strong>Payment Lines</strong></td>
+											</tr>
+                                            <tr>
+                                                <td><strong>B/Date</strong></td>
+												<td><strong>Desc</strong></td>
+												<td><strong>Payee</strong></td>
+												<td><strong>Ref</strong></td>
+												<td class="text-right"><strong>Amount</strong></td>
+												<td class="text-right"><strong>Status</strong></td>
+                                            </tr>
+                                            <t t-foreach="doc.payment_request_line_ids" t-as="payment">
+                                                    <tr>
+                                                        <td><span t-field="payment.date"/></td>
+														<td><span t-field="payment.name"/></td>
+														<td><span t-field="payment.partner_id"/></td>
+														<td><span t-field="payment.bill_ref"/></td>
+														<td class="text-right"><span t-field="payment.amount"/></td>
+														<td class="text-right"><span t-field="payment.state"/></td>
+                                                    </tr>
+
+													<tr>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td><strong>Total:</strong></td>
+													<td class="text-right"><strong><span t-field="payment.amount"/></strong></td>
+													<td></td>
+													</tr>
+                                            </t>
+                						</tbody>
+                        			</table>
+									
+									<br/><br/><br/><br/>
+									
+									<div class="row">
+									
+									<div class="col-xs-5">
+									Payee Sign: ................
+									</div>
+									
+									<div class="col-xs-7 text-right">
+									Confirmed by: <span t-field="doc.create_uid"/>
+									</div>									
+									</div>
+									
+									
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</t>
+			</t>
+		</t>
+	</template>
+
+</data>
+</odoo>

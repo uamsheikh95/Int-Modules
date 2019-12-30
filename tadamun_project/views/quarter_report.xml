@@ -1,0 +1,279 @@
+<odoo>
+<data>
+    <template id="background_layout" inherit_id="web.external_layout_background">
+        <xpath expr="//div[@class='header o_background_header']" position="replace">
+            <div class="header o_background_header">
+                <div class="col-xs-12 text-center">
+                    <img t-if="company.logo" style = "max-height:105px;max-width:400px" src="/tadamun_project/static/src/img/Picture1.png"/>
+
+                </div>
+
+                <div class="clearfix mb8"/>
+            </div>
+
+
+
+        </xpath>
+
+
+
+
+    </template>
+
+    <report
+        id="action_quarter_report"
+        name="tadamun_project.quarter_report"
+        file="tadamun_project.quarter_report"
+        model="project.project"
+        string="Quarter Report"
+        report_type="qweb-pdf"
+        />
+
+    <template id="quarter_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" >
+                        <div class="row">
+                            <h3 class="text-center">TASS Project Quarter Report</h3>
+                        	<div class="col-md-12">
+                        		<div class="">
+                                    <table class = "table table-bordered">
+										<tbody>
+
+											<tr>
+												<td nowrap="nowrap"><strong>Project Title</strong></td>
+												<td colspan="6"><span t-field="doc.project_title" /></td>
+											</tr>
+											
+											<tr>
+												<td nowrap="nowrap"><strong>Donor</strong></td>
+												<td colspan="6"><span t-field="doc.donor" /></td>
+											</tr>
+											
+											<tr>
+												<td nowrap="nowrap"><strong>Project Location</strong></td>
+												<td colspan="6"><span t-field="doc.project_location" /></td>
+											</tr>
+											
+											<tr>
+												<td nowrap="nowrap"><strong>Project Type (Sector)</strong></td>
+												<td colspan="2">
+													
+													<t t-foreach="doc.project_type" t-as="cluster">
+														   <span t-field="cluster.name"/> - 
+													</t>
+												</td>
+											</tr>
+											
+											<tr>
+												<td nowrap="nowrap"><strong>Quarter of Reporting</strong></td>
+												<td colspan="6"><span t-field="doc.quarter_of_reporting"/></td>
+											</tr>
+
+										</tbody>
+									</table>
+									
+									<table class = "table table-bordered">
+										<tbody>
+											<tr>
+												<td><strong>Overall Project Objective:</strong></td>
+												<td colspan="6"><span t-field="doc.overall_project_objective" /></td>
+											</tr>
+											
+											<tr>
+												<td>
+													<strong>Introduction</strong> (State general important information concerning the focus this quarter, progress,
+																					changes in context)
+												</td>
+												<td colspan="6"><span t-field="doc.introduction" /></td>
+											</tr>
+											
+										</tbody>
+									</table>
+									
+									<h3>Progress Against Logframe Indicators</h3>
+									
+									<table class="table table-bordered" style="font-size:12px">
+										<tbody>
+											<tr>
+												<td><strong>Output</strong></td>
+												<td><strong>Activity</strong></td>
+												<td><strong>Indicator</strong></td>
+												<td><strong>Project Target</strong></td>
+												<td><strong>Quarter Planned Target</strong></td>
+												<td><strong>Quarter Planned Budget</strong></td>
+											</tr>
+											
+
+											<tr>
+											
+												<td nowrap="nowrap">
+													<t t-foreach="doc.outcome_ids" t-as="outcom">
+														<t t-foreach="outcom.output_ids" t-as="output">
+															<span t-field="output.name" /><br/>
+														</t>
+														
+													</t>
+												</td>
+												
+											
+												<td nowrap="nowrap">
+													<t t-foreach="doc.outcome_ids" t-as="outcom">
+														<t t-foreach="outcom.output_ids" t-as="output">
+															<t t-foreach="output.activity_ids" t-as="activity">
+																
+																	<span t-field="activity.name" /><br/>
+																
+															</t>
+														</t>
+													</t>
+												</td>
+												
+												<td nowrap="nowrap">
+													<t t-foreach="doc.outcome_ids" t-as="outcom">
+														<t t-foreach="outcom.output_ids" t-as="output">
+															<t t-foreach="output.indicator_ids" t-as="indicator">
+																
+																	<span t-field="indicator.name" /><br/>
+																
+															</t>
+														</t>
+													</t>
+												</td>
+												
+												<td><span t-field="doc.project_target" /></td>
+												<td><span t-field="doc.quarter_target" /></td>
+												<td><span t-field="doc.quarter_budget" /></td>
+											</tr>
+											
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+
+										</tbody>
+									</table>
+
+									
+									<table class="table table-bordered" style="font-size: 12px;width:33.4%;float:left;">
+										<tbody>
+											<tr>
+												<td colspan="5"><strong>Beneficiaries</strong></td>
+											</tr>
+											<tr>
+												<td><strong>Boy</strong></td>
+												<td><strong>Girl</strong></td>
+												<td><strong>Women</strong></td>
+												<td><strong>Men</strong></td>
+												<td><strong>Total</strong></td>
+											</tr>
+											<tr>
+												<td><span t-field="doc.boys_q_r"/></td>
+												<td><span t-field="doc.girls_q_r"/></td>
+												<td><span t-field="doc.men_q_r"/></td>
+												<td><span t-field="doc.women_q_r"/></td>
+												<td><span t-field="doc.no_of_beneficieries_q_r"/></td>
+											</tr>
+											
+										</tbody>
+									</table>
+									
+									<table class="table table-bordered" style="font-size: 12px;width:33.3%;float:left;">
+										<tbody>
+											<tr>
+												<td><strong>Remaining Target</strong></td>
+											</tr>
+											
+											<tr>
+												<td><span t-field="doc.remaining_target"/></td>
+											</tr>
+											
+										</tbody>
+									</table>
+									
+									
+									<table class="table table-bordered" style="width:33.3%;float:left;" >
+										<tbody>
+											<tr>
+												<td><strong>Remarks</strong></td>
+											</tr>
+											
+											<t t-foreach="doc.quarter_remarks_ids" t-as="weekly_rem">
+												<tr><td><span t-field="weekly_rem.name"/></td></tr>
+											</t>
+										</tbody>
+									</table>
+
+
+							<h3 style="margin-top: 72px;text-align: left;">Achievements Per Outcome</h3>
+							
+							
+							<table class = "table table-bordered">
+								<tbody>
+
+									<tr style="width:180px">
+										<td nowrap="nowrap"><strong>Lessons Learned</strong></td>
+										<td colspan="6"><span t-field="doc.lessons_learned" /></td>
+									</tr>
+									
+									<tr>
+										<td nowrap="nowrap"><strong>Challenges</strong></td>
+										<td colspan="6"><span t-field="doc.challenges_quarter" /></td>
+									</tr>
+									
+									<tr>
+										<td nowrap="nowrap"><strong>Annex</strong></td>
+										<td colspan="6"><span t-field="doc.annex" /></td>
+									</tr>
+									
+									<tr>
+										<td nowrap="nowrap"><strong>Case Studies</strong></td>
+										<td colspan="6"><span t-field="doc.case_studies" /></td>
+									</tr>
+									
+									<tr>
+										<td nowrap="nowrap"><strong>Human Intersting Story</strong></td>
+										<td colspan="6"><span t-field="doc.human_stories_quarter"/></td>
+									</tr>
+									
+									<tr>
+										<td colspan="7"><strong>Activity Photos</strong></td>
+									</tr>
+									
+									<tr>
+										<td colspan="7">
+											<t t-foreach="doc.activity_photos" t-as="act_photo">
+												   <span t-field="act_photo.datas" t-field-options='{"widget": "image"}'/> - 
+											</t>
+											<!--<span t-field="doc.activity_photos"/>-->
+										</td>
+									</tr>
+									
+									<tr>
+										<td nowrap="nowrap"><strong>Next Quarter Workplan</strong></td>
+										<td colspan="6"><span t-field="doc.next_quarter_plan"/></td>
+									</tr>
+
+								</tbody>
+							</table>
+
+
+
+
+
+                        		</div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+
+        </t>
+    </template>
+
+</data>
+</odoo>
+
+

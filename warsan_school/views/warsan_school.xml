@@ -1,0 +1,333 @@
+<odoo>
+
+    <record model="ir.ui.view" id="warsan_school_class_form">
+        <field name="name">warsan_school.class.form</field>
+        <field name="model">warsan_school.class</field>
+        <field name="arch" type="xml">
+            <form string="Class Form">
+
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="open,closed" clickable="1" />
+                </header>
+
+                <sheet>
+
+
+                    <div class="oe_title" style="float:left;width:50%">
+                        <h1>
+                            <field name="name" string="Job"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="time_in" widget="float_time"/>
+                            <field name="course_id" domain="[('warsan_course', '=', True)]" options="{'no_create_edit': True, 'no_create': True}"/>
+                        </group>
+
+                        <group>
+                            <field name="date_end"/>
+                            <field name="time_out" widget="float_time"/>
+                            <field name="teacher_id" domain="[('teacher', '=', True)]" options="{'no_create_edit': True, 'no_create': True}"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                      <page string='Students'>
+                        <field name="registred_ids" readonly="1">
+                            <tree>
+                              <field name="student_id"/>
+                              <field name="reg_date"/>
+                              <field name="ammount_fee" sum="ammount_fee"/>
+                            </tree>
+                        </field>
+                      </page>
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="warsan_school_class_tree">
+        <field name="name">warsan_school.class.tree</field>
+        <field name="model">warsan_school.class</field>
+        <field name="arch" type="xml">
+            <tree string="Class">
+                <field name="name"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="time_in" widget="float_time"/>
+                <field name="time_out" widget="float_time"/>
+                <field name="teacher_id"/>
+                <field name="course_id" />
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="warsan_school_class_search">
+        <field name="name">warsan_school.class.search</field>
+        <field name="model">warsan_school.class</field>
+        <field name="arch" type="xml">
+            <search string="Class">
+                <field name="name"/>
+                <field name="date_start"/>
+                <field name="time_in"/>
+                <field name="teacher_id"/>
+                <field name="date_end"/>
+                <field name="time_out"/>
+                <field name="course_id" />
+                <field name="state" />
+            </search>
+        </field>
+    </record>
+
+
+
+    <record model="ir.ui.view" id="warsan_registration_form">
+        <field name="name">warsan_school.registration.form</field>
+        <field name="model">warsan_school.registration</field>
+        <field name="arch" type="xml">
+            <form string="Registration Form">
+
+                <header>
+                    <button string="Create Invoice" type="object" name="invoice_create" class="oe_highlight" attrs="{'invisible': [('state', 'in', ['invoiced'])]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="to_invoice,invoiced"/>
+                </header>
+
+                <sheet>
+
+                    <div class="oe_title" style="float:left;width:50%">
+                        <h1>
+                            <field name="name" string="Job"/>
+                        </h1>
+                    </div>
+
+                    <div class="oe_button_box" position="inside">
+
+                      <button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('invoice_id', '=', False)]}">
+                            Invoice
+                      </button>
+                        <field name="invoice_id" invisible="1"/>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="student_id" domain="[('student', '=', True)]" options="{'no_create_edit': True, 'no_create': True}"/>
+                            <field name="reg_date"/>
+                        </group>
+
+                        <group>
+                            <field name="class_id" domain="[('state', '=', 'open')]" options="{'no_create_edit': True, 'no_create': True}" />
+                            <field name="ammount_fee"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="warsan_school.registration_tree">
+        <field name="name">warsan_school.registration.tree</field>
+        <field name="model">warsan_school.registration</field>
+        <field name="arch" type="xml">
+            <tree string="Registration">
+                <field name="name"/>
+                <field name="student_id"/>
+                <field name="class_id"/>
+                <field name="reg_date"/>
+                <field name="total_invoiced" sum="total_invoiced" string="Fee Amount" />
+                <field name="amount_paid" sum="amount_paid" string="Amount Paid"/>
+                <field name="residual" sum="residual" string="Amount Due"/>
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="warsan_school_registration_search">
+        <field name="name">warsan_school.registration.search</field>
+        <field name="model">warsan_school.registration</field>
+        <field name="arch" type="xml">
+            <search string="Registration">
+                <separator orientation="vertical"/>
+                    <field name="student_id"/>
+                    <field name="class_id"/>
+                    <field name="ammount_fee" />
+
+                <newline/>
+                  <group expand="0" string="Group By..." colspan="11" col="11">
+                    <filter string="Today" domain="[('reg_date', '=', datetime.datetime.now().strftime('%Y-%m-%d'))]"/>
+                  </group>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="warsan_registration_pivot">
+        <field name="name">warsan_school.registration.pivot</field>
+        <field name="model">warsan_school.registration</field>
+        <field name="arch" type="xml">
+            <pivot string="Registration Pivot">
+              <field name="class_id"/>
+              <field name="teacher_id"/>
+              <field name="course_id"/>
+              <field name="reg_date"/>
+              <field name="total_invoiced" type="measure" />
+              <field name="amount_paid" type="measure" />
+              <field name="residual" type="measure" />
+            </pivot>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="student_action">
+        <field name="name">Students</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('student','=', True)]</field>
+        <field name="context">{'default_student': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create Student
+            </p>
+        </field>
+    </record>
+
+
+    <record id="student_action_tree" model="ir.actions.act_window.view">
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="base.view_partner_tree" />
+        <field name="act_window_id" ref="student_action" />
+    </record>
+
+
+
+    <record model="ir.actions.act_window" id="teacher_action">
+        <field name="name">Teachers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('teacher','=', True)]</field>
+        <field name="context">{'default_teacher': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create Teacher
+            </p>
+        </field>
+    </record>
+
+
+    <record id="teacher_action_tree" model="ir.actions.act_window.view">
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="base.view_partner_tree" />
+        <field name="act_window_id" ref="teacher_action" />
+    </record>
+
+
+
+    <record model="ir.actions.act_window" id="class_action">
+        <field name="name">Classes</field>
+        <field name="res_model">warsan_school.class</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create Class
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="course_action">
+        <field name="name">Courses</field>
+        <field name="res_model">product.product</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('warsan_course','=', True)]</field>
+        <field name="context">{'default_warsan_course': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create Course
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="registration_action">
+        <field name="name">Registred Students</field>
+        <field name="res_model">warsan_school.registration</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Register a new student
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="registration_pivot">
+        <field name="name">Classes Analysis</field>
+        <field name="res_model">warsan_school.registration</field>
+        <field name="view_mode">pivot</field>
+    </record>
+
+
+    <menuitem id="warsan_school_root"
+                  name="School"
+                  web_icon="warsan_school,static/description/icon.png"
+				  groups="group_school_manager"/>
+
+    <menuitem
+          id="student_menu"
+          name="Students"
+          parent="warsan_school_root"
+          sequence="1"
+          action="student_action"/>
+
+    <menuitem
+          id="teacher_menu"
+          name="Teachers"
+          parent="warsan_school_root"
+          sequence="5"
+          action="teacher_action"/>
+
+
+    <menuitem
+          id="reg_menu"
+          name="Class Reg"
+          parent="warsan_school_root"
+          sequence="10"
+          action="registration_action"/>
+
+    <menuitem
+          id="school_reporting_menu"
+          name="Reporting"
+          parent="warsan_school_root"
+          sequence="15" />
+
+    <menuitem
+          id="class_reporting_menu"
+          name="Classes"
+          parent="school_reporting_menu"
+          sequence="1"
+          action="registration_pivot" />
+
+    <menuitem
+          id="settings_menu"
+          name="Settings"
+          parent="warsan_school_root"
+          sequence="20"
+          />
+
+    <menuitem
+          id="class_menu"
+          name="Classes"
+          parent="settings_menu"
+          action="class_action"/>
+
+    <menuitem
+          id="courses_menu"
+          name="Courses"
+          parent="settings_menu"
+          action="course_action"/>
+
+
+</odoo>

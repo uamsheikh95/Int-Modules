@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_amaana_amaana_manager,amaana.amaana,model_amaana_amaana,account.group_account_manager,1,1,1,1
+access_amaana_amaana_user,amaana.amaana,model_amaana_amaana,account.group_account_invoice,1,1,1,1

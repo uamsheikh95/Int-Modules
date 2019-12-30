@@ -1,0 +1,100 @@
+<odoo>
+<data>
+
+
+    <report
+        id="action_job_cost_by_detail_report"
+        name="project_invoice_bill.job_cost_by_detail_report"
+
+        model="project.project"
+        string="Job Cost by Detail"
+        report_type="qweb-pdf"
+        />
+
+    <template id="job_cost_by_detail_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" >
+                        <div class="row mt0 mb4">
+                            <h3 class="text-center">Job Cost by Detail</h3>
+                        	<div class="col-md-12">
+                        		<div class="">
+                                   
+									<h3><span t-field="doc.name" /></h3>
+                                    <table class="table table-condensed" style="font-size: 12px;margin-top: 40px">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Date</strong></td>
+												<td><strong>JNL</strong></td>
+												<td><strong>Journal Entry</strong></td>
+												<td><strong>Account</strong></td>
+												<td><strong>Analytic Account</strong></td>
+												<td><strong>Partner</strong></td>
+												<td><strong>Label</strong></td>
+												<td><strong>Debit</strong></td>
+												<td><strong>Credit</strong></td>
+                                            </tr>
+
+											<t t-foreach="doc.account_move_line_ids" t-as="move">
+												<tr>
+													<td><span t-field="move.date" /></td>
+													<td><span t-field="move.journal_id.code" /></td>
+													<td><span t-field="move.move_id" /></td>
+													<td><span t-field="move.account_id" /></td>
+													<td><span t-field="move.analytic_account_id" /></td>
+													<td><span t-field="move.partner_id" /></td>
+													<td><span t-field="move.name" /></td>
+													<td><span t-field="move.debit" /></td>
+													<td><span t-field="move.credit" /></td>
+												</tr>
+											</t>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td><span t-field="doc.debit_total" /></td>
+												<td><span t-field="doc.credit_total" /></td>
+											</tr>
+
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td>
+
+													<t t-if="doc.debit_total &gt; doc.credit_total">
+														<strong>Loss</strong>
+													</t>
+													<t t-if="doc.debit_total &lt; doc.credit_total">
+														<strong>Profit</strong>
+													</t>
+												</td>
+												<td><span t-field="doc.total_debit_credit" /></td>
+
+											</tr>
+
+                						</tbody>
+									</table>
+
+
+                        		</div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+
+        </t>
+    </template>
+
+</data>
+</odoo>

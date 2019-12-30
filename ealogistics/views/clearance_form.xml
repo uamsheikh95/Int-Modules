@@ -1,0 +1,121 @@
+<odoo>
+<data>
+    <template id="background_layout" inherit_id="web.external_layout_background">
+        <xpath expr="//div[@class='header o_background_header']" position="replace">
+            <div class="header o_background_header">
+                <div class="col-xs-12 text-center">
+                    <img t-if="company.logo" style = "max-height:105px;max-width:400px" src="/ealogistics/static/src/img/Picture1.png"/>
+
+                </div>
+
+                <div class="clearfix mb8"/>
+            </div>
+
+
+
+        </xpath>
+
+
+
+
+    </template>
+
+    <report
+        id="action_clearance_form"
+        name="ealogistics.clearance_form"
+        file="ealogistics.clearance_form"
+        model="project.project"
+        string="Clearance Form"
+        report_type="qweb-html"
+        />
+
+    <template id="clearance_form">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" >
+                        <div class="row mt0 mb4">
+                            <div class="text-center" style="font-weight:bold;font-size:12px">Clearance Service Form</div>
+                        	<div class="col-md-12">
+                        		<div class="">
+                                    <table class="table table-bordered" style="font-size: 11px">
+
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Custom Name</strong></td>
+                                                <td colspan="2"><span t-field="doc.partner_id"/></td>
+                                                <td><strong>Date</strong></td>
+                    							<td colspan="2"><span t-field="doc.create_date"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Proj No</strong></td>
+                                                <td colspan="2"><span t-field="doc.project_code"/></td>
+                                                <td><strong>Cont(20F)</strong></td>
+                    							<td colspan="2"><span t-field="doc.container_20_feet"/></td>
+                                            </tr>
+                                           <tr>
+                                                <td><strong>Proj Name</strong></td>
+                                                <td colspan="2"><span t-field="doc.name"/></td>
+                                                <td><strong>Cont(40F)</strong></td>
+                    							<td colspan="2"><span t-field="doc.container_40_feet"/></td>
+                                            </tr>
+											<tr>
+                                                <td><strong>Status</strong></td>
+                                                <td colspan="2"><span t-field="doc.state"/></td>
+                                                <td><strong>Total</strong></td>
+                    							<td colspan="2"><span t-field="doc.task_count"/></td>
+                                            </tr>
+                						</tbody>
+									</table>
+										
+										<table class="table table-bordered" style="font-size: 12px">
+											<tbody>
+													<tr>
+														<td><strong>Container#</strong></td>
+														<td><strong>Type</strong></td>
+														<td><strong>From</strong></td>
+														<td><strong>To</strong></td>
+														<td><strong>Delivery Truck</strong></td>
+														<td><strong>D.Date</strong></td>
+														<td><strong>Returned Truck</strong></td>
+														<td><strong>R.Date</strong></td>
+														<td><strong>Status</strong></td>
+													</tr>
+													<t t-foreach="doc.task_ids" t-as="task">
+														<tr>
+															<td><span t-field="task.name"/></td>
+															<td><span t-field="task.container_type"/></td>
+															<td><span t-field="task.source_location"/></td>
+															<td><span t-field="task.destination_location"/></td>
+															<td><span t-field="task.delivery_truck"/></td>
+															<td><span t-field="task.delivery_date"/></td>
+															<td><span t-field="task.returned_truck"/></td>
+															<td><span t-field="task.returned_date"/></td>
+															<td><span t-field="task.stage_id.name"/></td>
+														</tr>
+													</t>
+											</tbody>
+										</table>
+										
+										<table class="table" style="font-size: 11px;border:none;">
+											<tbody style="border:none">
+												<tr style="border:none">
+													<td style="border:none"><strong>Appoved By</strong></td>
+													<td colspan="2" style="border:none"><strong>________________________________</strong></td>
+													<td style="border:none"><strong>Customer Signature</strong></td>
+													<td colspan="2" style="border:none"><strong>________________________________</strong></td>
+												</tr>
+											</tbody>
+										</table>
+                        		</div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+
+        </t>
+    </template>
+
+</data>
+</odoo>
