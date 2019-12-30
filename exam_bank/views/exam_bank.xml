@@ -1,0 +1,462 @@
+<odoo>
+  <!-- Exam Views -->
+  <record id="exam_form_view" model="ir.ui.view">
+        <field name="name">Exam view for exam</field>
+        <field name="model">exam_bank.exam</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+          <form string="Exam Form">
+            <field name="id" invisible="1"/>
+
+            <header>
+              <button string="Generate Exam" type="object" name="generate_exam" class="oe_highlight"/>
+            </header>
+
+            <sheet>
+              <div class="oe_title" style="float:left;width:50%;margin-top:20px">
+                  <h1>
+                    <label for="name" string="Exam" class="oe_edit_only"/>
+                      <field name="name" string="Exam" placeholder="Exam Name"/>
+                  </h1>
+                  <div name="options_active">
+                      <div>
+                          <label for="year_id" class="oe_inline" string="Academic Year :"/>
+                          <field name="year_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" class="oe_inline oe_input_align" />
+                      </div>
+                  </div>
+              </div>
+
+                <group>
+										<group>
+												<field name="exam_marks"/>
+                        <field name="level"/>
+										</group>
+										<group>
+												<field name="subject_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" string="Subject"/>
+										</group>
+								</group>
+
+                <notebook>
+                  <page string="Exam Sections">
+                    <field name="section_ids" mode="tree" nolabel="1" context="{'default_exam_id': id}">
+                        <tree editable="bottom">
+                            <field name="section_id"/>
+                            <field name="marks" sum="marks"/>
+                        </tree>
+                    </field>
+                  </page>
+                  <page string="Questions">
+											 <field name="question_ids" mode="tree" nolabel="1">
+													 <tree>
+															 <field name="name"/>
+															 <field name="subject_id" string="Subject"/>
+                               <field name="level"/>
+															 <field name="responsible_id"/>
+															 <field name="marks" sum="marks"/>
+													 </tree>
+											 </field>
+
+									</page>
+                </notebook>
+            </sheet>
+          </form>
+        </field>
+    </record>
+
+  <record model="ir.ui.view" id= "exam_tree_view">
+				<field name="name">Exam tree view</field>
+				<field name="model">exam_bank.exam</field>
+				<field name="arch" type="xml">
+						<tree string="Exams">
+								<field name="name" />
+								<field name="subject_id" />
+								<field name="level" />
+						</tree>
+				</field>
+		</record>
+
+  <record id="exam_view_search" model="ir.ui.view">
+			<field name="name">exam_bank.exam.search</field>
+			<field name="model">exam_bank.exam</field>
+			<field name="arch" type="xml">
+					<search string="Exams">
+							<separator orientation="vertical"/>
+              <field name="name" />
+              <field name="subject_id" />
+              <field name="level" />
+              <separator/>
+                    <filter string="Year" domain="[]" context="{'group_by': 'year_id'}"/>
+                    <filter string="Subject" domain="[]" context="{'group_by': 'subject_id'}"/>
+                    <filter string="Level" domain="[]" context="{'group_by': 'level'}"/>
+					</search>
+			</field>
+	</record>
+
+  <!-- Questions Views -->
+  <record model="ir.ui.view" id="exam_question_form">
+			<field name="name">Exam question form view</field>
+			<field name="model">exam_bank.question</field>
+			<field name="arch" type="xml">
+					<form string="Exam Question">
+            <sheet>
+              <div class="oe_title" style="width: 48%;">
+									<label for="name" string="Question" class="oe_edit_only"/>
+									<h1><field name="name" colspan="4" placeholder="Question"/></h1>
+									<separator />
+							</div>
+
+              <group>
+									<group>
+                      <field name="image_ids" style="width:70%" mode="tree" nolabel="1" context="{'default_question_id': id}">
+                        <tree editable="bottom">
+                          <field name="image" />
+                        </tree>
+                      </field>
+									</group>
+
+                  <group>
+                    <field name="section_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" />
+                    <field name="subject_id" widget="selection" string="Subject" />
+                    <field name="level" />
+                    <field name="marks" />
+                    <field name="responsible_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" />
+                  </group>
+            </group>
+            </sheet>
+          </form>
+      </field>
+  </record>
+
+  <record model="ir.ui.view" id= "exam_question_tree">
+				<field name="name">Tree view for exam questions</field>
+				<field name="model">exam_bank.question</field>
+				<field name="arch" type="xml">
+          <tree string="Exam Question" >
+              <field name="name" string="Question"/>
+              <field name="section_id"/>
+              <field name="subject_id" string="Subject"/>
+              <field name="level"/>
+              <field name="responsible_id"/>
+              <field name="marks"/>
+          </tree>
+				</field>
+		</record>
+
+    <record model="ir.ui.view" id= "exam_question_search">
+  				<field name="name">Serach view for exam questions</field>
+  				<field name="model">exam_bank.question</field>
+  				<field name="arch" type="xml">
+            <search string="Exam Question" >
+                <field name="name" string="Question"/>
+                <field name="section_id"/>
+                <field name="subject_id" string="Subject"/>
+                <field name="level"/>
+                <field name="responsible_id"/>
+                <separator/>
+
+                <filter string="Section" domain="[]" context="{'group_by': 'section_id'}"/>
+                <filter string="Subject" domain="[]" context="{'group_by': 'subject_id'}"/>
+                <filter string="Level" domain="[]" context="{'group_by': 'level'}"/>
+
+            </search>
+  				</field>
+  		</record>
+
+      <!-- Academic Year Views -->
+      <record model="ir.ui.view" id="year_form_veiw">
+    			<field name="name">Form view for academic year</field>
+    			<field name="model">exam_bank.year</field>
+    			<field name="arch" type="xml">
+    					<form string="Academic Year Form">
+                <sheet>
+                  <div class="oe_title" style="float:left;width:50%;margin-top:20px">
+                      <h1>
+                          <field name="name" string="Year" placeholder="Academic Year"/>
+                      </h1>
+                      <div name="options_active">
+                          <div>
+                              <label for="current" class="oe_inline" string="Current Year :"/>
+                              <field name="current" class="oe_inline oe_input_align" />
+                          </div>
+                      </div>
+                  </div>
+
+                  <group>
+    									<group>
+    											<field name="date_start" />
+    									</group>
+
+                      <group>
+                        <field name="date_stop" />
+                      </group>
+                  </group>
+                </sheet>
+              </form>
+          </field>
+      </record>
+
+      <record model="ir.ui.view" id= "year_tree">
+    				<field name="name">Tree view for year</field>
+    				<field name="model">exam_bank.year</field>
+    				<field name="arch" type="xml">
+              <tree string="Exam Question" >
+                  <field name="name" string="Academic Year"/>
+                  <field name="date_start"/>
+                  <field name="date_stop"/>
+              </tree>
+    				</field>
+    		</record>
+
+        <record model="ir.ui.view" id= "year_search">
+      				<field name="name">Serach view for year</field>
+      				<field name="model">exam_bank.year</field>
+      				<field name="arch" type="xml">
+                <search string="Exam Question" >
+                  <field name="name" string="Academic Year"/>
+                  <field name="date_start"/>
+                  <field name="date_stop"/>
+                    <separator/>
+                    <filter string="Current Year" domain="[('current', '=', True)]" />
+                </search>
+      				</field>
+      		</record>
+
+  <!-- Subject Views -->
+  <record model="ir.ui.view" id="subject_form">
+        <field name="name">Form view for subject</field>
+        <field name="model">exam_bank.subject</field>
+        <field name="arch" type="xml">
+            <form string="Subject Form">
+                <group>
+                    <field name="name" />
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="subject_tree">
+        <field name="name">Tree view for subject</field>
+        <field name="model">exam_bank.subject</field>
+        <field name="arch" type="xml">
+            <tree string="Subject">
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+  <!-- Prepared Views -->
+  <record model="ir.ui.view" id="prepared_form">
+        <field name="name">Form view for prepared</field>
+        <field name="model">exam_bank.responsible</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name" />
+                </group>
+                <group>
+                    <field name="mobile" />
+                </group>
+            </form>
+        </field>
+    </record>
+
+  <record model="ir.ui.view" id="prepared_tree">
+      <field name="name">Tree view for responsible</field>
+      <field name="model">exam_bank.responsible</field>
+      <field name="arch" type="xml">
+          <tree>
+              <field name="name" />
+              <field name="mobile" />
+          </tree>
+      </field>
+  </record>
+
+  <!-- Section Views -->
+  <record id="section_form_view" model="ir.ui.view">
+        <field name="name">Section Form View</field>
+        <field name="model">exam_bank.section</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+          <form string="Exam Sections Form">
+            <group>
+              <field name="name" />
+            </group>
+          </form>
+        </field>
+  </record>
+
+  <record id="section_tree_view" model="ir.ui.view">
+        <field name="name">Section Tree View</field>
+        <field name="model">exam_bank.section</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+          <tree string="Exam Sections Form">
+              <field name="name" />
+          </tree>
+        </field>
+  </record>
+
+  <!-- Actions -->
+  <!-- Exams Actions -->
+  <record model="ir.actions.act_window" id="action_exam_form">
+  		<field name="name">Exams</field>
+  		<field name="res_model">exam_bank.exam</field>
+  		<field name="view_type">form</field>
+  		<field name="view_mode">tree,form</field>
+  		<field name="help" type="html">
+  				<p class="oe_view_nocontent_create">Click to add an exam.</p>
+  				<p>Design easily your exam.</p>
+  		</field>
+  </record>
+  <record id="action_exam_tree" model="ir.actions.act_window.view">
+          <field name="view_mode">tree</field>
+          <field name="view_id" ref="exam_tree_view" />
+          <field name="act_window_id" ref="action_exam_form" />
+  </record>
+
+  <!-- Questions Actions -->
+  <record model="ir.actions.act_window" id="action_question_form">
+  		<field name="name">Questions</field>
+  		<field name="res_model">exam_bank.question</field>
+  		<field name="view_type">form</field>
+  		<field name="view_mode">tree,form</field>
+      <field name="view_id" ref="exam_question_form"/>
+  		<field name="help" type="html">
+  				<p class="oe_view_nocontent_create">Click to add question.</p>
+  				<p>Sepecify easily your question and its type.</p>
+  		</field>
+  </record>
+
+  <record id="action_question_tree" model="ir.actions.act_window.view">
+      <field name="view_mode">tree</field>
+      <field name="view_id" ref="exam_question_tree" />
+      <field name="act_window_id" ref="action_question_form" />
+  </record>
+
+  <!-- Academic Year Actions -->
+  <record model="ir.actions.act_window" id="action_year_form">
+  		<field name="name">Academic Years</field>
+  		<field name="res_model">exam_bank.year</field>
+  		<field name="view_type">form</field>
+  		<field name="view_mode">tree,form</field>
+      <field name="view_id" ref="year_form_veiw"/>
+  		<field name="help" type="html">
+  				<p class="oe_view_nocontent_create">Click to add Academic Year.</p>
+  				<p>Sepecify current Academic Year to help you tracking your data per year.</p>
+  		</field>
+  </record>
+
+  <record id="action_year_tree" model="ir.actions.act_window.view">
+      <field name="view_mode">tree</field>
+      <field name="view_id" ref="year_tree" />
+      <field name="act_window_id" ref="action_year_form" />
+  </record>
+
+  <!-- Subject Action -->
+  <record model="ir.actions.act_window" id="action_subject">
+      <field name="name">Subjects</field>
+      <field name="res_model">exam_bank.subject</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+  				<p class="oe_view_nocontent_create">Click to add subject.</p>
+  		</field>
+  </record>
+
+  <!-- Prepared Actions -->
+  <record model="ir.actions.act_window" id="action_prepared">
+      <field name="name">Responsible</field>
+      <field name="res_model">exam_bank.responsible</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+  				<p class="oe_view_nocontent_create">Click to add exam responsible.</p>
+  		</field>
+  </record>
+
+  <!-- Section Actions -->
+  <record model="ir.actions.act_window" id="action_section">
+      <field name="name">Exam Sections</field>
+      <field name="res_model">exam_bank.section</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+          <p class="oe_view_nocontent_create">Click to add exam section.</p>
+      </field>
+  </record>
+
+  <record id="action_section_tree" model="ir.actions.act_window.view">
+      <field name="view_mode">tree</field>
+      <field name="view_id" ref="section_tree_view" />
+      <field name="act_window_id" ref="action_section" />
+  </record>
+
+  <record id="action_prepared_tree" model="ir.actions.act_window.view">
+      <field name="view_mode">tree</field>
+      <field name="view_id" ref="prepared_tree" />
+      <field name="act_window_id" ref="action_prepared" />
+  </record>
+
+  <!--Menuitems-->
+  <menuitem id="exam_bank_root"
+            name="Exam Bank"
+            web_icon="exam_bank,static/description/icon.png"
+            groups="group_exam_bank_user"
+          />
+
+  <menuitem
+            id="exam_menu"
+            name="Exams"
+            parent="exam_bank_root"
+            action="action_exam_form"
+            sequence="1"
+			/>
+
+  <menuitem
+            id="question_menu"
+            name="Questions"
+            parent="exam_bank_root"
+            action="action_question_form"
+            sequence="2"
+			/>
+
+  <menuitem
+            id="config_menu"
+            name="Configuration"
+            parent="exam_bank_root"
+            sequence="3"
+			/>
+
+  <menuitem
+            id="year_menu"
+            name="Academic Years"
+            parent="config_menu"
+            action="action_year_form"
+            sequence="1"
+  			/>
+
+  <menuitem
+            id="subject_menu"
+            name="Subjects"
+            parent="config_menu"
+            action="action_subject"
+            sequence="10"
+  			/>
+
+  <menuitem
+            id="responsible_menu"
+            name="Sections"
+            parent="config_menu"
+            action="action_section"
+            sequence="15"
+      />
+
+  <menuitem
+            id="sections_menu"
+            name="Responsible"
+            parent="config_menu"
+            action="action_prepared"
+            sequence="20"
+      />
+
+</odoo>

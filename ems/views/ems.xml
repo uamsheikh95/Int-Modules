@@ -1,0 +1,763 @@
+<odoo>
+	<data>
+	
+		<!-- Secondary Registration -->
+        <record id="view_secondary_student_form" model="ir.ui.view">
+            <field name="name">view_secondary_student.student.form</field>
+            <field name="model">ems.student</field>
+            <field name="arch" type="xml">
+                <form string="Student Information">
+					<header>
+					
+						<button string="Approve Student" type="object" name="approve" class="oe_highlight"
+                          attrs="{
+                          'invisible': [('state', 'in', ['approved'])]}"/>
+						<field name="state" widget="statusbar" statusbar_visible="draft,to_approve,approved"/>
+					</header>
+					
+					<sheet>
+						<group>
+							<group style="width:98px"><field name="photo" nolabel="1" widget="image" class="oe_avatar oe_left" style="height:95px;" /></group>
+							
+							<group>
+								<field name="name" nolabel="1" placeholder="Student Name" style="border-radius:0;height:61px;width:500px;font-size:25px;font-widget:bold;" /><br/>
+								<field name="gender" required="1" nolabel="1" placeholder="Gender" style="border-radius:0;height:25px;width:205px" />
+								<field name="image_num" required="0" nolabel="1" placeholder="Image Number" style="border-radius:0;height:25px;width:290px;position:relative;right:290px" />
+							</group>
+						</group>
+						
+						<group>
+							<group>
+								<field name="mother_name" style="border-radius:0;height:25px;" />
+								<field name="year_of_birth" style="border-radius:0;height:25px;" widget="char" />
+								<field name="roll_no" style="border-radius:0;height:25px;" />
+							</group>
+							
+							<group>
+								<field name="tel" style="border-radius:0;height:25px;" />
+								<field name="place_of_birth" style="border-radius:0;height:25px;" />
+								<field name="year" style="border-radius:0;height:25px" />
+							</group>
+						</group>
+						
+						<group>
+							<group>
+								<field name="school_id" style="border-radius:0;height:25px;" required="1" readonly="0" options="{'no_create_edit': True, 'no_create': True}"  domain="[('school_type','=','secondary')]" />
+								<!--<field name="cmp_id" style="border-radius:0;height:25px;" widget="selection" required="0" options="{'no_create_edit': True, 'no_create': True}" />-->
+								<field name="country" style="border-radius:0;height:25px;" invisible="1" options="{'no_create_edit': True, 'no_create': True}"/>
+								<field name="region" style="border-radius:0;height:25px;" required="1" options="{'no_create_edit': True, 'no_create': True}" />
+								<field name="reg_date" style="border-radius:0;height:25px;" />
+								<field name="elective" style="border-radius:0;height:25px;" required="0" options="{'no_create_edit': True, 'no_create': True}" />
+							</group>
+							
+							<group>
+								<field name="city" style="border-radius:0;height:25px;" required="1" options="{'no_create_edit': True, 'no_create': True}" />
+								<field name="stream" style="border-radius:0;height:25px;" widget="selection" required="0" options="{'no_create_edit': True, 'no_create': True}" />
+								<field name="medium" style="border-radius:0;height:25px;" widget="selection" required="0" />
+							</group>
+						</group>
+						
+                    </sheet>
+				</form>
+			</field>
+		</record>
+		
+		
+		<!-- Primary Registration -->
+        <record id="view_primary_student_form" model="ir.ui.view">
+            <field name="name">view_primary_student.student.form</field>
+            <field name="model">ems.student</field>
+            <field name="arch" type="xml">
+                <form string="Student Information">
+					<header>
+						<button string="Approve Student" type="object" name="approve" class="oe_highlight"
+                          attrs="{
+                          'invisible': [('state', 'in', ['approved'])]}" />
+						<field name="state" widget="statusbar" statusbar_visible="draft,to_approve,approved"/>
+					</header>
+					
+					<sheet>
+						<group>
+							<group style="width:98px"><field name="photo" nolabel="1" widget="image" class="oe_avatar oe_left" style="height:95px;" /></group>
+							
+							<group>
+								<field name="name" nolabel="1" placeholder="Student Name" style="border-radius:0;height:61px;width:500px;font-size:25px;font-widget:bold;" /><br/>
+								<field name="gender" required="1" nolabel="1" placeholder="Gender" style="border-radius:0;height:25px;width:205px" />
+								<field name="image_num" required="0" nolabel="1" placeholder="Image Number" style="border-radius:0;height:25px;width:290px;position:relative;right:290px" />
+							</group>
+						</group>
+						
+						<group>
+							<group>
+								<field name="mother_name" style="border-radius:0;height:25px;" />
+								<field name="year_of_birth" style="border-radius:0;height:25px;" widget="char" />
+							</group>
+							
+							<group>
+								<field name="tel" style="border-radius:0;height:25px;" />
+								<field name="place_of_birth" style="border-radius:0;height:25px;" />
+								<field name="year" style="border-radius:0;height:25px" />
+							</group>
+						</group>
+						
+						<group>
+							<group>
+								<field name="school_id" style="border-radius:0;height:25px;" required="1" options="{'no_create_edit': True, 'no_create': True}" />
+								<field name="country" style="border-radius:0;height:25px;" invisible="1" options="{'no_create_edit': True, 'no_create': True}"/>
+								<field name="region" style="border-radius:0;height:25px;" required="1" options="{'no_create_edit': True, 'no_create': True}" />
+								<field name="medium" style="border-radius:0;height:25px;" required="0" />
+								
+							</group>
+							
+							<group>
+								<field name="city" style="border-radius:0;height:25px;" required="1" options="{'no_create_edit': True, 'no_create': True}" />
+								<field name="reg_date" style="border-radius:0;height:25px;" />
+							</group>
+						</group>
+						
+                    </sheet>
+				</form>
+			</field>
+		</record>
+		
+		
+		
+		<!-- Tree View Of secondary -->
+        <record id="view_secondary_student_tree" model="ir.ui.view">
+            <field name="name">ems.student.tree</field>
+            <field name="model">ems.student</field>
+            <field name="arch" type="xml">
+                <tree create="true" string="Admission Register">
+                    <field name="name" />
+                    <field name="year" />
+                    <field name="school_id" />
+                    <field name="gender" />
+					<field name="state" />
+                </tree>
+            </field>
+        </record>
+		
+		<!-- Tree View Of primary -->
+        <record id="view_primary_student_tree" model="ir.ui.view">
+            <field name="name">ems.student.tree2</field>
+            <field name="model">ems.student</field>
+            <field name="arch" type="xml">
+                <tree create="true" string="Admission Register">
+                    <field name="name" />
+                    <field name="year" />
+                    <field name="school_id" />
+                    <field name="gender" />
+					<field name="state" />
+                </tree>
+            </field>
+        </record>
+		
+		
+		
+		<!-- Search View Of Admission Register Information -->
+        <record id="view_student_student_search" model="ir.ui.view">
+            <field name="name">ems.student.search</field>
+            <field name="model">ems.student</field>
+            <field name="arch" type="xml">
+                <search string="Admission Register">
+                    <separator orientation="vertical" />
+                    <field name="name" />
+					<field name="school_id" />
+					<field name="image_num" />
+                    <field name="year" />
+                    <newline />
+                    <group expand="0" string="Group By..." colspan="12" col="10">
+                        <filter icon="terp-project" string="School" domain="[]" help="By School" context="{'group_by':'school_id'}" />
+                        <filter icon="terp-project" string="Academic Year" domain="[]" help="By Academic Year" context="{'group_by':'year'}" />
+                        <filter icon="terp-project" string="Region" domain="[]" help="By Region" context="{'group_by':'region'}" />
+                        <filter icon="terp-project" string="City" help="By City" context="{'group_by':'city'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+		
+		<!-- Secondary Student Profiles -->
+        <record id="view_secondary_student_profiles_form" model="ir.ui.view">
+            <field name="name">view_secondary_student.student_profiles.form</field>
+            <field name="model">ems.student</field>
+            <field name="arch" type="xml">
+                <form string="Students Profiles" create="false">
+					<header>
+						<field name="state" widget="statusbar" statusbar_visible="draft,to_approve,approved"/>
+					</header>
+					
+					<sheet>
+						<group>
+							<group style="width:98px"><field name="photo" nolabel="1" widget="image" class="oe_avatar oe_left" style="height:95px;" /></group>
+							
+							<group>
+								<field name="name" nolabel="1" placeholder="Student Name" style="border-radius:0;height:61px;width:500px;font-size:25px;font-widget:bold;" /><br/>
+								<field name="gender" required="1" nolabel="1" placeholder="Gender" style="border-radius:0;height:25px;width:205px" />
+								<field name="image_num" required="0" nolabel="1" placeholder="Image Number" style="border-radius:0;height:25px;width:290px;position:relative;right:290px" />
+							</group>
+						</group>
+						
+						<group>
+							<group>
+								<field name="mother_name" style="border-radius:0;height:25px;" />
+								<field name="year_of_birth" style="border-radius:0;height:25px;" widget="char" />
+								<field name="roll_no" nolabel="0" readonly="1" style="border-radius:0;height:25px;width:205px" />
+							</group>
+							
+							<group>
+								<field name="tel" style="border-radius:0;height:25px;" />
+								<field name="place_of_birth" style="border-radius:0;height:25px;" />
+								<field name="year" style="border-radius:0;height:25px" />
+							</group>
+						</group>
+						
+						<group>
+							<group>
+								<field name="school_id" style="border-radius:0;height:25px;" required="1" options="{'no_create_edit': True, 'no_create': True}"  domain="[('school_type','=','secondary')]" />
+								<!--<field name="cmp_id" style="border-radius:0;height:25px;" widget="selection" required="0" options="{'no_create_edit': True, 'no_create': True}" />-->
+								<field name="country" style="border-radius:0;height:25px;" invisible="1" options="{'no_create_edit': True, 'no_create': True}"/>
+								<field name="region" style="border-radius:0;height:25px;" required="1" options="{'no_create_edit': True, 'no_create': True}" />
+								<field name="reg_date" style="border-radius:0;height:25px;" />
+								<field name="elective" style="border-radius:0;height:25px;" required="0" options="{'no_create_edit': True, 'no_create': True}" />
+							</group>
+							
+							<group>
+								<field name="city" style="border-radius:0;height:25px;" required="1" options="{'no_create_edit': True, 'no_create': True}" />
+								<field name="stream" style="border-radius:0;height:25px;" widget="selection" required="0" options="{'no_create_edit': True, 'no_create': True}" />
+								<field name="medium" style="border-radius:0;height:25px;" widget="selection" required="0" options="{'no_create_edit': True, 'no_create': True}" />
+							</group>
+						</group>
+		
+
+						
+                    </sheet>
+				</form>
+			</field>
+		</record>
+		
+		
+		<!-- Primary Student Profiles -->
+        <record id="view_primary_student_profiles_form" model="ir.ui.view">
+            <field name="name">view_primary_student.student_profiles.form</field>
+            <field name="model">ems.student</field>
+            <field name="arch" type="xml">
+                <form string="Students Profiles" create="false">
+					<header>
+						<field name="state" widget="statusbar" statusbar_visible="draft,to_approve,approved"/>
+					</header>
+					
+					<sheet>
+						<group>
+							<group style="width:98px"><field name="photo" nolabel="1" widget="image" class="oe_avatar oe_left" style="height:95px;" /></group>
+							
+							<group>
+								<field name="name" nolabel="1" placeholder="Student Name" style="border-radius:0;height:61px;width:500px;font-size:25px;font-widget:bold;" /><br/>
+								<field name="gender" required="1" nolabel="1" placeholder="Gender" style="border-radius:0;height:25px;width:205px" />
+								<field name="image_num" required="0" nolabel="1" placeholder="Image Number" style="border-radius:0;height:25px;width:290px;position:relative;right:290px" />
+							</group>
+						</group>
+						
+						<group>
+							<group>
+								<field name="mother_name" style="border-radius:0;height:25px;" />
+								<field name="year_of_birth" style="border-radius:0;height:25px;" widget="char" />
+								<field name="roll_no" nolabel="0" readonly="1" style="border-radius:0;height:25px;width:205px" />
+							</group>
+							
+							<group>
+								<field name="tel" style="border-radius:0;height:25px;" />
+								<field name="place_of_birth" style="border-radius:0;height:25px;" />
+								<field name="year" style="border-radius:0;height:25px" />
+							</group>
+						</group>
+						
+						<group>
+							<group>
+								<field name="school_id" style="border-radius:0;height:25px;" required="1" options="{'no_create_edit': True, 'no_create': True}" />
+								<field name="country" style="border-radius:0;height:25px;" widget="selection" invisible="1" options="{'no_create_edit': True, 'no_create': True}"/>
+								<field name="region" style="border-radius:0;height:25px;" required="1" options="{'no_create_edit': True, 'no_create': True}" />
+								<field name="reg_date" style="border-radius:0;height:25px;" />
+							</group>
+							
+							<group>
+								<field name="city" style="border-radius:0;height:25px;" required="1" options="{'no_create_edit': True, 'no_create': True}" />
+							</group>
+						</group>
+
+                    </sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Secondary Students Profiles -->
+        <record id="view_student_student_tree_1" model="ir.ui.view">
+            <field name="name">ems.student.tree1</field>
+            <field name="model">ems.student</field>
+            <field name="arch" type="xml">
+                <tree create="false" delete="false" string="Students Profiles">
+                    <field name="name" />
+                    <field name="year" widget="selection" />
+                    <field name="school_id" />
+                    <field name="school_type" />
+                    <field name="gender" />
+					<field name="state" />
+                </tree>
+            </field>
+        </record>
+		
+		<!-- Primary Profiles -->
+        <record id="view_student_student_tree_2" model="ir.ui.view">
+            <field name="name">ems.student.tree2</field>
+            <field name="model">ems.student</field>
+            <field name="arch" type="xml">
+                <tree create="false" delete="false" string="Students Profiles">
+                    <field name="name" />
+                    <field name="year" widget="selection" />
+                    <field name="school_id" />
+                    <field name="school_type" />
+                    <field name="gender" />
+					<field name="state" />
+                </tree>
+            </field>
+        </record>
+		
+		<!-- Search View Of Admission Register Information -->
+        <record id="view_student_student_profiles_search" model="ir.ui.view">
+            <field name="name">ems.student_profiles.search</field>
+            <field name="model">ems.student</field>
+            <field name="arch" type="xml">
+                <search string="Admission Register">
+                    <separator orientation="vertical" />
+                    <field name="name" />
+					<field name="school_id" />
+					<field name="roll_no" />
+                    <field name="year" />
+                    <newline />
+                    <group expand="0" string="Group By..." colspan="12" col="10">
+                        <filter icon="terp-project" string="School" domain="[]" help="By School" context="{'group_by':'school_id'}" />
+                        <filter icon="terp-project" string="Academic Year" domain="[]" help="By Academic Year" context="{'group_by':'year'}" />
+                        <filter icon="terp-project" string="Region" domain="[]" help="By Region" context="{'group_by':'region'}" />
+                        <filter icon="terp-project" string="City" help="By City" context="{'group_by':'city'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+		
+
+		
+	
+		<!-- Form View Of School Information -->
+        <record id="view_school_school_form" model="ir.ui.view">
+            <field name="name">ems.school.form</field>
+            <field name="model">ems.school</field>
+            <field name="arch" type="xml">
+                <form string="School Information">
+                    <sheet>
+                        <separator string="School Configuration" />
+                        <group>
+							<group>
+								<field name="name" string="School Name" />
+								<field name="school_type" required="1" />
+							</group>
+                            
+							<group>
+								<field name="code" />
+								<field name="version" required="1" />
+							</group>
+							
+                        </group>
+						
+						
+						
+						<group>
+							<group>
+								<field name="region" string="Region" widget="selection" options="{'no_create_edit': True, 'no_create': True}" />
+							</group>
+							<group>
+								<field name="city" placeholder="City" widget="selection" options="{'no_create_edit': True, 'no_create': True}" />
+							</group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+		<!-- Tree View Of School Information -->
+        <record id="view_school_school_tree" model="ir.ui.view">
+            <field name="name">ems.school.tree</field>
+            <field name="model">ems.school</field>
+            <field name="arch" type="xml">
+                <tree string="School Information">
+                    <field name="name" string="School Name" />
+                    <field name="code" />
+					<field name="school_type" />
+                </tree>
+            </field>
+        </record>
+		
+		<!-- Search View Of Admission Register Information -->
+        <record id="view_school_profiles_search" model="ir.ui.view">
+            <field name="name">ems.school.search</field>
+            <field name="model">ems.school</field>
+            <field name="arch" type="xml">
+                <search string="School Search">
+                    <separator orientation="vertical" />
+                    <field name="name" />
+                    <newline />
+                    <group expand="0" string="Group By..." colspan="12" col="10">
+                        <filter icon="terp-project" string="School Type" domain="[]" help="By School Type" context="{'group_by':'school_type'}" />
+                        <filter icon="terp-project" string="Region" domain="[]" help="By Region" context="{'group_by':'region'}" />
+                        <filter icon="terp-project" string="City" help="By City" context="{'group_by':'city'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+		
+		
+		<!-- From View Of Academic Year's Information -->
+        <record id="view_academic_year_form" model="ir.ui.view">
+            <field name="name">acdemic.year.form</field>
+            <field name="model">ems.year</field>
+            <field name="arch" type="xml">
+                <form string="Academic Years">
+                    <header>
+                        <button name="generate_academicmonth" type="object" string="Generate Months"/>
+                    </header>
+                    <sheet>
+                        <group col="4" colspan="4">
+                            <field name="name" placeholder="Name" />
+                            <field name="code" placeholder="Code" />
+                            <field name="date_start" placeholder="Start Date" />
+                             <field name="date_stop" placeholder="Stop Date" />
+                            <field name="sequence" />
+                            <field name="current"/>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Months">
+                                <field name="month_ids" nolabel="1" colspan="4" 
+                                        options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}">
+                                    <tree string="Months">
+                                        <field name="name" />
+                                        <field name="code" />
+                                        <field name="date_start" />
+                                        <field name="date_stop" />
+                                    </tree>
+                                    <form string="Months">
+                                        <group col="4" colspan="4">
+                                            <field name="name" placeholder="Name" />
+                                            <field name="code" placeholder="Code" />
+                                            <field name="date_start" placeholder="Start Date" />
+                                            <field name="date_stop" placeholder="Stop Date" />
+                                            <field name="description" colspan="4" placeholder="Description"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                        <newline />
+                        <separator string="Description" colspan="4" />
+                        <field name="description" colspan="4" placeholder="Description"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+		
+		<!-- Tree View Of Academic Year's Information -->
+        <record id="view_academic_year_tree" model="ir.ui.view">
+            <field name="name">academic.year.tree</field>
+            <field name="model">ems.year</field>
+            <field name="arch" type="xml">
+                <tree string="Academic Years">
+                    <field name="sequence" />
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="date_start" />
+                    <field name="date_stop" />
+                </tree>
+            </field>
+        </record>
+		
+		
+		<!-- From View Of Academic Month's Information -->
+        <record id="view_academic_month_form" model="ir.ui.view">
+            <field name="name">academic.month.form</field>
+            <field name="model">ems.month</field>
+            <field name="arch" type="xml">
+                <form string="Months">
+                    <sheet>
+                        <group col="4" colspan="4">
+                            <field name="name" placeholder="Name" />
+                            <field name="code" placeholder="Code" />
+                            <field name="date_start" placeholder="Start Date" />
+                            <field name="date_stop" placeholder="Stop Date" />
+                            <field name="year_id" colspan="4" placeholder="Year" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                            <field name="description" colspan="4" placeholder="Description"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+		
+		
+        <!-- Tree View Of Academic Month's Information -->
+        <record id="view_academic_month_tree" model="ir.ui.view">
+            <field name="name">academic.month.tree</field>
+            <field name="model">ems.month</field>
+            <field name="arch" type="xml">
+                <tree string="Months">
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="date_start" />
+                    <field name="date_stop" />
+                    <field name="year_id" />
+                </tree>
+            </field>
+        </record>
+		
+		
+		<!-- Form View Of Subject's Information -->
+        <record id="view_subject_subject_form" model="ir.ui.view">
+            <field name="name">subject.subject.form</field>
+            <field name="model">ems.subject</field>
+            <field name="arch" type="xml">
+                <form string="Subjects">
+                    <sheet>
+                        <group col="4" colspan="4">
+                            <field name="name" placeholder="Name" />
+                            <field name="maximum_marks" placeholder="Maximum Marks"/>
+                            <field name="minimum_marks" placeholder="Minimum Marks"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+		
+		<!-- Tree View Of Subject's Information -->
+        <record id="view_subject_subject_tree" model="ir.ui.view">
+            <field name="name">subject.subject.tree</field>
+            <field name="model">ems.subject</field>
+            <field name="arch" type="xml">
+                <tree string="Subjects">
+                    <field name="name" />
+                    <field name="maximum_marks" />
+                    <field name="minimum_marks" />
+                </tree>
+            </field>
+        </record>
+		
+		
+		<!-- Form View Of City -->
+        <record id="view_city_form" model="ir.ui.view">
+            <field name="name">ems.city.form</field>
+            <field name="model">ems.city</field>
+            <field name="arch" type="xml">
+                <form string="School Information">
+                    <sheet>
+                        <separator string="City Configuration" />
+                        <group col="4" colspan="4">
+                            <field name="name" string="City Name" placeholder="City Name" />
+							<field name="code" string="City Code" placeholder="City Name" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+		<!-- Tree View Of City -->
+        <record id="view_city_tree" model="ir.ui.view">
+            <field name="name">ems.city.tree</field>
+            <field name="model">ems.city</field>
+            <field name="arch" type="xml">
+                <tree string="Cities">
+                    <field name="name" />
+                    <field name="code" />
+                </tree>
+            </field>
+        </record>
+		
+		
+		
+		
+		
+		
+		<!-- Action Secondary Registration -->
+        <record id="action_secondary_student_form" model="ir.actions.act_window">
+            <field name="name">Secondary Students Registration</field>
+            <field name="res_model">ems.student</field>
+			<field name="domain">[('state', '=', 'to_approve'),('school_type', '=', 'secondary')]</field>
+            <field name="view_type">form</field>
+			<field name="view_id" ref="view_secondary_student_form" />
+			<field name="search_view_id" ref="view_student_student_search" />
+            <field name="view_mode">tree,form</field>
+        </record>
+		
+		<!-- Action Of Secondary Registration -->
+        <record id="action_secondary_register_tree" model="ir.actions.act_window.view">
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_secondary_student_tree" />
+            <field name="act_window_id" ref="action_secondary_student_form" />
+        </record>
+		
+		
+		
+		
+		<!-- Action Primary Registration -->
+        <record id="action_primary_student_form" model="ir.actions.act_window">
+            <field name="name">Primary Students Registration</field>
+            <field name="res_model">ems.student</field>
+			<field name="domain">[('state', '=', 'to_approve'),('school_type', '=', 'primary')]</field>
+            <field name="view_type">form</field>
+			<field name="view_id" ref="view_primary_student_form" />
+			<field name="search_view_id" ref="view_student_student_search" />
+            <field name="view_mode">tree,form</field>
+        </record>
+		
+		<!-- Action Of Secondary Registration -->
+        <record id="action_primary_register_tree" model="ir.actions.act_window.view">
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_primary_student_tree" />
+            <field name="act_window_id" ref="action_primary_student_form" />
+        </record>
+
+		
+		
+		
+		
+		<!-- Action View 2 Of Kanban View Of Student Information -->
+       <!-- <record id="action_view_student_profiles_kanban" model="ir.actions.act_window.view">
+            <field name="view_mode">kanban</field>
+            <field eval="21" name="sequence" />
+            <field name="view_id" ref="student_profile_kanban_view" />
+            <field name="act_window_id" ref="action_student_student_profiles_form" />
+        </record>-->
+
+		
+		
+		
+		
+		<!-- Action Of Form, Tree & Kanban Views Of Student Profiles -->
+		<record id="action_secondary_student_profiles_form" model="ir.actions.act_window">
+            <field name="name">Secondary Students</field>
+            <field name="domain">[('state', '=', 'approved'),('school_type', '=', 'secondary')]</field>
+            <field name="res_model">ems.student</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="view_secondary_student_profiles_form" />
+            <field name="search_view_id" ref="view_student_student_profiles_search" />
+            <field name="view_mode">tree,form</field>
+        </record>
+		
+		<!-- Action Of Tree View Of Student Profiles -->
+        <record id="action_student_student_profile_tree" model="ir.actions.act_window.view">
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_student_student_tree_1" />
+            <field name="act_window_id" ref="action_secondary_student_profiles_form" />
+        </record>
+		
+		<!-- Action Of Form, Tree & Kanban Views Of Student Profiles -->
+		<record id="action_primary_student_profiles_form" model="ir.actions.act_window">
+            <field name="name">Primary Students</field>
+            <field name="domain">[('state', '=', 'approved'),('school_type', '=', 'primary')]</field>
+            <field name="res_model">ems.student</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="view_primary_student_profiles_form" />
+            <field name="search_view_id" ref="view_student_student_profiles_search" />
+            <field name="view_mode">tree,form</field>
+        </record>
+		
+		<!-- Action Of Tree View Of Student Profiles -->
+        <record id="action_primary_student_profiles_tree" model="ir.actions.act_window.view">
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_student_student_tree_2" />
+            <field name="act_window_id" ref="action_primary_student_profiles_form" />
+        </record>
+		
+		
+		<!-- Action Of Form & Tree Views Of School Information -->
+        <record id="action_school_school_form" model="ir.actions.act_window">
+            <field name="name">Schools</field>
+            <field name="res_model">ems.school</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+		</record>
+			
+		<!-- Action Of Form & Tree Views Of Academic Year Information -->
+        <record id="action_academic_year_form" model="ir.actions.act_window">
+            <field name="name">Academic Years</field>
+            <field name="res_model">ems.year</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+		
+		<!-- Action Of Form & Tree Views Of Subject Information -->
+        <record id="action_subject_subject_form" model="ir.actions.act_window">
+            <field name="name">Subjects</field>
+            <field name="res_model">ems.subject</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+		
+		<!-- Action Of Form & Tree Views Of City Information -->
+        <record id="action_city_form" model="ir.actions.act_window">
+            <field name="name">Cities</field>
+            <field name="res_model">ems.city</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+		
+		
+		<!-- Action for attaching photos -->
+        <record id="action_image_attach" model="ir.actions.act_window">
+            <field name="name">Attach Photos</field>
+            <field name="res_model">ems.student</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+		
+		
+		
+		<!-- Menu Item Of ems -->
+        <menuitem id="menu_ems" name="PNEB Data Collection" web_icon="ems/static/description/logo.png" sequence="1"/>
+		
+		
+		<!-- MenuItem For Admission -->
+        <menuitem id="menu_admission" name="Admission Register" parent="menu_ems" sequence="5"/>
+		<menuitem id="menu_secondary_registration" name="Secondary Registration" parent="menu_admission" action="action_secondary_student_form" />
+		<menuitem id="menu_primary_registration" name="Primary Registration" parent="menu_admission" action="action_primary_student_form" />
+		
+		
+		<!-- MenuItem For Students Profiles -->
+        <menuitem id="menu_profiles" name="Approved Students" parent="menu_ems" sequence="10"/>
+		<menuitem id="menu_secondary_students_profiles" name="Secondary Students" parent="menu_profiles" action="action_secondary_student_profiles_form" />
+		<menuitem id="menu_primary_students_profiles" name="Primary Students" parent="menu_profiles" action="action_primary_student_profiles_form" />
+		
+		<!-- MenuItem For Reports -->
+        <menuitem id="menu_reports" name="Reports" parent="menu_ems" sequence="15"/>
+		
+		
+		<!-- MenuItem For Configurations -->
+        <menuitem id="menu_configuration" name="School Configurations" parent="menu_ems" sequence="25"/>
+		
+		
+		<!-- MenuItem For Academic Years -->
+        <menuitem id="menu_academic_year_form" name="Academic Years" parent="menu_configuration"  action="action_academic_year_form" />
+		
+		
+		<!-- MenuItem For Schools -->
+		<menuitem id="menu_school_school_sub_form" name="Schools" parent="menu_configuration" action="action_school_school_form" />
+		
+		<!-- MenuItem For Subject -->
+		<menuitem id="menu_subject_subject_sub_form" name="Subjects" parent="menu_configuration" action="action_subject_subject_form" />
+		
+		<!-- MenuItem For States -->
+		<menuitem id="menu_country_state_form" name="States" parent="menu_configuration" action="base.action_country_state" />
+		
+		<!-- MenuItem For Cities -->
+		<menuitem id="menu_city_form" name="Cities" parent="menu_configuration" action="action_city_form" />
+		
+		
+
+	</data>
+</odoo>
+

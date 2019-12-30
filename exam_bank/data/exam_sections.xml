@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+      <record id="multiple_choice" model="exam_bank.section">
+          <field name="name">Multiple choice</field>
+      </record>
+
+      <record id="struted_questions" model="exam_bank.section">
+          <field name="name">Structured questions</field>
+      </record>
+
+      <record id="reading_comprehension" model="exam_bank.section">
+          <field name="name">Reading comprehension</field>
+      </record>
+
+      <record id="vocabulary" model="exam_bank.section">
+          <field name="name">Vocabulary</field>
+      </record>
+
+      <record id="grammar" model="exam_bank.section">
+          <field name="name">Grammar</field>
+      </record>
+
+      <record id="composition" model="exam_bank.section">
+          <field name="name">Composition Answer 2 question out of 4</field>
+      </record>
+
+      <record id="extend_questions" model="exam_bank.section">
+          <field name="name">Extend questions</field>
+      </record>
+
+      <record id="answer_question_arabic" model="exam_bank.section">
+          <field name="name">أجب عن الأسئلة التالية</field>
+      </record>
+
+      <record id="multiple_choice_arabic" model="exam_bank.section">
+          <field name="name">اختر الإجابة الصحيحة بوضع دائرة أمام رقمها</field>
+      </record>
+
+      <record id="fill_in_the_blanks_arabic" model="exam_bank.section">
+          <field name="name">أكمل الفراعات التالية</field>
+      </record>
+
+      <record id="choose_from_other_sections" model="exam_bank.section">
+          <field name="name">صل مجموع  (أ) بما يناسبها من مجموعة (ب)</field>
+      </record>
+
+      <record id="answer_with_evidence" model="exam_bank.section">
+          <field name="name">اذكر ما يلي مع الدليل</field>
+      </record>
+
+      <record id="fill_in_the_blanks_arabic_shortly" model="exam_bank.section">
+          <field name="name">اكتب في الفراغ ما يدل عليه النص(أي معنى النص موجزا)</field>
+      </record>
+
+      <record id="fill_in_the_blanks_arabic_shortly2" model="exam_bank.section">
+          <field name="name">اكتب ما تدل عليه العبارات التالية في المكان الخالي</field>
+      </record>
+
+      <record id="fill_in_the_blanks_with_correct" model="exam_bank.section">
+          <field name="name">املأ الفراغ التالية بإجابات مناسبة</field>
+      </record>
+
+
+
+      <record id="sheeko" model="exam_bank.section">
+          <field name="name">Sheeko</field>
+      </record>
+
+      <record id="naxwe" model="exam_bank.section">
+          <field name="name">Naxwe</field>
+      </record>
+
+      <record id="hee_hawleedyo" model="exam_bank.section">
+          <field name="name">Hees Hawleedyo</field>
+      </record>
+
+      <record id="maahmaahyo" model="exam_bank.section">
+          <field name="name">Maahmaahyo</field>
+      </record>
+
+      <record id="gabyo" model="exam_bank.section">
+          <field name="name">Gabayo</field>
+      </record>
+
+      <record id="googaalaysi" model="exam_bank.section">
+          <field name="name">Googaalaysi Dhaqameed</field>
+      </record>
+
+      <record id="maanso" model="exam_bank.section">
+          <field name="name">Maanso</field>
+      </record>
+
+      <record id="curis" model="exam_bank.section">
+          <field name="name">Curis</field>
+      </record>
+    </data>
+</odoo>

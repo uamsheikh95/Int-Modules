@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<odoo>
+<data>
+
+	
+    <report
+        id="action_students_list_wizard_report"
+        name="ems.students_list_wizard_report"
+        file="ems.students_list_wizard_report"
+        model="report.ems.students_list_wizard_report"
+        string="Students List Report"
+        report_type="qweb-pdf"
+        />
+
+    <template id="students_list_wizard_report">
+	
+	
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="doc">
+					<!---->
+					<!--<t t-set="RN01" t-value="doc.roll_no"/>-->
+					<!--<t t-esc="RN01"/>-->
+					<div class="page" style="width:100%;">
+						<div class="oe_structure"/>
+						<img style = "width:100%" src="/ems/static/description/students_list.png"/>
+						
+		
+							
+							<table class ="table table-condensed" style="margin-top:20px;">
+								<tbody>
+									<tr>
+										<td><strong>Level</strong></td>
+										<td>
+											<t t-if="docs.level">
+												<span t-esc="docs.level"/>
+											</t>
+										</td>
+										
+										<td><strong>School</strong></td>
+										<td>
+											<t t-if="docs.school_id">
+												<span t-esc="docs.school_id.name"/>
+											</t>
+										</td>
+										
+									</tr>
+									
+									<tr>
+										
+										<td><strong>Academic Year</strong></td>
+										<td>
+											<t t-if="docs.year">
+												<span t-esc="docs.year.name"/>
+											</t>
+										</td>
+										
+										<td><strong>Medium</strong></td>
+										<td>
+											<t t-if="docs.medium">
+												<span t-esc="docs.medium"/>
+											</t>
+										</td>
+										
+									</tr>
+									
+									<t t-if="docs.level == 'secondary'">
+									
+										<tr>
+											
+											<td><strong>Elective</strong></td>
+											<td>
+												<t t-if="docs.elective">
+													<span t-esc="docs.elective"/>
+												</t>
+											</td>
+											<td></td>
+											<td></td>
+											
+										</tr>
+									</t>
+								</tbody>
+							</table>
+							
+							
+							<table class ="table table-bordered" style="margin-top:20px;">
+								<tbody>
+									
+									
+									<tr style="font-size: 13px;">
+										<td class="text-center"><strong>STN</strong></td>
+										<td class="text-center"><strong>roll_no</strong></td>
+										<td colspan = "3" class="text-center"><strong>Student Name</strong></td>
+										<td colspan = "3" class="text-center"><strong>Mother Name</strong></td>
+										<td class="text-center"><strong>Gender</strong></td>
+										<td colspan = "3" class="text-center"><strong>School</strong></td>
+										<td class="text-center"><strong>Location</strong></td>
+										<t t-if="docs.level == 'secondary'">
+											<td class="text-center"><strong>Elective</strong></td>
+										</t>
+										<td class="text-center"><strong>Medium</strong></td>
+									</tr>
+									
+									<t t-foreach="students" t-as="student">
+										<tr>
+										
+											<td class="text-center">
+												<!--<t t-set="num" t-value="0"/>
+												<t t-esc="num + 1"/>
+												<t t-set="i" t-value="num+1"/> -->
+												<span t-esc="student_index+1"/>
+											</td>
+
+										
+											<td><span t-field="student.roll_no"/></td>
+											<td colspan = "3" nowrap="nowrap"><span t-field="student.name"/></td>
+											<td colspan = "3" nowrap="nowrap"><span t-field="student.mother_name"/></td>
+											<td><span t-field="student.gender"/></td>
+											<td colspan = "3" nowrap="nowrap"><span t-field="student.school_id.name"/></td>
+											<td class="text-center" nowrap="nowrap"><span t-field="student.city.name"/></td>
+											<t t-if="docs.level == 'secondary'">
+												<td class="text-center" nowrap="nowrap"><span t-field="student.elective"/></td>
+											</t>
+											<td class="text-center" nowrap="nowrap"><span t-field="student.medium"/></td>
+										</tr>
+									</t>
+								</tbody>
+							</table>								
+						
+					</div>
+				</t>
+		
+            </t>
+     </template>
+
+</data>
+</odoo>
+
+

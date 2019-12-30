@@ -1,0 +1,27 @@
+<odoo>
+	<data>
+		<record id="ems_student_confirm_view" model="ir.ui.view">
+            <field name="name">ems.student.confirm.form</field>
+            <field name="model">ems.student.confirm</field>
+            <field name="arch" type="xml">
+                <form string="Confirm Waiting to approve students">
+                    <p class="oe_grey">
+                        Are you sure?
+                    </p>
+                    <footer>
+                        <button string="Approve" name="student_confirm" type="object" default_focus="1" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="action_ems_student_confirm"
+            multi="True"
+            key2="client_action_multi" name="Approve Students"
+            res_model="ems.student.confirm" src_model="ems.student"
+            view_mode="form" target="new" view_type="form"
+			groups="ems.group_exam_board_admin,ems.group_secondary_school_admin,ems.group_primary_school_admin" />
+	</data>
+</odoo>
+

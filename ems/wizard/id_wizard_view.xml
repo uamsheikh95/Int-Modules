@@ -1,0 +1,49 @@
+<odoo>
+	<data>
+		<record id="id_report_view" model="ir.ui.view">
+			<field name="name">ems.idwizard</field>
+			<field name="model">ems.id.wizard</field>
+			<field name="arch" type="xml">
+			   <form>
+					<group>
+						<group>
+							<field name="state" string="Region" options="{'no_create_edit': True, 'no_create': True}" required="1" />
+							<field name="school_id" options="{'no_create_edit': True, 'no_create': True}" domain="[('region','=',state)]" required="1" />		
+							<field name="year" widget="selection" options="{'no_create_edit': True, 'no_create': True}" />
+						</group>
+						<group>
+							<field name="name" options="{'no_create_edit': True, 'no_create': True}" domain="[('school_id','=',school_id)]" />
+							<field name="level" widget="selection" />
+						</group>
+						
+					</group>
+					
+					
+					
+					<footer>
+						<button name="check_report" string="Print" type="object" default_focus="1" class="oe_highlight" />
+
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+			   </form>
+			</field>
+		</record>
+		
+		
+		<record id="action_id_wizard" model="ir.actions.act_window">
+			<field name="name">Generate Id Card Report</field>
+			<field name="res_model">ems.id.wizard</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="id_report_view"/>
+			<field name="target">new</field>
+		</record>
+		
+		
+		
+        <menuitem id="menu_id_report" name="ID Card" parent="menu_reports"  action="action_id_wizard" />
+		
+	</data>
+</odoo>
+

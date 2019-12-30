@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<odoo>
+<data>
+
+	<template id="minimal_layout_inherit" inherit_id="report.minimal_layout">
+		<xpath expr="//head" position="inside">
+			<link rel='stylesheet' href="/ems/static/src/css/id_card.css"/>
+		</xpath>
+	</template>
+	
+    <report
+        id="action_print_id_card"
+        name="ems.print_id_card"
+        file="ems.print_id_card"
+        model="ems.student"
+        string="Custom ID Card"
+        report_type="qweb-pdf"
+        />
+
+    <template id="print_id_card">
+	
+		<style type="text/css">
+			.image img {
+				width:100%;
+			}
+		</style>
+	
+	
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="doc">
+					<!---->
+					<!--<t t-set="RN01" t-value="doc.roll_no"/>-->
+					<!--<t t-esc="RN01"/>-->
+                        <div class="page">
+                            <div class="oe_structure"/>
+							<t t-set="card_position" t-value="l"/>
+							
+							<!--t t-foreach="students" t-as="student">-->
+								
+								<!--Variables 1-->
+								
+								<t t-set="rno1" t-value="doc.roll_no"/>
+								<t t-set="name1" t-value="doc.name"/>
+								<t t-set="gender1" t-value="doc.gender"/>
+								<t t-set="mother1" t-value="doc.mother_name"/>
+								<t t-set="dob1" t-value="doc.year_of_birth"/>
+								<t t-set="pob1" t-value="doc.place_of_birth"/>
+								<t t-set="photo1" t-value="doc.photo"/>
+								<t t-set="school1" t-value="doc.school_id.name"/>
+								<t t-set="region1" t-value="doc.region.name"/>
+								<t t-set="city1" t-value="doc.city.name"/>
+								
+								<!--Variables 2-->
+								<t t-if="card_position=='r'">
+									<t t-set="rno2" t-value="doc.roll_no"/>
+									<t t-set="name2" t-value="doc.name"/>
+									<t t-set="gender2" t-value="doc.gender"/>
+									<t t-set="mother2" t-value="doc.mother_name"/>
+									<t t-set="dob2" t-value="doc.date_of_birth"/>
+									<t t-set="pob2" t-value="doc.place_of_birth"/>
+									<t t-set="photo2" t-value="doc.photo"/>
+									<t t-set="school2" t-value="doc.school_id.name"/>
+									<t t-set="region2" t-value="doc.region.name"/>
+									<t t-set="city2" t-value="doc.city.name"/>
+								</t>
+								
+								<table style="font-size:11px;width:41%;float:left;">
+									<tbody>
+										<tr>
+											<!--ID Card Left-->
+											
+												<td style="width:400px">
+													<div class="id_card" style="width:400px;">
+														<!--ID Card Cover Image-->
+														<img t-if="doc.school_type == 'primary'" style = "width:100%;border:1px solid #ddd;border-top:1px solid #ddd;height:73px;" src="/ems_moe/static/description/G8-Header.JPG"/>
+														
+														<img t-if="doc.school_type == 'secondary'" style = "width:100%;border:1px solid #ddd;border:1px solid #ddd;height:73px;" src="/ems_moe/static/description/F4-Header.JPG"/>
+														
+														<div class="col1" style="width:100%">
+															<table style="font-size: 11px;border-right:none;width:80%;border-left:1px solid #ddd;float:left;">
+																<tbody>
+																	<tr style="border-bottom:1px solid #ddd;height:22px;">
+																		<td style="border:none"><strong style="margin:10px;">RNO</strong></td>
+																		<td colspan="3" style="border:none;"><t t-esc="rno1"/></td>
+																	</tr>
+																	<tr style="border-bottom:1px solid #ddd;height:22px;">
+																		<td style="border:none"><strong style="margin:10px;">Name</strong></td>
+																		<td colspan="3" style="border:none">
+																			<t t-esc="name1"/>
+																		</td>
+																	</tr>
+																	
+																	<tr style="border-bottom:1px solid #ddd;height:22px;">
+																		<td style="border:none;width:50px;"><strong style="margin:10px;">Gender</strong></td>
+																		<td style="border:none;width:70px;"><t t-esc="gender1"/></td>
+																		
+																		<td style="border:none;width:74px"><strong>Mother Name:</strong></td>
+																		<td style="border-bottom:1px solid #ddd"><t t-esc="mother1"/></td>
+																	</tr>
+																	
+																	<tr style="border-bottom:1px solid #ddd;height:22px;">
+																		<td style="border:none"><strong style="margin:10px;">DOB</strong></td>
+																		<td style="border:none">
+																			<t t-esc="dob1"/>
+																		</td>
+																		
+																	<td style="border:none;width:53px;"><strong>POB</strong></td>
+																		<td style="border:none"><t t-esc="pob1"/></td>
+																	</tr>
+																	
+																</tbody>
+																
+															</table>
+															<div class="image" style="width:20%;height:89px;border-bottom:1px solid #ddd;border-left:1px solid #ddd;border-right:1px solid #ddd;float:right">
+																<t t-if="photo1">
+																	<t t-esc="photo1" t-esc-options='{"widget": "image"}' style="width:100px"/>
+																</t>
+															</div>
+															
+														</div>
+														
+														<!--+++++++++++-->
+														<table style="font-size: 11px;border-top:none;margin-top:20px;position:relative;bottom:21px;width:100%;border-left:1px solid #ddd">
+															<tbody>
+																<tr style="border-bottom:1px solid #ddd;height:22px;">
+																	
+																	
+																	
+																</tr>
+																
+																<tr style="border-bottom:1px solid #ddd;border-right:1px solid #ddd;width:40px;height:22px;">
+																	<td style="border:none;width:40px"><strong style="margin:10px;">School</strong></td>
+																	<td colspan="3" style="border:none"><t t-esc="school1"/></td>
+																</tr>
+																
+																
+																
+																<tr style="border-bottom:1px solid #ddd;border-right:1px solid #ddd;height:22px;">
+																	<td style="border:none"><strong style="margin:10px;">Region</strong></td>
+																	<td style="border:none"><t t-esc="region1"/></td>
+																	
+																	<td style="border:none"><strong>Location</strong></td>
+																	<td style="border:none"><t t-esc="city1"/></td>
+																</tr>
+																
+																<tr style="border-bottom:1px solid #ddd;height:47px;height:55px;">
+																	<td style="border:none"><strong style="margin:10px;">Signature</strong></td>
+																	<td colspan="3" style="border:1px solid #ddd;border-left:none"></td>
+																</tr>
+																
+															</tbody>
+														</table>
+														
+													</div>
+
+												</td>
+											
+											
+											<td style="width:60px">
+												<p>
+													
+												</p>
+												
+											</td>
+
+										</tr>
+									</tbody>
+								</table>
+								
+								
+							<!--</t>-->
+							
+							<t t-if="card_position=='l'">
+								<t t-set="card_position" t-value="r"/>
+							</t>
+							
+                        </div>
+                </t>
+            </t>
+     </template>
+
+</data>
+</odoo>
+
+

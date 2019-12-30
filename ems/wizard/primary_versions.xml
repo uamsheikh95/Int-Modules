@@ -1,0 +1,40 @@
+<odoo>
+	<data>
+	
+		<record id="primaryversions_wizard_form" model="ir.ui.view">
+			<field name="name">primaryversions wizard</field>
+			<field name="model">ems.primaryversions.wizard</field>
+			<field name="arch" type="xml">
+			    <form>
+					<group>
+						<field name="year" widget="selection" options="{'no_create_edit': True, 'no_create': True}" invisible="1" />
+					</group>
+					
+					<h4>Click Print to confirm</h4>
+
+					<footer>
+						<button name="check_report" string="Print" type="object" default_focus="1" class="oe_highlight" />
+
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+			    </form>
+			</field>
+		</record>
+		
+		
+		<record id="action_primaryversions" model="ir.actions.act_window">
+			<field name="name">Primary Versions</field>
+			<field name="res_model">ems.primaryversions.wizard</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="primaryversions_wizard_form"/>
+			<field name="target">new</field>
+		</record>
+		-->
+		
+		<!-- MenuItem For Reports -->
+        <menuitem id="menu_primary_Versions_report" name="Primary Versions" parent="menu_reports" action="action_primaryversions" />
+		
+	</data>
+</odoo>

@@ -1,0 +1,29 @@
+<odoo>
+	<data>
+		<record id="ems_student_attach_view" model="ir.ui.view">
+            <field name="name">ems.student.attach.form</field>
+            <field name="model">ems.student.attach</field>
+            <field name="arch" type="xml">
+                <form string="Attach Photos">
+				
+				
+					<group>
+						<field name="folder_select" string="Enter Folder Name" />
+					</group>
+                    <footer>
+                        <button string="Ok" name="attach_photos" type="object" default_focus="1" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="action_ems_attach_photos"
+            multi="True"
+            key2="client_action_multi" name="Upload Photos"
+            res_model="ems.student.attach" src_model="ems.student"
+            view_mode="form" target="new" view_type="form"
+			groups="ems.group_exam_board_admin,ems.group_secondary_school_admin,ems.group_primary_school_admin" />
+	</data>
+</odoo>
+

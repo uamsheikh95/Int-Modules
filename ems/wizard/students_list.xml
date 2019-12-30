@@ -1,0 +1,49 @@
+<odoo>
+	<data>
+		<record id="studentslist_view" model="ir.ui.view">
+			<field name="name">Students List Wizard</field>
+			<field name="model">ems.studentslist.wizard</field>
+			<field name="arch" type="xml">
+			   <form>
+					<group>
+						<group>
+							<field name="level" widget="selection" />
+							<field name="year" widget="selection" options="{'no_create_edit': True, 'no_create': True}"  />
+							<field name="elective" widget="selection" attrs="{'invisible': [('level', 'in', [False,'primary'])]}" />
+						</group>
+						
+						<group>
+							<field name="school_id" widget="selection" options="{'no_create_edit': True, 'no_create': True}" domain="[('school_type','=',level)]" />
+							<field name="medium" widget="selection" />
+						</group>
+						
+					</group>
+					
+					
+					
+					<footer>
+						<button name="check_report" string="Print" type="object" default_focus="1" class="oe_highlight" />
+
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+			   </form>
+			</field>
+		</record>
+		
+		
+		<record id="action_students_list" model="ir.actions.act_window">
+			<field name="name">Students List Report</field>
+			<field name="res_model">ems.studentslist.wizard</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="studentslist_view"/>
+			<field name="target">new</field>
+		</record>
+		
+		
+		<!-- MenuItem For Reports -->
+        <menuitem id="menu_students_list_report" name="Students List" parent="menu_reports"  action="action_students_list" />
+		
+	</data>
+</odoo>

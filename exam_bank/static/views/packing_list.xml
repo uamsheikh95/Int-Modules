@@ -1,0 +1,161 @@
+<odoo>
+<data>
+    <template id="background_layout" inherit_id="web.external_layout_background">
+        <xpath expr="//div[@class='header o_background_header']" position="replace">
+            <div class="header o_background_header">
+                <div class="col-xs-12 text-center">
+                    <img t-if="company.logo" style = "max-height:105px;max-width:400px" src="/ealogistics/static/src/img/shardi_shippingcargo.png"/>
+
+                </div>
+
+                <div class="clearfix mb8"/>
+            </div>
+
+
+
+        </xpath>
+
+
+
+
+    </template>
+
+    <report
+        id="action_packing_list"
+        name="shardi_logistics.packing_list"
+        file="shardi_logistics.packing_list"
+        model="project.project"
+        string="Packing List Report"
+        report_type="qweb-pdf"
+        />
+
+    <template id="packing_list">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" >
+                        <div class="row mt0 mb4">
+                            <h3 class="text-center">Packing List Report</h3>
+                        	<div class="col-md-12">
+                        		<div class="">
+									
+									<div style = "width:30%;float:right">
+										<strong>Date: </strong><span t-field="doc.create_date"/><br />
+									</div>
+									
+                                    <table class="table table-condensed" style="font-size: 12px;margin-top: 40px">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Customer :</strong></td>
+                                                <td colspan="3" style = "position:relative;right:120px" ><span t-field="doc.partner_id.name"/></td>
+												
+												<td><strong>Project Code :</strong></td>
+                    							<td style = "text-align:center;position:relative;right:100px"><span t-field="doc.proj_code"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Address :</strong></td>
+                                                <td colspan="3" style = "position:relative;right:120px">
+													<span t-field="doc.partner_id.street"/>
+												</td>
+                                                <td><strong>Service Type :</strong></td>
+                    							<td colspan="2" style = "text-align:center;position:relative;right:100px"><span t-field="doc.service_type"/></td>
+                                            </tr>
+                                           <tr>
+                                                <td><strong>Source Location :</strong></td>
+													<t t-foreach="doc.task_ids" t-as="task">
+														<td colspan="3" style = "text-align:center;position:relative;right:165px">
+															<span t-field="task.source_location"/>
+														</td>
+													</t>
+
+                                                <td><strong>Destination Location :</strong></td>
+                    							<t t-foreach="doc.task_ids" t-as="task">
+													<td colspan="2" style = "text-align:center;position:relative;right:120px">
+														<span t-field="task.destination_location"/>
+													</td>
+												</t>
+                                            </tr>
+											
+											<tr>
+												<td><strong>Number of Rooms :</strong></td>
+												<td colspan="3" style = "text-align:center;position:relative;right:165px"><span t-field="doc.no_of_rooms"/></td>
+												
+												<td><strong>Lift Available :</strong></td>
+												<td colspan="2" style = "text-align:center;position:relative;right:165px"><span t-field="doc.lift_avaliable"/></td>
+												
+											</tr>
+											
+											<tr>
+												<td><strong>Floor Number :</strong></td>
+												<td colspan="3" style = "text-align:center;position:relative;right:165px"><span t-field="doc.floor_no"/></td>
+												
+												<td><strong>Free Parking :</strong></td>
+												<td colspan="2" style = "text-align:center;position:relative;right:165px"><span t-field="doc.free_parking"/></td>	
+											</tr>
+											
+											<tr>
+												<td><strong>Shift Day :</strong></td>
+												<td colspan="3" style = "text-align:center;position:relative;right:165px"><span t-field="doc.shifting_day"/></td>
+												
+												<td><strong>Shift Time :</strong></td>
+												<td colspan="2" style = "text-align:center;position:relative;right:165px"><span t-field="doc.shifting_time"/></td>	
+											</tr>
+											
+                						</tbody>
+									</table>
+										
+									<table class="table table-bordered" style="font-size: 12px">
+										<tbody>
+												<tr>
+													<td style = "text-align:center"><strong>NO</strong></td>
+													<td style = "text-align:center" colspan="2"><strong>Item</strong></td>
+													<td style = "text-align:center"><strong>QTY</strong></td>
+													<td style = "text-align:center"><strong>Length</strong></td>
+													<td style = "text-align:center"><strong>Width</strong></td>
+													<td style = "text-align:center"><strong>Height</strong></td>
+													<td style = "text-align:center"><strong>Measure</strong></td>
+													<td style = "text-align:center"><strong>Volume</strong></td>
+													<td style = "text-align:center"><strong>Fragile</strong></td>
+													<td style = "text-align:center"><strong>Remarks</strong></td>
+												</tr>
+												<t t-foreach="doc.packing_list_ids" t-as="park">
+													<tr>
+														<td style = "text-align:center"><span t-esc="park_index+1"/></td>
+														<td colspan="2"><span t-field="park.item"/></td>
+														<td style = "text-align:center"><span t-field="park.quantity"/></td>
+														<td style = "text-align:center"><span t-field="park.length"/></td>
+														<td style = "text-align:center"><span t-field="park.width"/></td>
+														<td style = "text-align:center"><span t-field="park.height"/></td>
+														<td style = "text-align:center"><span t-field="park.measure"/></td>
+														<td style = "text-align:center"><span t-field="park.volume"/></td>
+														<td style = "text-align:center"><span t-field="park.fragile"/></td>
+														<td style = "text-align:left"><span t-field="park.remarks"/></td>
+													</tr>
+												</t>
+										</tbody>
+									</table>
+																			
+										
+										
+										<table class="table" style="font-size: 11px;border:none;">
+											<tbody style="border:none">
+												<tr style="border:none">
+													<td style="border:none;text-align:left"><strong>Estimated By</strong></td>
+													<td colspan="2" style="border:none;text-align:left"><strong>________________________________</strong></td>
+													<td style="border:none;text-align:right"><strong>Approved By</strong></td>
+													<td colspan="2" style="border:none;text-align:right"><strong>________________________________</strong></td>
+												</tr>
+											</tbody>
+										</table>
+                        		</div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+
+        </t>
+    </template>
+
+</data>
+</odoo>

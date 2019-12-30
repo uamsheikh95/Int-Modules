@@ -1,0 +1,45 @@
+<odoo>
+	<data>
+		<record id="totalmaleandfemale_view" model="ir.ui.view">
+			<field name="name">totalmaleandfemale Wizard</field>
+			<field name="model">ems.totalmaleandfemale.wizard</field>
+			<field name="arch" type="xml">
+			    <form>
+					<group>
+						<group>
+							<field name="school_id" widget="selection" options="{'no_create_edit': True, 'no_create': True}" />
+							<field name="year" widget="selection" options="{'no_create_edit': True, 'no_create': True}" invisible="1" />
+						</group>
+						
+						<group>
+							<field name="state" widget="selection" options="{'no_create_edit': True, 'no_create': True}" />
+						</group>
+					</group>
+
+					<footer>
+						<button name="check_report" string="Print" type="object" default_focus="1" class="oe_highlight" />
+
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+			    </form>
+			</field>
+		</record>
+		
+		
+		<record id="action_totalmaleandfemale" model="ir.actions.act_window">
+			<field name="name">Total Male and Female Report</field>
+			<field name="res_model">ems.totalmaleandfemale.wizard</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="totalmaleandfemale_view"/>
+			<field name="target">new</field>
+		</record>
+		
+		
+		<!-- MenuItem For Reports -->
+        <menuitem id="menu_total_male_and_female_report" name="Total Male and Female" parent="menu_reports" action="action_totalmaleandfemale" />
+		
+	</data>
+</odoo>
+

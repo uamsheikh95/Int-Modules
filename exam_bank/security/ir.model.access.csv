@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+exam_bank_exam_user,exam_bank.exam,model_exam_bank_exam,group_exam_bank_user,1,1,1,1
+exam_bank_question_user,exam_bank.question,model_exam_bank_question,group_exam_bank_user,1,1,1,1
+exam_bank_responsible_user,exam_bank.responsible,model_exam_bank_responsible,group_exam_bank_user,1,1,1,1
+exam_bank_subject_user,exam_bank.subject,model_exam_bank_subject,group_exam_bank_user,1,1,1,1
+exam_bank_year_user,exam_bank.year,model_exam_bank_year,group_exam_bank_user,1,1,1,1

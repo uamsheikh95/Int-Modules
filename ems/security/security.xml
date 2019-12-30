@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+
+<odoo>
+    <data noupdate="0">
+
+        <record id="module_category_school" model="ir.module.category">
+            <field name="name">PNEB Management</field>
+            <field name="sequence">22</field>
+        </record>
+
+		
+		<record id="group_exam_board_admin" model="res.groups">
+            <field name="name">Exam Board Admin</field>
+            <field name="category_id" ref="module_category_school"/>
+        </record>
+		
+		<record id="group_secondary_school_admin" model="res.groups">
+            <field name="name">Secondary School Data Entry</field>
+            <field name="category_id" ref="module_category_school"/>
+        </record>
+		
+		<record id="group_primary_school_admin" model="res.groups">
+            <field name="name">Primary School Data Entry</field>
+            <field name="category_id" ref="module_category_school"/>
+        </record>
+		
+		<!-- Rule For Student Profile Record As An Administrator -->
+
+        <!--<record id="rule_student_profile_record_as_admin" model="ir.rule">
+            <field name="name">Rule Student Profile Record As An Administrator</field>
+            <field name="model_id" ref="model_ems_student"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force"> ['|','|',('cmp_id.child_ids','child_of',[user.company_id.id]),('cmp_id','child_of',[user.company_id.id]),('cmp_id','in',False)]</field>
+            <field name="groups" eval="[(4, ref('group_secondary_school_admin')), (4, ref('group_primary_school_admin'))]"/>
+		</record>-->
+
+    </data>
+</odoo>

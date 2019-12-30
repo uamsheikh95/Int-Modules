@@ -1,0 +1,137 @@
+<odoo>
+<data>
+    <report
+        id="action_print_exam"
+        name="exam_bank.print_exam"
+        file="exam_bank.print_exam"
+        model="exam_bank.exam"
+        string="Exam"
+        report_type="qweb-html"
+        />
+
+    <template id="print_exam">
+      <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="doc">
+          <!-- Exam coverpages except arabic, islamic and somali exams -->
+          <div class="page">
+            <div class="row">
+               <div style = "width:50%;float:right">
+                   <h4 style="color:#000;font-weight:bold">Name .............................................................</h4>
+               </div>
+            </div>
+
+            <div class="row">
+               <div style = "width:50%;float:right">
+                   <h4 style="color:#000;font-weight:bold">School ...................................…………………</h4>
+               </div>
+            </div>
+
+            <div class="row">
+               <div style = "width:50%;float:right">
+                   <h4 style="color:#000;font-weight:bold">Roll Number.........................………………….</h4>
+               </div>
+            </div>
+
+            <div class="row" style="margin-top:34px">
+                <h3 class="text-center" style="color:black;font-weight:bold;margin-bottom:5px">Puntland State of Somalia</h3>
+
+                <h3 class="text-center" style="color:black;font-weight:bold;margin-top:0;margin-bottom:5px">Ministry of Education</h3>
+
+                <h3 class="text-center" style="color:black;font-weight:bold;margin-top:0;margin-bottom:5px">Puntland National Examination Board</h3>
+
+                <h3 class="text-center" style="color:black;font-weight:bold;margin-top:0;margin-bottom:5px">Form 4</h3>
+
+                <h3 class="text-center" style="color:black;font-weight:bold;margin-top:0;margin-bottom:9px"><span t-field="doc.subject_id"/> Examination</h3>
+
+                <h3 class="text-center" style="color:black;font-weight:bold;margin-top:0;margin-bottom:10">2019</h3>
+
+                <h3 class="text-center" style="color:black;font-weight:bold;margin-top:0;margin-bottom:0">Time 2 hours</h3>
+                <p class="text-center" style="color:black;font-size: 21px; margin-top: 10px;">Plus 10 minutes before the exam for reading through the paper</p>
+
+                <p class="text-center" style="color:black;font-size: 21px; margin-top: 10px;">TOTAL TIME : 2 hours 10 minutes</p>
+            </div>
+
+            <div class="row" style="padding-left:30px">
+              <h4 class="text-left" style="color:black;font-weight:bold;margin-top:35px;margin-bottom:0">Structure of Exam</h4>
+
+              <!-- <p style="font-size: 16px; margin-top: 10px; font-family: inherit;">This paper consists of pages including this one.<br/>
+              Count them now. Inform the invigilator if there are any missing.</p> -->
+
+              <table style="width: 80%; margin-left: 39px;">
+                  <tbody>
+                    <t t-foreach="doc.section_ids" t-as="section">
+                      <tr>
+                          <td style="width:70%">
+                              <p style="font-size: 16px; margin-top: 10px; font-family: inherit;"><strong>Section <span t-esc="section_index+1"/> : </strong> <span t-field="section.section_id"/></p>
+                          </td>
+
+                          <td style="width:20">
+                              <p style="font-size: 16px; margin-top: 10px; font-family: inherit;"><span t-field="section.marks"/> marks</p>
+                          </td>
+                      </tr>
+                    </t>
+
+                      <!-- <tr>
+                          <td style="width:60%">
+                              <p style="color:black;font-size: 21px; margin-top: 10px;">PART TWO ( 8 Structured questions): </p>
+                          </td>
+
+                          <td style="width:20">
+                              <p style="color:black;font-size: 21px; margin-top: 10px;">90 marks</p>
+                          </td>
+                      </tr> -->
+
+                      <tr>
+                          <td style="width:60%">
+                              <p class="text-right" style="font-size: 16px; margin-top: 10px; font-family: inherit;"><strong>TOTAL : </strong></p>
+                          </td>
+
+                          <td style="width:20">
+                              <p style="color:black;font-size: 21px; margin-top: 10px;">100 marks</p>
+                          </td>
+                      </tr>
+                  </tbody>
+              </table>
+
+              <ul>
+                  <li style="font-size: 18px; list-style-type: circle;">Answer ALL questions.</li>
+
+                  <li style="font-size: 18px; list-style-type: circle;">All answers and working must be written on this paper in the spaces provided immediately after each questio</li>
+
+                  <li style="font-size: 18px; list-style-type: circle;">Rough work can be done on page 2. This will not be marked.</li>
+
+                  <li style="font-size: 18px; list-style-type: circle;">No extra paper is allowed.</li>
+
+
+              </ul>
+            </div>
+
+          </div>
+
+          <div class="page" style="padding-left:30px;">
+              <t t-foreach="doc.section_ids" t-as="section">
+                <h2 style="font-size: 18px;font-weight: bold;font-family: Arial, Helvetica, sans-serif;text-decoration:underline">Section <span t-esc="section_index+1"/> : <span t-field="section.section_id" /></h2>
+                <ol>
+                  <t t-foreach="doc.question_ids" t-as="question">
+                    <t t-if="question.section_id == section.section_id">
+                      <li style="font-size: 17px; font-weight: bold;margin-bottom: 10px;">
+                        <t t-if="question.name">
+                          <p t-field="question.name" style="font-weight: normal; line-height: 22px; font-family: Gill Sans Extrabold, sans-serif; font-size: 18px;" />
+                        </t>
+                        <div>
+                          <t t-foreach="question.image_ids" t-as="image">
+                             <img t-attf-src="data:image/*;base64,{{image.image}}" style="width:90%;margin-left:40px"/>
+                          </t>
+                        </div>
+                      </li>
+                    </t>
+                  </t>
+                </ol>
+              </t>
+          </div>
+        </t> <!-- t t-foreach="docs" t-as="doc" -->
+      </t> <!-- t t-call="report.html_container -->
+     </template>
+
+</data>
+</odoo>

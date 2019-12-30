@@ -1,0 +1,50 @@
+<odoo>
+  <record id="stock_picking_print_count" model="ir.ui.view">
+        <field name="name">stock.picking.print_counter</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form" />
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+          <xpath expr="//form/sheet" position="attributes">
+            <attribute name="style">position:relative</attribute>
+          </xpath>
+
+          <xpath expr="//form/sheet" position="inside">
+            <div style="position: absolute; top: 23px; right: 101px; width: 90px; height: 90px; border-radius: 49%; border: 2px solid #d80c0c;" attrs="{'invisible': [('print_counter', '!=', 1)]}">
+                <h2 style="color: #f70606; margin-top: 33px; margin-left: 8px; font-size: 15px; font-weight: bold; font-family: sans-serif;">Original</h2>
+
+            </div>
+
+            <div style="position: absolute; top: 23px; right: 101px; width: 90px; height: 90px; border-radius: 49%; border: 2px solid #d80c0c;" attrs="{'invisible': [('print_counter', '=', 1)]}">
+                <h2 style="color: #f70606; margin-top: 23px; margin-left: 8px; font-size: 15px; font-weight: bold; font-family: sans-serif;">Duplicate</h2>
+                <field name="print_counter" style="color: #f70606; margin-top: 4px; margin-left: 34px; font-size: 17px; font-weight: bold; font-family: sans-serif;" />
+            </div>
+          </xpath>
+
+          <xpath expr="//field[@name='partner_id']" position="after">
+            <field name="print_counter" invisible="1" />
+          </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit Picking Operations Report -->
+    <template id="add_partner_balance_to_invoice" inherit_id="stock.report_picking">
+      <xpath expr="//div[@class='page']//div[@class='row']" position="before">
+
+        <t t-if="o.print_counter == 1">
+          <div style="position: absolute;right: 101px; width: 110px; height: 110px; border-radius: 49%; border: 2px solid #d80c0c;">
+            <h2 style="color: #f70606; margin-top: 41px; margin-left: 13px; font-size: 18px; font-weight: bold; font-family: sans-serif;">Original</h2>
+              <!-- <span t-esc="o.print_counter" style="color: white; margin-top: 4px; margin-left: 48px; font-size: 18px; font-weight: bold; font-family: sans-serif; }" /> -->
+          </div>
+        </t>
+
+        <t t-if="o.print_counter &gt; 1">
+          <div style="position: absolute; right: 101px; width: 110px; height: 110px; border-radius: 49%; border: 2px solid #d80c0c;">
+            <h2 style="color: #f70606; margin-top: 29px; margin-left: 13px; font-size: 18px; font-weight: bold; font-family: sans-serif;">Duplicate</h2>
+              <span t-esc="o.print_counter" style="color: #f70606; margin-left: 43px; font-size: 18px; font-weight: bold; font-family: sans-serif;" />
+          </div>
+        </t>
+        <span t-esc="o.count_times_printed()" />
+      </xpath>
+    </template>
+</odoo>

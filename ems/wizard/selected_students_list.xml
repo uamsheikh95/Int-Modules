@@ -1,0 +1,34 @@
+<odoo>
+	<data>
+		<record id="selected_students_list_view" model="ir.ui.view">
+			<field name="name">Students List Wizard</field>
+			<field name="model">ems.selected_students_list.wizard</field>
+			<field name="arch" type="xml">
+			   <form string="Confirm Waiting to approve students">
+                   	<group>
+						<field name="title" />
+					</group>
+				   	<footer>
+                        <button string="Print" name="check_report" type="object" default_focus="1" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+			</field>
+		</record>
+		
+		
+
+		
+		
+		<!-- Selected students action-->
+        <act_window id="report_ems_student_confirm"
+            multi="True"
+            key2="client_print_multi" name="Print Selected"
+            res_model="ems.selected_students_list.wizard" src_model="ems.student"
+            view_mode="form" target="new" view_type="form"
+			 />
+
+
+		
+	</data>
+</odoo>

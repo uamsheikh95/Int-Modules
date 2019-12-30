@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<odoo>
+<data>
+
+	
+    <report
+        id="action_total_male_and_female"
+        name="ems.total_male_and_female"
+        file="ems.total_male_and_female"
+        model="report.ems.total_male_and_female"
+        string="Total Male and Female Report"
+        report_type="qweb-pdf"
+        />
+
+    <template id="total_male_and_female">
+	
+	
+		<t t-call="report.html_container">
+			<t t-foreach="docs" t-as="doc">
+				<!---->
+				<!--<t t-set="RN01" t-value="doc.roll_no"/>-->
+				<!--<t t-esc="RN01"/>-->
+				<div class="page" style="width:100%;">
+					<div class="oe_structure"/>
+					<img style = "width:100%" src="/ems/static/description/total_male_and_female.png"/>
+					<h4 class="text-center" style="color:#3e4750"><strong>Academic Year:</strong><span t-esc="docs.year.name"/></h4>
+					
+					
+						
+						<table class ="table table-bordered" style="margin-top:60px;">
+							<tbody>									
+								<tr style="font-size: 13px;">
+									<td class="text-center"><strong>Total Male</strong></td>
+									<td class="text-center"><strong>Total Female</strong></td>
+								</tr>
+								
+								<tr>
+									<td class="text-center"><span t-esc="docs.male_total"/></td>
+									<td class="text-center"><span t-esc="docs.female_total"/></td>
+								</tr>
+								
+							</tbody>
+						</table>								
+					
+				</div>
+			</t>
+	
+		</t>
+     </template>
+
+</data>
+</odoo>
+
+

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<odoo>
+<data>
+
+	
+    <report
+        id="action_primaryversions_report"
+        name="ems.primaryversions_report"
+        file="ems.primaryversions_report"
+        model="report.ems.primaryversions_report"
+        string="Primary Versions"
+        report_type="qweb-pdf"
+        />
+
+    <template id="primaryversions_report">
+	
+	
+		<t t-call="report.html_container">
+			<t t-foreach="docs" t-as="doc">
+				<!---->
+				<!--<t t-set="RN01" t-value="doc.roll_no"/>-->
+				<!--<t t-esc="RN01"/>-->
+				<div class="page" style="width:100%;">
+					<div class="oe_structure"/>
+					<img style = "width:100%" src="/ems/static/description/primary_versions.png"/>
+					<h4 class="text-center" style="color:#3e4750"><strong>Academic Year:</strong><span t-esc="docs.year.name"/></h4>
+					
+					
+						
+						<table class ="table table-bordered" style="font-size: 13px;margin-top:40px;">
+							<tbody>									
+								<tr>
+									<td class="text-center"><strong>School Name</strong></td>
+									<td class="text-center"><strong>Grade</strong></td>
+									<td class="text-center"><strong>Version</strong></td>
+									<td class="text-center"><strong>Male</strong></td>
+									<td class="text-center"><strong>Female</strong></td>
+									<td class="text-center"><strong>Total Students</strong></td>
+								</tr>
+								
+								<t t-foreach="schools" t-as="school">
+									<tr>
+										<td><span t-field="school.name"/></td>
+										<td class="text-center">Grade 8</td>
+										<td class="text-center"><span t-field="school.version"/></td>
+										<td class="text-center"><span t-field="school.male_total"/></td>
+										<td class="text-center"><span t-field="school.female_total"/></td>
+										<td class="text-center"><span t-field="school.total"/></td>
+									</tr>
+								</t>
+								
+							</tbody>
+						</table>
+
+						<table class ="table table-bordered" style="font-size: 12px;">
+							<tbody>									
+								<tr>
+									<td><strong>Total Som Ver</strong></td>
+									<td class="text-center" colspan = "2"><span t-field="docs.som_ver_total"/></td>
+								</tr>
+								
+								<tr>
+									<td><strong>Total Arb Ver</strong></td>
+									<td class="text-center" colspan = "2"><span t-field="docs.arab_ver_total"/></td>
+								</tr>
+								
+								<tr>
+									<td><strong>Total Eng Ver</strong></td>
+									<td class="text-center" colspan = "2"><span t-field="docs.eng_ver_total"/></td>
+								</tr>
+								
+								<tr>
+								</tr>
+								
+							</tbody>
+						</table>
+						
+						<table class ="table table-bordered" style="font-size: 12px;">
+							<tbody>																	
+								<tr>
+									<td><strong>Wadar Guud</strong></td>
+									<td class="text-center" colspan = "2"><span t-field="docs.wadar_guud"/></td>
+								</tr>
+							</tbody>
+						</table>
+					
+				</div>
+			</t>
+	
+		</t>
+     </template>
+
+</data>
+</odoo>
+
+

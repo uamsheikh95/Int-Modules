@@ -1,0 +1,156 @@
+<odoo>
+<data>
+    <template id="background_layout" inherit_id="web.external_layout_background">
+        <xpath expr="//div[@class='header o_background_header']" position="replace">
+            <div class="header o_background_header">
+                <div class="col-xs-12 text-center">
+                    <img t-if="company.logo" style = "max-height:105px;max-width:400px" src="/ealogistics/static/src/img/shardi_shippingcargo.png"/>
+
+                </div>
+
+                <div class="clearfix mb8"/>
+            </div>
+
+
+
+        </xpath>
+
+
+
+
+    </template>
+
+    <report
+        id="action_cost_estimation"
+        name="shardi_logistics.cost_estimation"
+        file="shardi_logistics.cost_estimation"
+        model="project.project"
+        string="Cost Estimation Report"
+        report_type="qweb-pdf"
+        />
+
+    <template id="cost_estimation">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" >
+                        <div class="row mt0 mb4">
+                            <h3 class="text-center">Cost Estimation Report</h3>
+                        	<div class="col-md-12">
+                        		<div class="">
+                                   
+									<div style = "width:30%;float:right">
+										<strong>Date: </strong><span t-field="doc.create_date"/><br />
+									</div>
+									
+                                    <table class="table table-condensed" style="font-size: 12px;margin-top: 40px">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Customer :</strong></td>
+                                                <td colspan="3" style = "position:relative;right:120px" ><span t-field="doc.partner_id.name"/></td>
+												
+												<td><strong>Project Code :</strong></td>
+                    							<td style = "text-align:center;position:relative;right:100px"><span t-field="doc.proj_code"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Address :</strong></td>
+                                                <td colspan="3" style = "position:relative;right:120px">
+													<span t-field="doc.partner_id.street"/>
+												</td>
+                                                <td><strong>Service Type :</strong></td>
+                    							<td colspan="2" style = "text-align:center;position:relative;right:100px"><span t-field="doc.service_type"/></td>
+                                            </tr>
+                                           <tr>
+                                                <td><strong>Source Location :</strong></td>
+													<t t-foreach="doc.task_ids" t-as="task">
+														<td colspan="3" style = "text-align:center;position:relative;right:120px">
+															<span t-field="task.source_location"/>
+														</td>
+													</t>
+
+                                                <td><strong>Destination Location :</strong></td>
+                    							<t t-foreach="doc.task_ids" t-as="task">
+													<td colspan="2" style = "text-align:center;position:relative;right:120px">
+														<span t-field="task.destination_location"/>
+													</td>
+												</t>
+                                            </tr>
+                						</tbody>
+									</table>
+										
+									<table class="table table-bordered" style="font-size: 12px">
+										<tbody>
+												<tr>
+													<td style = "text-align:center"><strong>NO</strong></td>
+													<td style = "text-align:center" colspan="2"><strong>Item</strong></td>
+													<td style = "text-align:center"><strong>Price</strong></td>
+													<td style = "text-align:center"><strong>Discount</strong></td>
+													<td style = "text-align:center"><strong>DSC Price</strong></td>
+													<td style = "text-align:center"><strong>Quantity</strong></td>
+													<td style = "text-align:center"><strong>Amount</strong></td>
+												</tr>
+												<t t-foreach="doc.cost_estimation_ids" t-as="estimate">
+													<tr>
+														<td style = "text-align:center"><span t-esc="estimate_index+1"/></td>
+														<td colspan="2"><span t-field="estimate.item"/></td>
+														<td style = "text-align:right"><span t-field="estimate.price_unit"/></td>
+														<td style = "text-align:right"><span t-field="estimate.discount"/></td>
+														<td style = "text-align:right"><span t-field="estimate.price_disc"/></td>
+														<td style = "text-align:center"><span t-field="estimate.quantity"/></td>
+														<td style = "text-align:right"><span t-field="estimate.amount"/></td>
+													</tr>
+												</t>
+										</tbody>
+									</table>
+									
+									<table class = "table table-condensed" style = "font-size:13px;width:40%;float:right">
+										<tbody>
+											<tr>
+												<td><strong>Sub Total :</strong></td>
+												<td style = "text-align: right;" colspan = "2"><strong><span t-field="doc.total" /></strong></td>
+											</tr> 
+											<tr></tr>
+											
+											<tr>
+												<td><strong>Sales Commission (%)</strong></td>
+												<td><span t-field="doc.sales_comn" style = "border-bottom:none;text-align:center" /> %</td>
+												<td style = "text-align: right;"><strong><span t-field="doc.sales_comn_total" /></strong></td>
+											</tr>
+											
+											<tr>
+												<td><strong>Profit Margin (%)</strong></td>
+												<td><span t-field="doc.profit_margin" style = "border-bottom:none;text-align:center" /> %</td>
+												<td style = "text-align: right;"><strong><span t-field="doc.profit_margin_total" /></strong></td>
+											</tr>
+											
+											<tr>
+												<td><strong>Gross Amount</strong></td>
+												<td colspan = "2" style = "text-align: right;font-size: 14px;"><strong><span t-field="doc.gross_amount" /></strong></td>
+											</tr>
+										</tbody>
+									</table>
+										
+										
+										
+										<table class="table" style="font-size: 11px;border:none;">
+											<tbody style="border:none">
+												<tr style="border:none">
+													<td style="border:none;text-align:left"><strong>Estimated By</strong></td>
+													<td colspan="2" style="border:none;text-align:left"><strong>________________________________</strong></td>
+													<td style="border:none;text-align:right"><strong>Approved By</strong></td>
+													<td colspan="2" style="border:none;text-align:right"><strong>________________________________</strong></td>
+												</tr>
+											</tbody>
+										</table>
+                        		</div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+
+        </t>
+    </template>
+
+</data>
+</odoo>

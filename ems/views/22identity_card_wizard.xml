@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<odoo>
+<data>
+
+	<template id="minimal_layout_inherit" inherit_id="report.minimal_layout">
+		<xpath expr="//head" position="inside">
+			<link rel='stylesheet' href="/ems/static/src/css/id_card.css"/>
+		</xpath>
+	</template>
+	
+    <report
+        id="action_identity_card_report"
+        name="ems.identity_card_wizard_report"
+        file="ems.identity_card_wizard_report"
+        model="report.ems.identity_card_wizard_report"
+        string="ID Card"
+        report_type="qweb-html"
+        />
+
+    <template id="identity_card_wizard_report">
+	
+		<style type="text/css">
+		
+			body{
+				margin:0;
+				margin-left:34px;
+			}
+			.image img {
+				width:100%;
+			}
+			
+			td {
+				font-size: 12px;
+				font-family: monospace;
+			}
+			
+			.title {
+
+				color: #41367b;
+				padding: 11px;
+				box-sizing:border-box
+			}
+			
+			#img-td{
+				width:95px;
+				height:95px
+				margin-right:10px;
+				border-radius:1px
+			}
+			
+		</style>
+	
+	
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="doc">
+					<!---->
+					<!--<t t-set="RN01" t-value="doc.roll_no"/>-->
+					<!--<t t-esc="RN01"/>-->
+                        <div class="page">
+                            <div class="oe_structure"/>
+							<t t-set="card_position" t-value="l"/>
+							
+							<t t-foreach="students" t-as="student">
+								
+								<!--Variables 1-->
+								
+									<t t-set="rno" t-value="student.roll_no"/>
+									<t t-set="name" t-value="student.name"/>
+									<t t-set="gender" t-value="student.gender"/>
+									<t t-set="mother" t-value="student.mother_name"/>
+									<t t-set="dob" t-value="student.year_of_birth"/>
+									<t t-set="pob" t-value="student.place_of_birth"/>
+									<t t-set="photo" t-value="student.photo"/>
+									<t t-set="school" t-value="student.school_id.name"/>
+									<t t-set="region" t-value="student.region.name"/>
+									<t t-set="city" t-value="student.city.name"/>
+								
+	
+								<div style = "width:400px;background:#f2f1ef;float:right;margin-top: 20px;margin-right:18px;border-bottom: 5px solid #41367b;max-height:307px">
+									<div id="header" style="width:100%;height:70px;background:#41367b">
+									</div>
+									
+									
+									<table style="border:none;max-width:76%;float:left;max-height:205px;">
+										<tbody>
+											<tr>
+												<td class="title" style="font-size: 12px;color: #41367b;font-family: monospace;padding: 11px;box-sizing:border-box;width:80px;max-height: 225px;border-right:1px solid #ddd">
+													<strong>Name</strong>
+												</td>
+												
+												<td colspan="5" style="font-size: 12px;;font-family: monospace;padding-left:8px;">
+													<t t-esc="name"/>
+												</td>
+												
+												
+											</tr>
+											
+											<tr>
+												<td class="title" style="font-size: 12px;color: #41367b;font-family: monospace;padding: 11px;box-sizing:border-box;border-right:1px solid #ddd">
+													<strong>Gender</strong>
+												</td>
+												
+												<td colspan="2" style="font-size: 12px;font-family: monospace;padding-left:8px;">
+													<t t-esc="gender"/>
+												</td>
+												
+											</tr>
+											
+											<tr>
+												<td class="title" style="font-size: 12px;color: #41367b;font-family: monospace;padding: 11px;box-sizing:border-box;border-right:1px solid #ddd">
+													<strong>Mother</strong>
+												</td>
+												
+												<td colspan="5" style="font-size: 12px;font-family: monospace;padding-left:8px;">
+													<t t-esc="mother"/>
+												</td>
+												
+											</tr>
+											
+											<tr>
+												<td class="title" style = "font-size: 12px;color: #41367b;font-family: monospace;padding: 11px;box-sizing:border-box;border-right:1px solid #ddd">
+													<strong>School</strong>
+												</td>
+												
+												<td colspan="5" style="font-size: 12px;font-family: monospace;padding-left:8px;">
+													<t t-esc="school"/>
+												</td>
+												
+											</tr>
+											
+											<tr>
+												<td class="title" style="font-size: 12px;color: #41367b;font-family: monospace;padding: 11px;box-sizing:border-box;border-right:1px solid #ddd">
+													<strong>DOB</strong>
+												</td>
+												
+												<td colspan="2" style="font-size: 12px;font-family: monospace;padding-left:8px;">
+													<t t-esc="dob"/>
+												</td>
+												
+												<!-- <td class="title" style="font-size: 12px;color: #41367b;font-family: monospace;box-sizing:border-box;border-right:1px solid #ddd"> -->
+													<!-- <strong>POB</strong> -->
+												<!-- </td> -->
+												
+												<!-- <td colspan="2" style="font-size: 12px;font-family: monospace;padding-left:8px;"> -->
+													<!-- <t t-esc="pob"/> -->
+												<!-- </td> -->
+												
+											</tr>
+											
+											<tr>
+												<td class="title" style="font-size: 12px;color: #41367b;font-family: monospace;padding: 11px;box-sizing:border-box;border-right:1px solid #ddd">
+													<strong>Location</strong>
+												</td>
+												
+												<td colspan="2" style="font-size: 12px;font-family: monospace;padding-left:8px;">
+													<t t-esc="city"/>
+												</td>
+												
+												<!-- <td class="title" style="font-size: 12px;color: #41367b;font-family: monospace;box-sizing:border-box;border-right:1px solid #ddd"> -->
+													<!-- <strong>Region</strong> -->
+												<!-- </td> -->
+												
+												<!-- <td colspan="2" style="font-size: 12px;font-family: monospace;padding-left:8px;"> -->
+													<!-- <t t-esc="region"/> -->
+												<!-- </td> -->
+												
+											</tr>
+											
+											
+											
+										</tbody>
+									</table>
+									
+									<div style="width:23%;height:130px;float:right;margin-top: 11px;margin-top: 11px;">
+										<p style="color:red;padding-right:11px;box-sizing:border-box;font-family: monospace;font-size: 12px;font-weight: bold;">S190101002</p>
+										<!--<t t-esc="photo" t-esc-options='{"widget": "image"}' style="width:100px"/>--><h1>D</h1>
+									</div>
+								
+									
+								</div>
+						
+							</t>
+						</div>
+                </t>
+            </t>
+     </template>
+
+</data>
+</odoo>
+
+
+
