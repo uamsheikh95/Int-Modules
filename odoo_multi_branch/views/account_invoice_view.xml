@@ -23,6 +23,18 @@
 						</field>
 				</record>
 
+				<!-- invoice list view -->
+				<record id="invoice_list_inherit_form_company_branch" model="ir.ui.view">
+						<field name="name">account.invoice.list.inherit.company.branch</field>
+						<field name="model">account.move</field>
+						<field name="inherit_id" ref="account.view_invoice_tree"/>
+						<field name="arch" type="xml">
+							<xpath expr="//field[@name='state']" position="after">
+									<field name='company_branch_id' groups="odoo_multi_branch.group_multi_branches"/>
+							</xpath>
+					</field>
+				</record>
+
 				<!-- <record id="invoice_supplier_form_inherit_company_branch" model="ir.ui.view">
 						<field name="name">account.invoice.supplier.inherit.company.branch</field>
 						<field name="model">account.invoice</field>

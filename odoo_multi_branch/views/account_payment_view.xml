@@ -12,8 +12,19 @@
 								<xpath expr="//field[@name='partner_id']" position="replace">
 										<field name="partner_id"
 											attrs="{'required': [('state', '=', 'draft'), ('payment_type', 'in', ('inbound', 'outbound'))], 'invisible': [('payment_type', 'not in', ('inbound', 'outbound'))], 'readonly': [('state', '!=', 'draft')]}"
-											context="{'default_is_company': True, 'default_supplier': payment_type == 'outbound', 'default_customer': payment_type == 'inbound'}" options="{'no_create': True}"/>
+											context="{'default_is_company': True}" options="{'no_create': True}"/>
 								</xpath>
+						</field>
+				</record>
+
+				<record id="view_account_payment_tree_inherit_company_branch" model="ir.ui.view">
+						<field name="name">account.payment.tree.inherit.company.branch</field>
+						<field name="model">account.payment</field>
+						<field name="inherit_id" ref="account.view_account_payment_tree"/>
+						<field name="arch" type="xml">
+							<xpath expr="//field[@name='company_id']" position="after">
+									<field name="company_branch_id" groups="odoo_multi_branch.group_multi_branches" widget="selection" options="{'no_create': True}"/>
+							</xpath>
 						</field>
 				</record>
 
