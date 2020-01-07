@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+		<record id="account_report_partner_ledger_mail" model="ir.ui.view">
+				<field name="name">Partner Ledger Email</field>
+				<field name="model">account.report.partner.ledger</field>
+				<field name="inherit_id" ref="account.account_common_report_view"/>
+				<field name="arch" type="xml">
+				<data>
+				<xpath expr="//field[@name='target_move']" position="after">
+								<field name="computed_partner_id"/>
+
+						</xpath>
+            <button name="check_report" position="before">
+          		<button name="action_statement_send" string="Send Email" type="object" class="oe_highlight" groups="base.group_user"/>
+          	</button>
+
+            <button name="check_report" position="after">
+          		or
+          	</button>
+				</data>
+				</field>
+		</record>
+</odoo>
