@@ -1,0 +1,19 @@
+<odoo>
+<record id="hr_job_form_chatter" model="ir.ui.view">
+      <field name="name">hr.job.form.inherit</field>
+      <field name="model">hr.job</field>
+      <field name="inherit_id" ref="hr.view_hr_job_form" />
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+             <!-- CUSTOMIZATIONS -->
+             <xpath expr="//field[@name='department_id']" position="after">
+                  <field name="grade_id" /> <!-- options="{'no_create': True, 'no_create_edit':False, 'no_quick_create':True}"-->
+              </xpath>
+
+             <xpath expr="//field[@name='message_follower_ids']" position="after">
+                  <field name="message_ids" widget="mail_thread"/>
+				  <field name="activity_ids" widget="mail_activity"/>
+              </xpath>
+      </field>
+  </record>
+</odoo>

@@ -1,0 +1,60 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="recruitment_extension.list">
+      <field name="name">recruitment_extension list</field>
+      <field name="model">recruitment_extension.recruitment_extension</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+    -->
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="recruitment_extension.action_window">
+      <field name="name">recruitment_extension window</field>
+      <field name="res_model">recruitment_extension.recruitment_extension</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="recruitment_extension.action_server">
+      <field name="name">recruitment_extension server</field>
+      <field name="model_id" ref="model_recruitment_extension_recruitment_extension"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="recruitment_extension" id="recruitment_extension.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="recruitment_extension.menu_1" parent="recruitment_extension.menu_root"/>
+    <menuitem name="Menu 2" id="recruitment_extension.menu_2" parent="recruitment_extension.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="recruitment_extension.menu_1_list" parent="recruitment_extension.menu_1"
+              action="recruitment_extension.action_window"/>
+    <menuitem name="Server to list" id="recruitment_extension" parent="recruitment_extension.menu_2"
+              action="recruitment_extension.action_server"/>
+    -->
+  </data>
+</odoo>
