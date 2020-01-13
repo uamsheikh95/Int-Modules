@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_recruitment_extension_grade_admin,recruitment_extension.grade,model_recuitment_extension_grade,hr.group_hr_manager,1,1,1,1
+access_recruitment_extension_grade_user,recruitment_extension.grade,model_recuitment_extension_grade,hr.group_hr_user,1,1,1,1
+access_recruitment_extension_grade_general,recruitment_extension.grade,model_recuitment_extension_grade,base.group_user,1,0,0,0

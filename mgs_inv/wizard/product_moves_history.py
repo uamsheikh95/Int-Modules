@@ -9,6 +9,13 @@ class ProductMovesHistory(models.TransientModel):
     date_from = fields.Datetime('From', default=datetime.today().replace(day=1, hour=00, minute=00, second=00))
     date_to = fields.Datetime('To', default=fields.Datetime.now)
 
+    def print_xls_report(self, cr, uid, ids, context=None):
+        data = self.read(cr, uid, ids)[0]
+        return {'type': 'ir.actions.report.xml',
+                'report_name': 'mgs_inv.report_product_moves_history.xlsx',
+                'datas': data
+                }
+
     @api.multi
     def confirm(self):
         """Call when button 'Get Rep=t' clicked.

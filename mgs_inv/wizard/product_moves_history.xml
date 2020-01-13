@@ -23,6 +23,7 @@
 
 				<footer>
 					<button name="confirm" string="View" type="object" class="oe_highlight"/>
+					<button name="print_xls_report" string="Export XLSX" type="object"  class="oe_highlight"  />
 					<button string="Cancel" special="cancel"/>
 				</footer>
 
