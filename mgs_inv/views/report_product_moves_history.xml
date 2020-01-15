@@ -58,6 +58,9 @@
                               <td colspan="10"><p style="font-weight:bold;margin-bottom:0;font-size: 16px;color:blue"><span t-esc="product_name"/></p></td>
                             </tr> <!--Product Name-->
 
+                            <t t-set="total_qty_in" t-value="0"/>
+                            <t t-set="total_qty_out" t-value="0"/>
+
                             <t t-set="balance" t-value="open_balance(product_id, date_from)"/>
 
                             <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
@@ -86,17 +89,18 @@
                                 <td><span t-esc="line['origin']"/></td>
                                 <td><span t-esc="line['partner_id']"/></td>
 
-
                                 <td style="text-align:right">
                                     <t t-set="qty_in" t-value="line['product_uom_qty']" t-if="line['location_usage'] == 'internal'" />
                                     <t t-set="qty_in" t-value="0" t-if="line['location_usage'] != 'internal'" />
                                     <span t-esc="qty_in" t-if="line['location_usage'] == 'internal'"/>
+                                    <t t-set="total_qty_in" t-value="total_qty_in + qty_in"/>
                                 </td>
 
                                 <td style="text-align:right">
                                   <t t-set="qty_out" t-value="line['product_uom_qty']" t-if="line['location_usage'] != 'internal'" />
                                   <t t-set="qty_out" t-value="0" t-if="line['location_usage'] == 'internal'" />
                                   <span t-esc="qty_out" t-if="line['location_usage'] != 'internal'"/>
+                                  <t t-set="total_qty_out" t-value="total_qty_in + qty_out"/>
                                 </td>
 
                                 <td style="text-align:center">
@@ -117,8 +121,8 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
+                                <td style="text-align:right;font-weight:bold"><span t-esc="total_qty_in" /></td>
+                                <td style="text-align:right;font-weight:bold"><span t-esc="total_qty_out" /></td>
                                 <td></td>
                                 <td style="text-align:right;font-weight:bold">
                                   <span t-esc="balance" />
