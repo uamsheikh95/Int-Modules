@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <report
+    id="action_report_location_moves"
+    name="mgs_inv.pr_moves_by_location_report"
+    model="mgs_inv.pr_moves_by_location_report"
+    string="Product Moves by Location"
+    report_type="qweb-html"
+    paperformat="paperformat_custom"
+ />
+ <!--  paperformat="paperformat_custom" -->
+
+
+    <template id="pr_moves_by_location_report">
+        <t t-call="web.html_container">
+             <t t-call="web.internal_layout">
+                <div class="page">
+                    <div class="container" style="font-size:12px;font-family:Arial;margin-top:1px;">
+                      <div class="text-center" style="margin-top:4px;font-size: 18px; font-weight: bold;">Product Moves by Location</div>
+
+                      <div id="informations" class="row mt2 mb2">
+
+        								<div class="col-auto mw-100 mb-2" t-if="date_from" name="invoice_date" style="width: 20%; float: left;">
+        									<strong>Date from:</strong>
+        									<p class="m-0" t-esc="date_from"/>
+        								</div>
+        								<div class="col-auto mw-100 mb-2" t-if="date_to" name="due_date" style="width: 20%; float: left;">
+        									<strong>Date to:</strong>
+        									<p class="m-0" t-esc="date_to"/>
+        								</div>
+
+                        <div class="col-auto mw-100 mb-2" t-if="stock_location_name" name="due_date" style="width: 20%; float: left;">
+        									<strong>Location:</strong>
+        									<p class="m-0" t-esc="stock_location_name"/>
+        								</div>
+
+                        <div class="col-auto mw-100 mb-2" t-if="stock_location_name" name="due_date" style="width: 20%; float: left;">
+        									<strong>Company:</strong>
+        									<p class="m-0" t-esc="company_name"/>
+        								</div>
+        							</div>
+
+                      <div class="row">
+                        <table style="width:100%;">
+                          <thead style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
+                            <tr style="background-color: #F2F4F4;">
+                              <th nowrap="nowrap">Date</th>
+                              <!-- <th nowrap="nowrap" style="display:none">Type</th> -->
+                              <th nowrap="nowrap">From</th>
+                              <th nowrap="nowrap">To</th>
+                              <th nowrap="nowrap">Ref</th>
+                              <th nowrap="nowrap">Source</th>
+                              <!-- <th nowrap="nowrap">Partner</th> -->
+                              <th style="text-align:right" nowrap="nowrap">Qty in</th>
+                              <th style="text-align:right" nowrap="nowrap">Qty out</th>
+                              <!-- <th nowrap="nowrap" style="text-align:center">UOM</th> -->
+                              <th style="text-align:right" nowrap="nowrap">Balance</th>
+                              <!-- <th>Total</th> -->
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            <t t-set="qty_in" t-value="0" />
+                            <t t-set="qty_out" t-value="0" />
+                            <t t-set="balance" t-value="0"/>
+                            <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
+                              <td colspan="10"><p style="font-weight:bold;margin-bottom:0;font-size: 16px;color:blue"><span t-esc="product_name"/></p></td>
+                            </tr> <!--Product Name-->
+
+                            <t t-set="balance" t-value="open_balance(product_id, date_from, stock_location_id, stock_location_id)"/>
+
+                            <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
+                              <td></td>
+                              <!-- <td></td> -->
+                              <!-- <td></td> -->
+                              <td></td>
+
+                              <td></td>
+                              <td style="font-size=font-size: 13px;color:red">Qty Balance Forward</td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td style="text-align:right;font-weight:bold;color:red"><span t-esc="balance"/></td>
+                            </tr>
+
+
+                            <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd" t-foreach="lines(product_id, date_from, date_to, stock_location_id, stock_location_id)" t-as="line">
+                                <td nowrap="nowrap">
+                                  <span t-esc="line['date']"/>
+                                </td>
+                                <!-- <td style="display:none"><span t-esc="line['usage']"/> > <span t-esc="line['usaged']"/></td> -->
+                                <td><span t-esc="line['location_id']"/></td>
+                                <td><span t-esc="line['location_dest_id']"/></td>
+                                <td><span t-esc="line['picking_id']"/></td>
+                                <td><span t-esc="line['stored_origin']"/></td>
+                                <!-- <td><span t-esc="line['partner_id']"/></td> -->
+
+
+                                <td style="text-align:right">
+                                    <t t-set="qty_in" t-value="line['qty_done']" t-if="line['location_dest_id'] == stock_location_name" />
+                                    <t t-set="qty_in" t-value="0" t-if="line['location_dest_id'] != stock_location_name" />
+                                    <span t-esc="qty_in" />
+                                </td>
+
+                                <td style="text-align:right">
+                                  <t t-set="qty_out" t-value="line['qty_done']" t-if="line['location_id'] == stock_location_name" />
+                                  <t t-set="qty_out" t-value="0" t-if="line['location_id'] != stock_location_name" />
+                                  <span t-esc="qty_out"/>
+                                </td>
+
+                                <!-- <td style="text-align:center">
+                                  <span t-esc="line['product_uom']" />
+                                </td> -->
+
+                                <td style="text-align:right">
+                                  <t t-set="balance" t-value="balance + qty_in - qty_out"/>
+                                  <span t-esc="balance" />
+                                </td>
+
+                              </tr>
+
+                              <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd;background-color: #F2F4F4;">
+                                <td><p style="font-weight:bold;margin-bottom:0;">Total <span t-esc="product_name" />  : </p></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <!-- <td></td> -->
+                                <!-- <td></td> -->
+                                <td></td>
+                                <td></td>
+                                <td style="text-align:right;font-weight:bold">
+                                  <span t-esc="balance" />
+                                </td>
+                              </tr>
+
+                          </tbody>
+                        </table>
+                      </div> <!--tow-->
+
+
+                    </div> <!--container-->
+                </div> <!--page-->
+              </t> <!--web.external_layout-->
+        </t> <!--web.html_container-->
+    </template>
+</odoo>

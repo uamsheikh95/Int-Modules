@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<record id="product_id_form" model="ir.ui.view">
+			<field name="name">mgs_sales.sales_by_item_detail.form</field>
+			<field name="model">mgs_sales.sales_by_item_detail</field>
+			<field name="arch" type="xml">
+			   <form>
+					<sheet>
+						<group>
+							<group>
+								<field name="date_from" string = "From" required="1" />
+								<field name="product_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" />
+
+							</group>
+
+
+							<group>
+								<field name="date_to" string="To" required="1" />
+								<field name="company_id" groups="base.group_multi_company" />
+							</group>
+						</group>
+					</sheet>
+
+				<footer>
+					<button name="confirm" string="View" type="object" class="oe_highlight"/>
+					<button string="Cancel" special="cancel"/>
+				</footer>
+
+			   </form>
+			</field>
+		</record>
+
+
+
+		<record id="action_product_id_form" model="ir.actions.act_window">
+			<field name="name">Generate Sales by Item Detail</field>
+			<field name="res_model">mgs_sales.sales_by_item_detail</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="product_id_form"/>
+			<field name="target">new</field>
+		</record>
+
+
+
+    <menuitem id="menu_mgs_sales_item_detail_report" name="Sales by Item Detail" parent="menu_mgs_sales_report" action="action_product_id_form" sequence="10" />
+
+</odoo>
