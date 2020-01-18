@@ -6,8 +6,8 @@ class SalesByItemDetail(models.TransientModel):
     _description = 'Sales by Item Detail'
 
     product_id = fields.Many2one('product.product', string="Product")
-    date_from = fields.Datetime('From', default=datetime.today().replace(day=1, hour=00, minute=00, second=00))
-    date_to = fields.Datetime('To', default=fields.Datetime.now)
+    date_from = fields.Datetime('From')
+    date_to = fields.Datetime('To')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env['res.company']._company_default_get('mgs_sales.sales_by_item_detail'))
     # company_branch_id = fields.Many2one(
     #     'res.company.branch',
@@ -44,27 +44,19 @@ class SalesByItemDetailReport(models.AbstractModel):
     # @api.model
     def _lines(self, date_from, date_to, company_id, product): #, company_branch_id
         full_move = []
-        params = [date_from, date_to, company_id] #, company_branch_id
+        params = [date_from, date_to, company_id, product] #, company_branch_id
 
-        query_part1 = """
+        query = """
 
-            select aml.date,am.name as move_id,aml.name,aml.partner_id,rp.name as partner_name,rp.customer,aml.invoice_id,pr.name as product_id,aml.quantity,aml.credit
-            from account_move_line  as aml
-            left join account_move as am on aml.move_id=am.id
-            left join product_template as pr on aml.product_id=pr.id
-            left join res_partner as rp on aml.partner_id=rp.id
-            where aml.date between %s and %s and aml.company_id=%s
-            and aml.invoice_id is not null and aml.product_id is not null 
+            select sr.date, so.name as order_id, sr.partner_id, rp.name as partner_name,pr.name as product_id,sr.product_uom_qty,sr.price_total,sr.invoice_status
+            from sale_report as sr
+            left join sale_order as so on sr.order_id=so.id
+            left join res_partner as rp on sr.partner_id=rp.id
+            left join product_template as pr on sr.product_id=pr.id
+            where sr.date between %s and %s and sr.company_id=%s
+            and sr.product_id=%s and sr.invoice_status='invoiced'
+            order by 1
         """
-        #
-        query_part2 = " order by 1"
-        #
-        if product:
-            query_part2 = " and aml.product_id=" + str(product) + " order by 1"
-        query = query_part1 + query_part2
-        # and company_branch_id = %s
-        # query = query_part1 + query_part2
-
         self.env.cr.execute(query, tuple(params))
         res = self.env.cr.dictfetchall()
 
@@ -87,17 +79,24 @@ class SalesByItemDetailReport(models.AbstractModel):
         company_id = data['form']['company_id']
         company_name = data['form']['company_name']
 
-        partner_list = []
+        product_list = []
+        result = {'id': '', 'name': '', 'product_sales': ''}
 
         if product_id:
-            # partner_list.append(partner_id)
-            for r in self.env['account.move.line'].search([('date', '>=', date_from), ('date', '<=', date_to), ('product_id', '=', product_id)]):
-                if r.product_id not in partner_list:
-                    partner_list.append(r.product_id)
+            # product_list.append(product_id)
+            for r in self.env['sale.report'].search([('date', '>=', date_from), ('date', '<=', date_to), ('product_id', '=', product_id), ('invoice_status', '=', 'invoiced')]):
+                if str(r.product_id.id) not in result['id'] and r.order_id:
+                    product = r.product_id
+                    product_sales = self._lines(date_from, date_to, company_id, product.id)
+                    result = {'id': str(product.id), 'name': product, 'product_sales': product_sales}
+                    product_list.append(result)
         else:
-            for r in self.env['account.move.line'].search([('date', '>=', date_from), ('date', '<=', date_to), ('partner_id.customer', '=', True)]):
-                if r.product_id not in partner_list:
-                    partner_list.append(r.product_id)
+            for r in self.env['sale.report'].search([('date', '>=', date_from), ('date', '<=', date_to), ('invoice_status', '=', 'invoiced')]):
+                if str(r.product_id.id) not in result['id'] and r.order_id:
+                    product = r.product_id
+                    product_sales = self._lines(date_from, date_to, company_id, product.id)
+                    result = {'id': str(product.id), 'name': product, 'product_sales': product_sales}
+                    product_list.append(result)
 
         return {
             'doc_ids': self.ids,
@@ -109,9 +108,8 @@ class SalesByItemDetailReport(models.AbstractModel):
             'product_name': product_name,
             'company_id': company_id,
             'company_name': company_name,
-            'partner_list': partner_list,
             # 'company_branch_id': company_branch_id,
             # 'company_branch_name': company_branch_name,
-            'lines': self._lines,
+            'lines': product_list,
             # 'location_list': location_list,
         }

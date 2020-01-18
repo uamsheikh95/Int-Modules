@@ -52,7 +52,7 @@
                               <th style="text-align:center" nowrap="nowrap">Qty</th>
                               <th style="text-align:right" nowrap="nowrap">Sales Price</th>
                               <th style="text-align:right" nowrap="nowrap">Amount</th>
-                              <th style="text-align:right" nowrap="nowrap">Invoice Status</th>
+                              <th style="text-align:left;padding-left:20px" nowrap="nowrap">Invoice Status</th>
 
                               <!-- <th>Total</th> -->
                             </tr>
@@ -61,36 +61,44 @@
                           <tbody>
                             <t t-set="balance" t-value="0"/>
                             <t t-set="total_balance" t-value="0"/>
-                            <t style="border-bottom:1px solid #000000;border-top:1px solid #dddddd" t-foreach="partner_list" t-as="partner">
-                              <td colspan="7"><p style="font-weight: bold; margin-bottom: 0; font-size: 12px;">- <span t-esc="partner.name"/></p></td>
 
-                              <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd" t-foreach="lines(date_from, date_to, company_id, partner_id)" t-as="line">
-                                <t t-if="line['partner_id'] == partner.id">
-                                  <td nowrap="nowrap"><span t-esc="line['date']"/></td>
-                                  <td><span t-esc="line['order_id']"/></td>
-                                  <td colspan="2"><span t-esc="line['product_id']"/></td>
-                                  <td style="text-align:center"><span t-esc="line['product_uom_qty']"/></td>
+                            <t t-foreach="lines" t-as="line">
+                              <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
+                                <td></td>
+                                <td colspan="6" t-foreach="line['name']" t-as="partner">
+                                  - <span style="font-weight: bold; margin-bottom: 0; font-size: 12px;" t-esc="partner.name" />
+                                </td>
+                              </tr>
+
+                              <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd" t-foreach="line['partner_sales']" t-as="sale">
+                                  <td nowrap="nowrap"><span t-esc="sale['date']"/></td>
+                                  <td><span t-esc="sale['order_id']"/></td>
+                                  <td colspan="2"><span t-esc="sale['product_id']"/></td>
+                                  <td style="text-align:center"><span t-esc="sale['product_uom_qty']"/></td>
                                   <td style="text-align:right">
-                                      <t t-set="price_unit" t-value="line['price_total'] / line['product_uom_qty']" />
+                                      <t t-set="price_unit" t-value="sale['price_total'] / sale['product_uom_qty']" />
                                       <span t-esc="'{0:,.2f}'.format(price_unit)"/>
                                          </td>
-                                  <td style="text-align:right"><span t-esc="'{0:,.2f}'.format(line['price_total'])"/></td>
-                                  <t t-set="balance" t-value="balance + line['price_total']"/>
-                                  <td><span t-esc="line['invoice_status']"/></td>
-                                </t>
+                                  <td style="text-align:right"><span t-esc="'{0:,.2f}'.format(sale['price_total'])"/></td>
+                                  <t t-set="balance" t-value="balance + sale['price_total']"/>
+                                  <t t-set="total_balance" t-value="total_balance + sale['price_total']"/>
+                                  <td style="padding-left:20px"><span t-esc="sale['invoice_status']"/></td>
                               </tr>
 
                               <tr t-if="balance != 0" style="border-bottom:1px solid #000000;border-top:1px solid #dddddd;">
-                                <td colspan="7"><p style="font-weight:bold;margin-bottom:0;">Total <span t-esc="partner.name" />  : </p></td>
+                                <td></td>
+                                <td colspan="6"><p style="font-weight:bold;margin-bottom:0;">Total : </p></td>
 
                                 <td style="text-align:right;font-weight:bold">
                                   <span t-esc="'{0:,.2f}'.format(balance)" />
-                                  <t t-set="total_balance" t-value="total_balance + balance"/>
+
                                   <t t-set="balance" t-value="0"/>
                                 </td>
                               </tr>
-                          </t>
-                          <tr style="border-bottom:1px solid #000000;border-top:1px solid #dddddd;background-color: #F2F4F4;">
+
+                            </t>
+
+                            <tr style="border-bottom:1px solid #000000;border-top:1px solid #dddddd;background-color: #F2F4F4;">
                                 <td colspan="4"><p style="font-weight:bold;margin-bottom:0;">Total All Balances  : </p></td>
 
                                 <td></td>
