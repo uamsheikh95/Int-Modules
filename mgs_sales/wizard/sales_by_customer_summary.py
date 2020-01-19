@@ -51,9 +51,10 @@ class SalesByCustomerSummaryReport(models.AbstractModel):
             from  sale_report as sr
             where sr.partner_id = %s
             and sr.date between %s and %s and company_id=%s
-            and sr.state NOT IN ('draft', 'cancel', 'sent')
+            and sr.state NOT IN ('draft', 'cancel', 'sent') and sr.invoice_status <> 'no'
             order by 1
         """
+        
 
         self.env.cr.execute(query, tuple(params))
         res = self.env.cr.dictfetchall()
@@ -91,11 +92,11 @@ class SalesByCustomerSummaryReport(models.AbstractModel):
 
         if partner_id:
             # partner_list.append(partner_id)
-            for r in self.env['sale.report'].search([('date', '>=', date_from), ('date', '<=', date_to), ('partner_id', '=', partner_id)]):
+            for r in self.env['sale.report'].search([('date', '>=', date_from), ('date', '<=', date_to), ('partner_id', '=', partner_id)], order="partner_id asc"):
                 if r.partner_id not in partner_list and r.price_total is not None :
                     partner_list.append(r.partner_id)
         else:
-            for r in self.env['sale.report'].search([('date', '>=', date_from), ('date', '<=', date_to)]):
+            for r in self.env['sale.report'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="partner_id asc"):
                 if r.partner_id not in partner_list and r.price_total is not None:
                     partner_list.append(r.partner_id)
 

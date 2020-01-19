@@ -5,7 +5,7 @@
     id="action_sales_by_customer_detail"
     name="mgs_sales.sales_by_customer_detail_report"
     model="mgs_sales.sales_by_customer_detail_report"
-    string="Sales by Item Detail"
+    string="Sales by Customer Detail"
     report_type="qweb-html"
     paperformat="paperformat_custom"
 />
@@ -43,7 +43,7 @@
 
                       <div class="row">
                         <table style="width:100%;">
-                          <thead style="border-bottom:1px solid #dadadadd;border-top:1px solid #dddddd">
+                          <thead style="border-top: 1px solid #696767;border-bottom: 1px solid #696767;">
                             <tr style="background-color: #F2F4F4;">
                               <th nowrap="nowrap">Date</th>
                               <th nowrap="nowrap">Order</th>
@@ -52,7 +52,7 @@
                               <th style="text-align:center" nowrap="nowrap">Qty</th>
                               <th style="text-align:right" nowrap="nowrap">Sales Price</th>
                               <th style="text-align:right" nowrap="nowrap">Amount</th>
-                              <th style="text-align:left;padding-left:20px" nowrap="nowrap">Invoice Status</th>
+                              <th style="padding-left:20px" nowrap="nowrap">Invoice Status</th>
 
                               <!-- <th>Total</th> -->
                             </tr>
@@ -61,44 +61,36 @@
                           <tbody>
                             <t t-set="balance" t-value="0"/>
                             <t t-set="total_balance" t-value="0"/>
-
-                            <t t-foreach="lines" t-as="line">
-                              <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
-                                <td></td>
-                                <td colspan="6" t-foreach="line['name']" t-as="partner">
-                                  - <span style="font-weight: bold; margin-bottom: 0; font-size: 12px;" t-esc="partner.name" />
-                                </td>
+                            <t t-foreach="partner_list" t-as="partner">
+                              <tr style="border-bottom:1px solid #696767;border-top:1px solid #696767">
+                                <td colspan="8"><p style="font-weight: bold; margin-bottom: 0; font-size: 12px;">- <span t-esc="partner.name"/></p></td>
                               </tr>
 
-                              <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd" t-foreach="line['partner_sales']" t-as="sale">
-                                  <td nowrap="nowrap"><span t-esc="sale['date']"/></td>
-                                  <td><span t-esc="sale['order_id']"/></td>
-                                  <td colspan="2"><span t-esc="sale['product_id']"/></td>
-                                  <td style="text-align:center"><span t-esc="sale['product_uom_qty']"/></td>
+                              <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd" t-foreach="lines(date_from, date_to, company_id, partner.id)" t-as="line">
+                                  <td nowrap="nowrap"><span t-esc="line['date']"/></td>
+                                  <td><span t-esc="line['order_id']"/></td>
+                                  <td colspan="2"><span t-esc="line['product_id']"/></td>
+                                  <td style="text-align:center"><span t-esc="line['qty_invoiced']"/></td>
                                   <td style="text-align:right">
-                                      <t t-set="price_unit" t-value="sale['price_total'] / sale['product_uom_qty']" />
+                                      <t t-set="price_unit" t-value="line['price_total'] / line['qty_invoiced']" t-if="line['qty_invoiced']" />
                                       <span t-esc="'{0:,.2f}'.format(price_unit)"/>
                                          </td>
-                                  <td style="text-align:right"><span t-esc="'{0:,.2f}'.format(sale['price_total'])"/></td>
-                                  <t t-set="balance" t-value="balance + sale['price_total']"/>
-                                  <t t-set="total_balance" t-value="total_balance + sale['price_total']"/>
-                                  <td style="padding-left:20px"><span t-esc="sale['invoice_status']"/></td>
+                                  <td style="text-align:right"><span t-esc="'{0:,.2f}'.format(line['price_total'])"/></td>
+                                  <t t-set="balance" t-value="balance + line['price_total']"/>
+                                  <td style="padding-left:20px"><span t-esc="line['invoice_status']"/></td>
                               </tr>
 
-                              <tr t-if="balance != 0" style="border-bottom:1px solid #000000;border-top:1px solid #dddddd;">
-                                <td></td>
-                                <td colspan="6"><p style="font-weight:bold;margin-bottom:0;">Total : </p></td>
+                              <tr style="border-top:1px solid #dddddd;">
+                                <td colspan="7"><p style="font-weight:bold;margin-bottom:0;">Total <span t-esc="partner.name" />  : </p></td>
 
                                 <td style="text-align:right;font-weight:bold">
                                   <span t-esc="'{0:,.2f}'.format(balance)" />
-
+                                  <t t-set="total_balance" t-value="total_balance + balance"/>
                                   <t t-set="balance" t-value="0"/>
                                 </td>
                               </tr>
-
-                            </t>
-
-                            <tr style="border-bottom:1px solid #000000;border-top:1px solid #dddddd;background-color: #F2F4F4;">
+                          </t>
+                          <tr style="border-bottom:1px solid #000000;border-top:1px solid #dddddd;background-color: #F2F4F4;">
                                 <td colspan="4"><p style="font-weight:bold;margin-bottom:0;">Total All Balances  : </p></td>
 
                                 <td></td>

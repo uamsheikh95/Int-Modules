@@ -6,7 +6,7 @@ class SalesByCustomerDetail(models.TransientModel):
     _description = 'Sales by Customer Detail'
 
     partner_id = fields.Many2one('res.partner', string="Partner", domain=[('customer','=',True)])
-    date_from = fields.Datetime('From', default=datetime.today().replace(day=1))
+    date_from = fields.Datetime('From', default=datetime.today().replace(day=1, hour=00, minute=00, second=00))
     date_to = fields.Datetime('To', default=fields.Datetime.now)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env['res.company']._company_default_get('mgs_sales.sales_by_customer_detail'))
     # company_branch_id = fields.Many2one(
@@ -41,7 +41,7 @@ class SalesByCustomerDetailReport(models.AbstractModel):
     _name = 'report.mgs_sales.sales_by_customer_detail_report'
     _description = 'Sales by Customer Detail Report'
 
-    # @api.model
+    @api.model
     def _lines(self, date_from, date_to, company_id, partner): #, company_branch_id
         full_move = []
         params = [date_from, date_to, company_id, partner] #, company_branch_id
@@ -55,17 +55,15 @@ class SalesByCustomerDetailReport(models.AbstractModel):
         # and aml.invoice_id is not null and aml.product_id is not null
 
         query = """
-            select sr.date, so.name as order_id, sr.partner_id, rp.name as partner_name,pr.name as product_id,sr.product_uom_qty,sr.price_total,sr.invoice_status
+            select sr.date, so.name as order_id, sr.partner_id, rp.name as partner_name,pr.name as product_id,sr.qty_invoiced,sr.price_total,sr.invoice_status
             from sale_report as sr
             left join sale_order as so on sr.order_id=so.id
             left join res_partner as rp on sr.partner_id=rp.id
             left join product_template as pr on sr.product_id=pr.id
             where sr.date between %s and %s and sr.company_id=%s
-            and sr.partner_id=%s and sr.invoice_status='invoiced'
-            order by 1
+            and sr.partner_id=%s and sr.invoice_status <> 'no' and sr.state NOT IN ('draft', 'cancel', 'sent')
+             order by sr.id
         """
-
-        print(query)
 
         self.env.cr.execute(query, tuple(params))
         res = self.env.cr.dictfetchall()
@@ -90,23 +88,16 @@ class SalesByCustomerDetailReport(models.AbstractModel):
         company_name = data['form']['company_name']
 
         partner_list = []
-        result = {'id': '', 'name': '', 'partner_sales': ''}
 
         if partner_id:
             # partner_list.append(partner_id)
-            for r in self.env['sale.report'].search([('date', '>=', date_from), ('date', '<=', date_to), ('partner_id', '=', partner_id)]):
-                if str(r.partner_id.id) not in result['id'] and r.order_id:
-                    partner = r.partner_id
-                    partner_sales = self._lines(date_from, date_to, company_id, partner.id)
-                    result = {'id': str(partner.id), 'name': partner, 'partner_sales': partner_sales}
-                    partner_list.append(result)
+            for r in self.env['sale.report'].search([('date', '>=', date_from), ('date', '<=', date_to), ('partner_id', '=', partner_id)], order="partner_id asc"):
+                if r.partner_id not in partner_list:
+                    partner_list.append(r.partner_id)
         else:
-            for r in self.env['sale.report'].search([('date', '>=', date_from), ('date', '<=', date_to), ('partner_id.customer', '=', True)]):
-                if str(r.partner_id.id) not in result['id'] and r.order_id:
-                    partner = r.partner_id
-                    partner_sales = self._lines(date_from, date_to, company_id, partner.id)
-                    result = {'id': str(partner.id), 'name': partner, 'partner_sales': partner_sales}
-                    partner_list.append(result)
+            for r in self.env['sale.report'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="partner_id asc"):
+                if r.partner_id not in partner_list:
+                    partner_list.append(r.partner_id)
 
         return {
             'doc_ids': self.ids,
@@ -118,8 +109,9 @@ class SalesByCustomerDetailReport(models.AbstractModel):
             'partner_name': partner_name,
             'company_id': company_id,
             'company_name': company_name,
+            'partner_list': partner_list,
             # 'company_branch_id': company_branch_id,
             # 'company_branch_name': company_branch_name,
-            'lines': partner_list,
+            'lines': self._lines,
             # 'location_list': location_list,
         }

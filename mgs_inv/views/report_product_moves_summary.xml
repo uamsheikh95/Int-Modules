@@ -79,37 +79,37 @@
                                 <t t-set="balance" t-value="open_balance(product.id, date_from)"/>
                                 <t t-if="product.categ_id.name == category.name">
                                   <td colspan="2" style="padding-left:3px"><span t-esc="product.name"/></td>
-                                  <td style="text-align:right"><span t-esc="open_balance(product.id, date_from)"/></td>
+                                  <td style="text-align:right"><span t-esc="'{0:,.2f}'.format(open_balance(product.id, date_from))"/></td>
                                    <!-- Purchase  + -->
                                   <td style="text-align:right">
-                                    <span t-esc="usage_qty('supplier', 'internal', product.id, date_from, date_to)"/>
+                                    <span t-esc="'{0:,.2f}'.format(usage_qty('supplier', 'internal', product.id, date_from, date_to))"/>
                                     <t t-set="balance" t-value="balance + usage_qty('supplier', 'internal', product.id, date_from, date_to)"/>
                                   </td>
                                   <!-- Sales return -->
                                   <td style="text-align:right">
-                                    <span t-esc="usage_qty('customer', 'internal', product.id, date_from, date_to)"/>
+                                    <span t-esc="(usage_qty('customer', 'internal', product.id, date_from, date_to))"/>
                                     <t t-set="balance" t-value="balance + usage_qty('customer', 'internal', product.id, date_from, date_to)"/>
                                   </td>
                                   <!-- Inv.Adj/Scrap+ -->
                                   <td style="text-align:right">
-                                    <span t-esc="usage_qty('inventory', 'internal', product.id, date_from, date_to)"/>
+                                    <span t-esc="'{0:,.2f}'.format(usage_qty('inventory', 'internal', product.id, date_from, date_to))"/>
                                     <t t-set="balance" t-value="balance + usage_qty('inventory', 'internal', product.id, date_from, date_to)"/>
                                   </td>
                                   <!-- Purchase Return- -->
                                   <td style="text-align:right;color:red">
-                                    <span t-esc="usage_qty('internal', 'supplier', product.id, date_from, date_to)"/>
+                                    <span t-esc="'{0:,.2f}'.format(usage_qty('internal', 'supplier', product.id, date_from, date_to))"/>
                                     <t t-set="balance" t-value="balance - usage_qty('internal', 'supplier', product.id, date_from, date_to)"/>
                                   </td>
 
                                   <!-- Soles (-) -->
                                   <td style="text-align:right;color:red">
-                                    <span t-esc="usage_qty('internal', 'customer', product.id, date_from, date_to)"/>
+                                    <span t-esc="'{0:,.2f}'.format(usage_qty('internal', 'customer', product.id, date_from, date_to))"/>
                                     <t t-set="balance" t-value="balance - usage_qty('internal', 'customer', product.id, date_from, date_to)"/>
                                   </td>
 
                                   <!-- Adj/Scraped -->
                                   <td style="text-align:right;color:red">
-                                    <span t-esc="usage_qty('internal', 'inventory', product.id, date_from, date_to)"/>
+                                    <span t-esc="'{0:,.2f}'.format(usage_qty('internal', 'inventory', product.id, date_from, date_to))"/>
                                     <t t-set="balance" t-value="balance - usage_qty('internal', 'inventory', product.id, date_from, date_to)"/>
                                   </td>
 
@@ -118,7 +118,7 @@
 
 
                                   <td style="text-align:right;font-weight:bold">
-                                    <span t-esc="balance" />
+                                    <span t-esc="'{0:,.2f}'.format(balance)" />
                                   </td>
                                 </t>
                               </tr>

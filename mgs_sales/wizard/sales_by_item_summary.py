@@ -51,7 +51,7 @@ class SalesByItemSummaryReport(models.AbstractModel):
             from  sale_report as sr
             where sr.product_id = %s
             and sr.date between %s and %s and company_id=%s
-            and sr.state NOT IN ('draft', 'cancel', 'sent')
+            and sr.state NOT IN ('draft', 'cancel', 'sent') and sr.invoice_status <> 'no'
             order by 1
         """
 
@@ -82,16 +82,14 @@ class SalesByItemSummaryReport(models.AbstractModel):
 
         if product_id:
             # product_list.append(partner_id)
-            for r in self.env['sale.report'].search([('date', '>=', date_from), ('date', '<=', date_to), ('product_id', '=', product_id)]):
+            for r in self.env['sale.report'].search([('date', '>=', date_from), ('date', '<=', date_to), ('product_id', '=', product_id)], order="product_id asc"):
                 if r.product_id not in product_list and r.price_total is not None :
                     product_list.append(r.product_id)
         else:
-            for r in self.env['sale.report'].search([('date', '>=', date_from), ('date', '<=', date_to)]):
+            for r in self.env['sale.report'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="product_id asc"):
                 if r.product_id not in product_list and r.price_total is not None:
                     product_list.append(r.product_id)
 
-        print('---------------------------------')
-        print(product_list)
 
         return {
             'doc_ids': self.ids,
