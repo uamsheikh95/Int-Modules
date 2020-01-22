@@ -76,7 +76,7 @@
                               <td></td>
                               <td></td>
                               <td></td>
-                              <td style="text-align:right;font-weight:bold;color:red"><span t-esc="balance"/></td>
+                              <td style="text-align:right;font-weight:bold;color:red"><span t-esc="'{0:,.2f}'.format(balance)"/></td>
                             </tr>
 
 
@@ -95,13 +95,13 @@
                                 <td style="text-align:right">
                                     <t t-set="qty_in" t-value="line['product_uom_qty']" t-if="line['location_dest_id'] == stock_location_name" />
                                     <t t-set="qty_in" t-value="0" t-if="line['location_dest_id'] != stock_location_name" />
-                                    <span t-esc="qty_in" />
+                                    <span t-esc="'{0:,.2f}'.format(qty_in)" />
                                 </td>
 
                                 <td style="text-align:right">
                                   <t t-set="qty_out" t-value="line['product_uom_qty']" t-if="line['location_id'] == stock_location_name" />
                                   <t t-set="qty_out" t-value="0" t-if="line['location_id'] != stock_location_name" />
-                                  <span t-esc="qty_out"/>
+                                  <span t-esc="'{0:,.2f}'.format(qty_out)"/>
                                 </td>
 
                                 <td style="text-align:center">
@@ -110,7 +110,7 @@
 
                                 <td style="text-align:right">
                                   <t t-set="balance" t-value="balance + qty_in - qty_out"/>
-                                  <span t-esc="balance" />
+                                  <span t-esc="'{0:,.2f}'.format(balance)" />
                                 </td>
 
                               </tr>
@@ -126,7 +126,7 @@
                                 <td></td>
                                 <td></td>
                                 <td style="text-align:right;font-weight:bold">
-                                  <span t-esc="balance" />
+                                  <span t-esc="'{0:,.2f}'.format(balance)" />
                                 </td>
                               </tr>
 
