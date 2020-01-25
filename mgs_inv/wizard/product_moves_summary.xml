@@ -17,6 +17,7 @@
 							<group>
 								<field name="date_to" required="1" />
 								<field name="categ_id" string="Prod Category" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" />
+								<field name="view" widget="radio"/>
 							</group>
 						</group>
 					</sheet>

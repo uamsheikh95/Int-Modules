@@ -5,9 +5,11 @@ class ProductMovesHistory(models.TransientModel):
     _name = 'mgs_inv.pr_moves_history'
     _description = 'Product Moves History'
 
-    product_id = fields.Many2one('product.product', required=True)
+    product_id = fields.Many2one('product.product')
     date_from = fields.Datetime('From', default=datetime.today().replace(day=1, hour=00, minute=00, second=00))
     date_to = fields.Datetime('To', default=fields.Datetime.now)
+
+    view = fields.Selection([ ('all', 'All Products'),('active', 'Active Products'), ('inactive', 'Inactive Products')], string='View', default='all')
 
     def print_xls_report(self, cr, uid, ids, context=None):
         data = self.read(cr, uid, ids)[0]
@@ -28,6 +30,7 @@ class ProductMovesHistory(models.TransientModel):
                     'product_name': self.product_id.name,
                     'date_from': self.date_from,
                     'date_to': self.date_to,
+                    'view': self.view,
                 },
         }
 
@@ -100,6 +103,28 @@ class ProductMovesHistoryReport(models.AbstractModel):
         date_to = data['form']['date_to']
         product_id = data['form']['product_id']
         product_name = data['form']['product_name']
+        view = data['form']['view']
+
+        product_list = []
+
+        if product_id:
+            for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to), ('product_id', '=', product_id)], order="product_id asc"):
+                if r.product_id not in product_list:
+                    product_list.append(r.product_id)
+        else:
+            if view == 'all':
+                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="product_id asc"):
+                    if r.product_id not in product_list:
+                        product_list.append(r.product_id)
+            elif view == 'active':
+                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="product_id asc"):
+                    if r.product_id not in product_list and r.product_id.active == True:
+                        product_list.append(r.product_id)
+
+            elif view == 'inactive':
+                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="product_id asc"):
+                    if r.product_id not in product_list and r.product_id.active == False:
+                        product_list.append(r.product_id)
 
         docargs = {
             'doc_ids': self.ids,
@@ -109,9 +134,10 @@ class ProductMovesHistoryReport(models.AbstractModel):
             'date_to': date_to,
             'product_id': product_id,
             'product_name': product_name,
+            'view': view,
             'lines': self._lines,
             'open_balance': self._sum_open_balance,
-            # 'location_list': location_list,
+            'product_list': product_list,
         }
 
         return self.env['report'].render('mgs_inv.pr_moves_history_report', docargs)

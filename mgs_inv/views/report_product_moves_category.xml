@@ -29,6 +29,13 @@
         									<strong>Date to:</strong>
         									<p class="m-0" t-esc="date_to"/>
         								</div>
+
+                        <div class="col-auto mw-100 mb-2" t-if="view" name="due_date" style="width: 30%; float: left;">
+        									<strong>View:</strong>
+        									<p class="m-0" t-if="view == 'all'">All Products</p>
+                          <p class="m-0" t-if="view == 'active'">Active Products</p>
+                          <p class="m-0" t-if="view == 'inactive'">Inactive Products</p>
+        								</div>
         							</div>
 
                       <div class="row">
@@ -66,10 +73,18 @@
                               </tr>
 
                               <!-- loop through the products -->
-                              <t t-foreach="product_list(date_from, date_to, category.id)" t-as="product">
+                              <t t-foreach="product_list(view, date_from, date_to, category.id)" t-as="product">
                                 <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
-                                  <td colspan="11"><p style="font-weight:bold;margin-bottom:0;font-size: 13px;color:green"><span t-esc="product.code" t-if="product.code"/> - <span t-esc="product.name"/></p></td>
+                                  <td colspan="11">
+                                    <p style="font-weight:bold;margin-bottom:0;font-size: 13px;color:green" t-if="product.active"><span t-esc="product.code" t-if="product.code"/> - <span t-esc="product.name"/></p>
+                                    <p style="font-weight:bold;margin-bottom:0;font-size: 13px;color:red" t-if="not product.active"><span t-esc="product.code" t-if="product.code"/> - <span t-esc="product.name"/></p>
+                                  </td>
                                 </tr>
+
+                                <!-- <td colspan="10">
+                                  <p style="font-weight:bold;margin-bottom:0;font-size: 16px;color:blue" t-if="product.active"><span t-esc="product.name"/></p>
+                                  <p style="font-weight:bold;margin-bottom:0;font-size: 16px;color:red" t-if="not product.active"><span t-esc="product.name"/></p>
+                                </td> -->
 
                                 <t t-set="balance" t-value="open_balance(product.id, date_from)"/>
 
@@ -102,14 +117,14 @@
                                         <t t-set="qty_in" t-value="line['product_uom_qty']" t-if="line['location_usage'] == 'internal'" />
                                         <t t-set="qty_in" t-value="0" t-if="line['location_usage'] != 'internal'" />
                                         <span t-esc="qty_in" t-if="line['location_usage'] == 'internal'"/>
-                                        <t t-set="total_qty_in" t-value="total_qty_in + qty_in"/>
+                                        <t t-set="total_qty_in" t-value="total_qty_in + qty_in" t-if="line['location_usage'] == 'internal'"/>
                                     </td>
 
                                     <td style="text-align:right">
                                       <t t-set="qty_out" t-value="line['product_uom_qty']" t-if="line['location_usage'] != 'internal'" />
                                       <t t-set="qty_out" t-value="0" t-if="line['location_usage'] == 'internal'" />
                                       <span t-esc="qty_out" t-if="line['location_usage'] != 'internal'"/>
-                                      <t t-set="total_qty_out" t-value="total_qty_in + qty_out"/>
+                                      <t t-set="total_qty_out" t-value="total_qty_out + qty_out"  t-if="line['location_usage'] != 'internal'"/>
                                     </td>
 
                                     <td style="text-align:center">
@@ -134,6 +149,8 @@
                                   <t t-set="total_qty_in_categ" t-value="total_qty_in_categ + total_qty_in"/>
                                   <td style="text-align:right;font-weight:bold"><span t-esc="'{0:,.2f}'.format(total_qty_out)" /></td>
                                   <t t-set="total_qty_out_categ" t-value="total_qty_out_categ + total_qty_out"/>
+                                  <t t-set="total_qty_in" t-value="0"/>
+                                  <t t-set="total_qty_out" t-value="0"/>
                                   <td></td>
                                   <td style="text-align:right;font-weight:bold">
                                     <span t-esc="'{0:,.2f}'.format(balance)" />

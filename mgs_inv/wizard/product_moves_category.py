@@ -8,6 +8,7 @@ class ProductMovesCategory(models.TransientModel):
     categ_id = fields.Many2one('product.category')
     date_from = fields.Datetime('From', default=datetime.today().replace(day=1, hour=00, minute=00, second=00))
     date_to = fields.Datetime('To', default=fields.Datetime.now)
+    view = fields.Selection([ ('all', 'All Products'),('active', 'Active Products'), ('inactive', 'Inactive Products')], string='View', default='all')
 
     def print_xls_report(self, cr, uid, ids, context=None):
         data = self.read(cr, uid, ids)[0]
@@ -28,6 +29,7 @@ class ProductMovesCategory(models.TransientModel):
                     'categ_name': self.categ_id.name,
                     'date_from': self.date_from,
                     'date_to': self.date_to,
+                    'view': self.view,
                 },
         }
 
@@ -91,11 +93,25 @@ class ProductMovesCategoryReport(models.AbstractModel):
         return result
 
     @api.model
-    def product_list(self, date_from, date_to, categ_id):
+    def product_list(self, view, date_from, date_to, categ_id):
         list = []
-        for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to), ('product_id.categ_id', '=', categ_id)]):
-            if r.product_id not in list:
-                list.append(r.product_id)
+        # for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to), ('product_id.categ_id', '=', categ_id)]):
+        #     if r.product_id not in list:
+        #         list.append(r.product_id)
+
+        if view == 'all':
+            for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to), ('product_id.categ_id', '=', categ_id)], order="product_id asc"):
+                if r.product_id not in list:
+                    list.append(r.product_id)
+        elif view == 'active':
+            for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to), ('product_id.categ_id', '=', categ_id)], order="product_id asc"):
+                if r.product_id not in list and r.product_id.active == True:
+                    list.append(r.product_id)
+
+        elif view == 'inactive':
+            for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to), ('product_id.categ_id', '=', categ_id)], order="product_id asc"):
+                if r.product_id not in list and r.product_id.active == False:
+                    list.append(r.product_id)
         return list
 
 
@@ -109,6 +125,7 @@ class ProductMovesCategoryReport(models.AbstractModel):
         date_to = data['form']['date_to']
         categ_id = data['form']['categ_id']
         categ_name = data['form']['categ_name']
+        view = data['form']['view']
 
         categ_list = []
 
@@ -133,6 +150,7 @@ class ProductMovesCategoryReport(models.AbstractModel):
             'date_to': date_to,
             'categ_id': categ_id,
             'categ_name': categ_name,
+            'view': view,
             'lines': self._lines,
             'open_balance': self._sum_open_balance,
             'categ_list': categ_list,

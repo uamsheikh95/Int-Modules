@@ -10,6 +10,7 @@ class ProductMovesByLocation(models.TransientModel):
     date_from = fields.Datetime('From Date', default=datetime.today().replace(day=1, hour=00, minute=00, second=00))
     date_to = fields.Datetime('To Date', default=fields.Datetime.now)
     stock_location_id = fields.Many2one('stock.location', domain=[('usage','=','internal')])
+    view = fields.Selection([ ('all', 'All Products'),('active', 'Active Products'), ('inactive', 'Inactive Products')], string='View', default='all')
 
     @api.multi
     def confirm(self):
@@ -27,6 +28,7 @@ class ProductMovesByLocation(models.TransientModel):
                     'stock_location_name': self.stock_location_id.name,
                     'date_from': self.date_from,
                     'date_to': self.date_to,
+                    'view': self.view,
                 },
         }
 
@@ -90,14 +92,58 @@ class ProductMovesByLocationReport(models.AbstractModel):
 
         stock_location_id = data['form']['stock_location_id']
         stock_location_name = data['form']['stock_location_name']
+        view = data['form']['view']
 
         products = []
         if product_id and not categ_id:
-            products=self.env['product.product'].search([('active', '=', True),('id', '=', product_id)])
+            # products=self.env['product.product'].search([('active', '=', True),('id', '=', product_id)])
+            for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to), ('product_id', '=', product_id)], order="product_id asc"):
+                if r.product_id not in products:
+                        products.append(r.product_id)
+
         elif not product_id and categ_id:
-            products=self.env['product.product'].search([('active', '=', True),('categ_id', '=', categ_id)])
+            # products=self.env['product.product'].search([('active', '=', True),('categ_id', '=', categ_id)])
+            if view == 'all':
+                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to), ('product_id.categ_id', '=', categ_id)], order="product_id asc"):
+                    if r.product_id not in products:
+                        products.append(r.product_id)
+            elif view == 'active':
+                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to), ('product_id.categ_id', '=', categ_id)], order="product_id asc"):
+                    if r.product_id not in products and r.product_id.active == True:
+                        products.append(r.product_id)
+
+            elif view == 'inactive':
+                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to), ('product_id.categ_id', '=', categ_id)], order="product_id asc"):
+                    if r.product_id not in products and r.product_id.active == False:
+                        products.append(r.product_id)
         else:
-            products=self.env['product.product'].search([('active', '=', True)])
+            if view == 'all':
+                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="product_id asc"):
+                    if r.product_id not in products:
+                        products.append(r.product_id)
+            elif view == 'active':
+                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="product_id asc"):
+                    if r.product_id not in products and r.product_id.active == True:
+                        products.append(r.product_id)
+
+            elif view == 'inactive':
+                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="product_id asc"):
+                    if r.product_id not in products and r.product_id.active == False:
+                        products.append(r.product_id)
+
+        # if view == 'all':
+        #     for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="product_id asc"):
+        #         if r.product_id not in product_list:
+        #             product_list.append(r.product_id)
+        # elif view == 'active':
+        #     for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="product_id asc"):
+        #         if r.product_id not in product_list and r.product_id.active == True:
+        #             product_list.append(r.product_id)
+        #
+        # elif view == 'inactive':
+        #     for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="product_id asc"):
+        #         if r.product_id not in product_list and r.product_id.active == False:
+        #             product_list.append(r.product_id)
 
         categories = []
         for product in products:
@@ -117,6 +163,7 @@ class ProductMovesByLocationReport(models.AbstractModel):
             'product_name': product_name,
             'categ_id': categ_id,
             'categ_name': categ_name,
+            'view': view,
             'usage_qty': self._sum_qty_by_usage,
             'open_balance': self._sum_open_balance,
             'products': products,

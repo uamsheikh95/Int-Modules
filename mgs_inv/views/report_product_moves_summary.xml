@@ -44,6 +44,13 @@
         									<strong>Category:</strong>
         									<p class="m-0" t-esc="categ_name"/>
         								</div>
+
+                        <div class="col-auto mw-100 mb-2" t-if="view" name="due_date" style="width: 30%; float: left;">
+        									<strong>View:</strong>
+        									<p class="m-0" t-if="view == 'all'">All Products</p>
+                          <p class="m-0" t-if="view == 'active'">Active Products</p>
+                          <p class="m-0" t-if="view == 'inactive'">Inactive Products</p>
+        								</div>
         							</div>
 
                       <div class="row">
@@ -73,7 +80,10 @@
                               <tr style="border:1px solid #dddddd;border-top:1px solid #dddddd" t-foreach="products" t-as="product">
                                 <t t-set="balance" t-value="open_balance(product.id, date_from)"/>
                                 <t t-if="product.categ_id.name == category.name">
-                                  <td colspan="2" style="padding-left:3px"><span t-esc="product.name"/></td>
+                                  <td colspan="2" style="padding-left:3px">
+                                    <span t-if="product.active"><span t-esc="product.code"/> - <span t-esc="product.name"/></span>
+                                    <span style="color:red" t-if="not product.active"><span t-esc="product.code"/> - <span t-esc="product.name"/></span>
+                                  </td>
                                   <td style="text-align:right"><span t-esc="open_balance(product.id, date_from)"/></td>
                                    <!-- Purchase  + -->
                                   <td style="text-align:right">
