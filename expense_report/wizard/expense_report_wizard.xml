@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<record id="expense_wizard_form" model="ir.ui.view">
+			<field name="name">expense_report.expense_wizard.form</field>
+			<field name="model">expense_report.expense_wizard</field>
+			<field name="arch" type="xml">
+			   <form>
+					<sheet>
+						<group>
+							<group>
+								<field name="date_from" string = "From" required="1" />
+								<field name="company_id" string = "Company" required="1" groups="base.group_multi_company" />
+							</group>
+
+
+							<group>
+								<field name="date_to" string="To" required="1" />
+							</group>
+						</group>
+            <group>
+              <field name="account_ids" widget="many2many_tags" domain="[('company_id', '=', company_id)]"/>
+            </group>
+					</sheet>
+
+				<footer>
+					<button name="confirm" string="View" type="object" class="oe_highlight"/>
+					<!-- <button name="print_xls_report" string="Export XLSX" type="object"  class="oe_highlight"  /> -->
+					<button string="Cancel" special="cancel"/>
+				</footer>
+
+			   </form>
+			</field>
+		</record>
+
+
+
+		<record id="action_expense_wizard_form" model="ir.actions.act_window">
+			<field name="name">Generate Expense Report</field>
+			<field name="res_model">expense_report.expense_wizard</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="expense_wizard_form"/>
+			<field name="target">new</field>
+		</record>
+
+
+		<menuitem id="menu_expense_wizard" name="Expense Report" parent="quickbooks_reports.menu_quickbooks_report" action="action_expense_wizard_form" />
+
+</odoo>
