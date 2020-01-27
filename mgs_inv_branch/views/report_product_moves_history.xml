@@ -53,7 +53,7 @@
                               <th nowrap="nowrap">To</th>
                               <th nowrap="nowrap">Ref</th>
                               <th nowrap="nowrap">Source</th>
-                              <!-- <th nowrap="nowrap">Partner</th> -->
+                              <th nowrap="nowrap">Partner</th>
                               <th style="text-align:right" nowrap="nowrap">Qty in</th>
                               <th style="text-align:right" nowrap="nowrap">Qty out</th>
                               <!-- <th nowrap="nowrap" style="text-align:center">UOM</th> -->
@@ -97,7 +97,7 @@
                                 <td><span t-esc="line['location_dest_id']"/></td>
                                 <td><span t-esc="line['picking_id']"/></td>
                                 <td><span t-esc="line['stored_origin']"/></td>
-                                <!-- <td><span t-esc="line['partner_id']"/></td> -->
+                                <td><span t-esc="line['partner_id']"/></td>
 
 
                                 <td style="text-align:right">

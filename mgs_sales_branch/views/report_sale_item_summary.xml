@@ -46,31 +46,67 @@
                         <table style="width:100%;">
                           <thead style="border:1px solid #dadadadd;">
                             <tr style="background-color: #F2F4F4;">
-                              <th style="padding-left: 5px;" colspan="4" nowrap="nowrap">Item</th>
+                              <th style="padding-left: 5px;" nowrap="nowrap">Item</th>
+                              <th style="text-align:center;padding-right: 5px;" nowrap="nowrap">Qty</th>
+                              <th style="text-align:right;padding-right: 5px;" nowrap="nowrap">Sales Price</th>
                               <th style="text-align:right;padding-right: 5px;" nowrap="nowrap">Total</th>
                               <!-- <th>Total</th> -->
                             </tr>
                           </thead>
 
                           <tbody>
+                            <t t-set="total_qty" t-value="0"/>
+                            <t t-set="total_all_qty" t-value="0"/>
+                            <t t-set="total_sales_price" t-value="0"/>
+                            <t t-set="total_all_sales_price" t-value="0"/>
+                            <t t-set="total" t-value="0"/>
                             <t t-set="total_balance" t-value="0"/>
 
                             <tr style="border:1px solid #dddddd" t-foreach="product_list" t-as="product">
-                              <td style="border: 1px solid #dddddd; padding-left: 5px; width: 80%;" colspan="4"><span t-esc="product.name"/></td>
-                              <td style="border:1px solid #dddddd;text-align:right;padding-left: 5px;" t-foreach="balance(product.id, date_from, date_to, company_id, company_branch_id)" t-as="bal">
-                                <!-- <t t-set="balance" t-value="balance(product.id, date_from, date_to, company_id)"/> -->
-                                <!-- <span t-esc="balance(product.id, date_from, date_to, company_id)" /> -->
-                                <t t-if="bal['balance']">
-                                  <span t-esc="'{0:,.2f}'.format(int(bal['balance']))" t-esc-options='{"widget": "float", "precision": 4}' />
+                              <!-- -++++++++++ TOTAL QTY +++++++++++++++++ -->
+                              <t  t-foreach="qty(product.id, date_from, date_to, company_id, company_branch_id)" t-as="q">
+                                <t t-if="q['balance']">
+                                  <t t-set="total_qty" t-value="total_qty + q['balance']"/>
                                 </t>
-                                <t t-set="total_balance" t-value="total_balance + int(bal['balance'])" t-if="bal['balance']"/>
-                                <!-- <t t-set="total_balance" t-value="total_balance + bal['balance']"/> -->
+                              </t>
 
+                              <!-- -++++++++++++ TOTAL +++++++++++++++ -->
+                              <t  t-foreach="balance(product.id, date_from, date_to, company_id, company_branch_id)" t-as="bal">
+                                <t t-if="bal['balance']">
+                                  <t t-set="total" t-value="total + bal['balance']"/>
+                                </t>
+                              </t>
+                              <!-- -++++++++++++ TOTAL PRICE UNIT +++++++++++++++ -->
+                              <t t-set="total_sales_price" t-value="total / total_qty" t-if="total_qty"/>
+
+
+                              <td style="border: 1px solid #dddddd; padding-left: 5px; width: 80%;"><span t-esc="product.name"/></td>
+                              <td style="border:1px solid #dddddd;text-align:center;padding-left: 5px;">
+                                <span t-esc="'{0:,.2f}'.format(total_qty)" />
+                                <t t-set="total_all_qty" t-value="total_all_qty + total_qty"/>
+                              </td>
+
+                              <td style="border:1px solid #dddddd;text-align:right;padding-left: 5px;">
+                                <span t-esc="'{0:,.2f}'.format(total_sales_price)" />
+                                <t t-set="total_all_sales_price" t-value="total_all_sales_price + total_sales_price"/>
+                              </td>
+
+                              <td style="border:1px solid #dddddd;text-align:right;padding-left: 5px;">
+                                <span t-esc="'{0:,.2f}'.format(total)" />
+                                <t t-set="total_balance" t-value="total_balance + total" t-if="total"/>
                               </td>
                             </tr> <!--product Name-->
                               <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd;background-color: #F2F4F4;">
-                                <td colspan="4"><p style="font-weight:bold;margin-bottom:0;">Total All Balances  : </p></td>
+                                <td><p style="font-weight:bold;margin-bottom:0;">Total All Balances  : </p></td>
+                                <td style="text-align:center;font-weight:bold">
+                                  <span t-esc="'{0:,.2f}'.format(total_all_qty)" />
 
+                                </td>
+
+                                <td style="text-align:right;font-weight:bold">
+                                  <span t-esc="'{0:,.2f}'.format(total_all_sales_price)" />
+
+                                </td>
                                 <td style="text-align:right;font-weight:bold">
                                   <span t-esc="'{0:,.2f}'.format(total_balance)" />
 

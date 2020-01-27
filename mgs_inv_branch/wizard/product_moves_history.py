@@ -69,6 +69,8 @@ class ProductMovesHistoryReport(models.AbstractModel):
         res = self.env.cr.dictfetchall()
 
         for r in res:
+            if r['stored_origin']:
+                r['partner_id'] = self.env['sale.order'].search([('name', '=', r['stored_origin'])]).partner_id.name
             full_move.append(r)
         return full_move
 

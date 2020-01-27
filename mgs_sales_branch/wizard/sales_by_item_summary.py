@@ -63,6 +63,36 @@ class SalesByItemSummaryReport(models.AbstractModel):
             full_move.append(r)
         return full_move
 
+    @api.model
+    def qty(self,product, date_from, date_to, company_id, company_branch_id): #, company_branch_id
+        full_move = []
+        params = [product, date_from, date_to, company_id, company_branch_id] #, company_branch_id
+
+        query = """
+            select cast(sum(sr.product_uom_qty) as INTEGER) as balance
+            from  sale_report as sr
+            where sr.product_id = %s
+            and sr.date between %s and %s and company_id=%s
+            and sr.state NOT IN ('draft', 'cancel', 'sent') and sr.invoice_status <> 'no' and sr.company_branch_id=%s
+            order by 1
+        """
+
+        self.env.cr.execute(query, tuple(params))
+        res = self.env.cr.dictfetchall()
+
+        displayed_total = 0
+        for r in res:
+            # if r['balance']:
+            #     displayed_total = '{:,}'.format(float(r['balance']))
+            #     r['balance'] = displayed_total
+            # print('--------------------------------------------------')
+            # print(r['balance'])
+            # print(type(r['balance']))
+
+            full_move.append(r)
+
+        return full_move
+
 
     @api.model
     # def _get_report_values(self, docids, data=None):
@@ -109,5 +139,6 @@ class SalesByItemSummaryReport(models.AbstractModel):
             'company_branch_id': company_branch_id,
             'company_branch_name': company_branch_name,
             'balance': self.balance,
+            'qty': self.qty,
             # 'location_list': location_list,
         }
