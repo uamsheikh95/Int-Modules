@@ -37,10 +37,12 @@ class Payment(models.Model):
 
     @api.multi
     def action_send_email(self):
+
         self.ensure_one()
-        # template = self.env.ref('payment_email_template', False)
+        ir_model_data = self.env['ir.model.data']
+
         try:
-        template_id = ir_model_data.get_object_reference('send_customer_statement_by_email', 'payment_email_template')[1]
+            template_id = ir_model_data.get_object_reference('send_customer_statement_by_email', 'payment_email_template')[1]
         except ValueError:
             template_id = False
 

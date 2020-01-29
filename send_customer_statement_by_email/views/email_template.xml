@@ -25,10 +25,10 @@
               <field name="report_template" ref="account.action_report_payment_receipt"/>
              <field name="subject">Custom Payment Req</field>
              <field name="body_html"><![CDATA[
-          <p>Dear ${(object.client_name.name)},<br/><br/>
+          <p>Dear user,<br/><br/>
           Good job, you've just created your first e-mail template!<br/></p>
                Regards,<br/>
-               ${(object.company_id.name)} ]]></field>
+               ]]></field>
           </record>
     </data>
 </odoo>
