@@ -59,6 +59,15 @@
                             <t t-set="qty_in" t-value="0" />
                             <t t-set="qty_out" t-value="0" />
                             <t t-set="balance" t-value="0"/>
+
+                            <t t-set="total_qty_in" t-value="0"/>
+                            <t t-set="total_qty_out" t-value="0"/>
+
+
+                            <t t-set="total_all_qty_in" t-value="0"/>
+                            <t t-set="total_all_qty_out" t-value="0"/>
+                            <t t-set="total_all_balance" t-value="0"/>
+
                             <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
                               <td colspan="10"><p style="font-weight:bold;margin-bottom:0;font-size: 16px;color:blue"><span t-esc="product_name"/></p></td>
                             </tr> <!--Product Name-->
@@ -96,13 +105,29 @@
                                     <t t-set="qty_in" t-value="line['product_uom_qty']" t-if="line['location_dest_id'] == stock_location_name" />
                                     <t t-set="qty_in" t-value="0" t-if="line['location_dest_id'] != stock_location_name" />
                                     <span t-esc="'{0:,.2f}'.format(qty_in)" />
+                                    <t t-set="total_qty_in" t-value="total_qty_in + qty_in" t-if="line['location_dest_id'] == stock_location_name"/>
                                 </td>
 
                                 <td style="text-align:right">
                                   <t t-set="qty_out" t-value="line['product_uom_qty']" t-if="line['location_id'] == stock_location_name" />
                                   <t t-set="qty_out" t-value="0" t-if="line['location_id'] != stock_location_name" />
                                   <span t-esc="'{0:,.2f}'.format(qty_out)"/>
+                                  <t t-set="total_qty_out" t-value="total_qty_out + qty_out" t-if="line['location_id'] == stock_location_name"/>
                                 </td>
+
+                                <!-- <td style="text-align:right">
+                                    <t t-set="qty_in" t-value="line['product_uom_qty']" t-if="line['location_dest_id'] == stock_location_name" />
+                                    <t t-set="qty_in" t-value="0" t-if="line['location_dest_id'] != stock_location_name" />
+                                    <span t-esc="'{0:,.2f}'.format(qty_in)" t-if="line['location_dest_id'] == stock_location_name"/>
+                                    <t t-set="total_qty_in" t-value="total_qty_in + qty_in" t-if="line['location_dest_id'] == stock_location_name"/>
+                                </td>
+
+                                <td style="text-align:right">
+                                  <t t-set="qty_out" t-value="line['product_uom_qty']" t-if="line['location_id'] != stock_location_name" />
+                                  <t t-set="qty_out" t-value="0" t-if="line['location_id'] == stock_location_name" />
+                                  <span t-esc="'{0:,.2f}'.format(qty_out)" t-if="line['location_id'] != stock_location_name"/>
+                                  <t t-set="total_qty_out" t-value="total_qty_out + qty_out" t-if="line['location_id'] != stock_location_name"/>
+                                </td> -->
 
                                 <td style="text-align:center">
                                   <span t-esc="line['product_uom']" />
@@ -115,20 +140,22 @@
 
                               </tr>
 
-                              <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd;background-color: #F2F4F4;">
+                              <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd;">
                                 <td><p style="font-weight:bold;margin-bottom:0;">Total <span t-esc="product_name" />  : </p></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
+                                <td style="text-align:right;font-weight:bold"><span t-esc="'{0:,.2f}'.format(total_qty_in)" /></td>   <t t-set="total_all_qty_in" t-value="total_all_qty_in + total_qty_in"/>
+                                <td style="text-align:right;font-weight:bold"><span t-esc="'{0:,.2f}'.format(total_qty_out)" /></td>  <t t-set="total_all_qty_out" t-value="total_all_qty_out + total_qty_out"/>
                                 <td></td>
                                 <td style="text-align:right;font-weight:bold">
                                   <span t-esc="'{0:,.2f}'.format(balance)" />
+                                  <t t-set="total_all_balance" t-value="total_all_balance + balance"/>
                                 </td>
                               </tr>
+
 
                           </tbody>
                         </table>

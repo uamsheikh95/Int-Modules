@@ -1,0 +1,14 @@
+<odoo>
+  <record id="product_moves_history_form_inherit" model="ir.ui.view">
+        <field name="name">mgs_inv.pr_moves_by_location.form.inherit</field>
+        <field name="model">mgs_inv.pr_moves_by_location</field>
+        <field name="inherit_id" ref="mgs_inv.pr_moves_by_location_form" />
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+               <!-- CUSTOMIZATIONS -->
+               <button name="confirm" position="after">
+                 <button name="print_xls_report" string="Print XLSX" type="object"  class="oe_highlight"  />
+               </button>
+        </field>
+    </record>
+</odoo>

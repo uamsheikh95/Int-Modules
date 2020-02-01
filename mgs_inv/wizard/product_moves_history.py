@@ -11,12 +11,6 @@ class ProductMovesHistory(models.TransientModel):
 
     view = fields.Selection([ ('all', 'All Products'),('active', 'Active Products'), ('inactive', 'Inactive Products')], string='View', default='all')
 
-    def print_xls_report(self, cr, uid, ids, context=None):
-        data = self.read(cr, uid, ids)[0]
-        return {'type': 'ir.actions.report.xml',
-                'report_name': 'mgs_inv.report_product_moves_history.xlsx',
-                'datas': data
-                }
 
     @api.multi
     def confirm(self):
