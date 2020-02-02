@@ -9,6 +9,7 @@ class ProductMovesHistory(models.TransientModel):
     date_from = fields.Datetime('From', default=datetime.today().replace(day=1, hour=00, minute=00, second=00))
     date_to = fields.Datetime('To', default=fields.Datetime.now)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env['res.company']._company_default_get('mgs_inv_branch.pr_moves_history'))
+    view = fields.Selection([ ('all', 'All Products'),('active', 'Active Products'), ('inactive', 'Inactive Products')], string='View', default='all')
     company_branch_id = fields.Many2one(
         'res.company.branch',
         string="Branch",
@@ -32,6 +33,7 @@ class ProductMovesHistory(models.TransientModel):
                     'company_name': self.company_id.name,
                     'company_branch_id': self.company_branch_id.id,
                     'company_branch_name': self.company_branch_id.name,
+                    'view': self.view,
                 },
         }
 
@@ -69,7 +71,9 @@ class ProductMovesHistoryReport(models.AbstractModel):
         res = self.env.cr.dictfetchall()
 
         for r in res:
-            if r['stored_origin']:
+            if r['stored_origin'] and 'PO' in r['stored_origin']:
+                r['partner_id'] = self.env['purchase.order'].search([('name', '=', r['stored_origin'])]).partner_id.name
+            elif r['stored_origin'] and 'SO' in r['stored_origin']:
                 r['partner_id'] = self.env['sale.order'].search([('name', '=', r['stored_origin'])]).partner_id.name
             full_move.append(r)
         return full_move
@@ -109,6 +113,30 @@ class ProductMovesHistoryReport(models.AbstractModel):
         company_branch_id = data['form']['company_branch_id']
         company_branch_name = data['form']['company_branch_name']
 
+        view = data['form']['view']
+
+        product_list = []
+
+        if product_id:
+            for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to), ('product_id', '=', product_id)], order="product_id asc"):
+                if r.product_id not in product_list:
+                    product_list.append(r.product_id)
+        else:
+            if view == 'all':
+                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="product_id asc"):
+                    if r.product_id not in product_list:
+                        product_list.append(r.product_id)
+            elif view == 'active':
+                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="product_id asc"):
+                    if r.product_id not in product_list and r.product_id.active == True:
+                        product_list.append(r.product_id)
+
+            elif view == 'inactive':
+                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="product_id asc"):
+                    if r.product_id not in product_list and r.product_id.active == False:
+                        product_list.append(r.product_id)
+
+
         return {
             'doc_ids': self.ids,
             'doc_model': self.model,
@@ -123,5 +151,5 @@ class ProductMovesHistoryReport(models.AbstractModel):
             'company_branch_name': company_branch_name,
             'lines': self._lines,
             'open_balance': self._sum_open_balance,
-            # 'location_list': location_list,
+            'product_list': product_list,
         }

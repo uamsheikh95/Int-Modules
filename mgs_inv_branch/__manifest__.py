@@ -32,10 +32,12 @@
         'views/report_moves_location.xml',
         'views/report_product_moves_summary.xml',
         'views/report_product_transfer.xml',
+        'views/report_product_moves_by_customer.xml',
         'wizard/product_moves_history.xml',
         'wizard/product_moves_location.xml',
         'wizard/product_transfer.xml',
-        'wizard/product_moves_summary.xml'
+        'wizard/product_moves_summary.xml',
+        'wizard/product_moves_by_customer.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
