@@ -9,6 +9,8 @@ class ProductMovesByLocation(models.TransientModel):
     date_from = fields.Datetime('From', default=datetime.today().replace(day=1, hour=00, minute=00, second=00))
     date_to = fields.Datetime('To', default=fields.Datetime.now)
     stock_location_id = fields.Many2one('stock.location', required=True, domain=[('usage','=','internal')])
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env['res.company']._company_default_get('mgs_inv_branch.pr_moves_by_location'))
+
 
     @api.multi
     def confirm(self):
@@ -24,6 +26,8 @@ class ProductMovesByLocation(models.TransientModel):
                     'stock_location_name': self.stock_location_id.name,
                     'date_from': self.date_from,
                     'date_to': self.date_to,
+                    'company_id': self.company_id.id,
+                    'company_name': self.company_id.name,
                 },
         }
 
@@ -36,7 +40,7 @@ class ProductMovesByLocationReport(models.AbstractModel):
     _name = 'report.mgs_inv.pr_moves_by_location_report'
     _description = 'Product Moves By Location Report'
 
-    def _lines(self, product_id, date_from, date_to, location_id, location_dest_id):
+    def _lines(self, product_id, date_from, date_to, company_id, location_id, location_dest_id):
         full_move = []
         params = [product_id, date_from, date_to, location_id, location_dest_id]
 
@@ -67,7 +71,7 @@ class ProductMovesByLocationReport(models.AbstractModel):
         return full_move
 
 
-    def _sum_open_balance(self, product_id, date_from):
+    def _sum_open_balance(self, product_id, date_from, company_id):
         params = [product_id, date_from]
         query = """
             select sum(case
@@ -98,8 +102,8 @@ class ProductMovesByLocationReport(models.AbstractModel):
         stock_location_id = data['form']['stock_location_id']
         stock_location_name = data['form']['stock_location_name']
 
-
-
+        company_id = data['form']['company_id']
+        company_name = data['form']['company_name']
 
         docargs = {
             'doc_ids': self.ids,
@@ -111,6 +115,8 @@ class ProductMovesByLocationReport(models.AbstractModel):
             'stock_location_name': stock_location_name,
             'product_id': product_id,
             'product_name': product_name,
+            'company_id': company_id,
+            'company_name': company_name,
             'lines': self._lines,
             'open_balance': self._sum_open_balance,
             # 'location_list': location_list,

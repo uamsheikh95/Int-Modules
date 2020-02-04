@@ -10,6 +10,7 @@ class ProductMovesHistory(models.TransientModel):
     date_to = fields.Datetime('To', default=fields.Datetime.now, required=True)
     location_id = fields.Many2one('stock.location', domain=[('usage','=','internal')], string="Source Location")
     location_dest_id = fields.Many2one('stock.location', domain=[('usage','=','internal')], string="Destination Location")
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env['res.company']._company_default_get('mgs_inv_branch.pr_moves_category'))
 
     @api.multi
     def confirm(self):
@@ -27,6 +28,8 @@ class ProductMovesHistory(models.TransientModel):
                     'location_name': self.location_id.name,
                     'location_dest_id': self.location_dest_id.id,
                     'location_dest_name': self.location_dest_id.name,
+                    'company_id': self.company_id.id,
+                    'company_name': self.company_id.name,
                 },
         }
 
@@ -39,9 +42,9 @@ class ProductMovesHistoryReport(models.AbstractModel):
     _name = 'report.mgs_inv.product_transfer_report'
     _description = 'Product Transfer Report'
 
-    def _lines(self, product_id, date_from, date_to, location_id, location_dest_id):
+    def _lines(self, product_id, date_from, date_to, location_id, location_dest_id, company_id):
         full_move = []
-        params = [product_id, date_from, date_to]
+        params = [product_id, date_from, date_to, company_id]
 
         part_one = """
 
@@ -59,7 +62,7 @@ class ProductMovesHistoryReport(models.AbstractModel):
             left join stock_location as sld on sm.location_dest_id=sld.id
             left join stock_location as sldu on sm.location_dest_id=sldu.id
             where sm.product_id = %s and sm.state<>'cancel'
-            AND sm.date between %s and %s
+            AND sm.date between %s and %s and sm.company_id=%s
         """
 
         part_two = ""
@@ -102,6 +105,9 @@ class ProductMovesHistoryReport(models.AbstractModel):
         location_dest_id = data['form']['location_dest_id']
         location_dest_name = data['form']['location_dest_name']
 
+        company_id = data['form']['company_id']
+        company_name = data['form']['company_name']
+
         docargs = {
             'doc_ids': self.ids,
             'doc_model': self.model,
@@ -114,6 +120,8 @@ class ProductMovesHistoryReport(models.AbstractModel):
             'location_name': location_name,
             'location_dest_id': location_dest_id,
             'location_dest_name': location_dest_name,
+            'company_id': company_id,
+            'company_name': company_name,
             'lines': self._lines,
             # 'location_list': location_list,
         }

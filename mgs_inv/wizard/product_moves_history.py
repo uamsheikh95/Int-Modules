@@ -8,6 +8,7 @@ class ProductMovesHistory(models.TransientModel):
     product_id = fields.Many2one('product.product')
     date_from = fields.Datetime('From', default=datetime.today().replace(day=1, hour=00, minute=00, second=00))
     date_to = fields.Datetime('To', default=fields.Datetime.now)
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env['res.company']._company_default_get('mgs_inv_branch.pr_moves_history'))
 
     view = fields.Selection([ ('all', 'All Products'),('active', 'Active Products'), ('inactive', 'Inactive Products')], string='View', default='all')
 
@@ -25,6 +26,8 @@ class ProductMovesHistory(models.TransientModel):
                     'date_from': self.date_from,
                     'date_to': self.date_to,
                     'view': self.view,
+                    'company_id': self.company_id.id,
+                    'company_name': self.company_id.name,
                 },
         }
 
@@ -37,9 +40,9 @@ class ProductMovesHistoryReport(models.AbstractModel):
     _name = 'report.mgs_inv.pr_moves_history_report'
     _description = 'Product Moves History Report'
 
-    def _lines(self, product_id, date_from, date_to):
+    def _lines(self, product_id, date_from, date_to, company_id):
         full_move = []
-        params = [product_id, date_from, date_to]
+        params = [product_id, date_from, date_to, company_id]
 
         query = """
 
@@ -57,7 +60,7 @@ class ProductMovesHistoryReport(models.AbstractModel):
             left join stock_location as sld on sm.location_dest_id=sld.id
             left join stock_location as sldu on sm.location_dest_id=sldu.id
             where sm.product_id = %s and sm.state<>'cancel' and   not (sl.usage='internal' and  sld.usage='internal' )
-            AND sm.date between %s and %s
+            AND sm.date between %s and %s and sm.company_id=%s
 
             order by 1
 
@@ -70,15 +73,15 @@ class ProductMovesHistoryReport(models.AbstractModel):
             full_move.append(r)
         return full_move
 
-    def _sum_open_balance(self, product_id, date_from):
-        params = [product_id, date_from]
+    def _sum_open_balance(self, product_id, date_from, company_id):
+        params = [product_id, date_from, company_id]
         query = """
             select sum(case
             when sld.usage='internal' then product_uom_qty else -product_uom_qty end) as Balance
             from stock_move  as sm  left join stock_location as sl on sm.location_id=sl.id
             left join stock_location as sld on sm.location_dest_id=sld.id
             where sm.product_id = %s and sm.state<>'cancel' and   not (sl.usage='internal' and  sld.usage='internal' )
-            and sm.date<%s
+            and sm.date<%s and sm.company_id=%s
         """
         self.env.cr.execute(query, tuple(params))
 
@@ -98,25 +101,27 @@ class ProductMovesHistoryReport(models.AbstractModel):
         product_id = data['form']['product_id']
         product_name = data['form']['product_name']
         view = data['form']['view']
+        company_id = data['form']['company_id']
+        company_name = data['form']['company_name']
 
         product_list = []
 
         if product_id:
-            for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to), ('product_id', '=', product_id)], order="product_id asc"):
+            for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to), ('product_id', '=', product_id), ('company_id', '=', company_id)], order="product_id asc"):
                 if r.product_id not in product_list:
                     product_list.append(r.product_id)
         else:
             if view == 'all':
-                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="product_id asc"):
+                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to), ('company_id', '=', company_id)], order="product_id asc"):
                     if r.product_id not in product_list:
                         product_list.append(r.product_id)
             elif view == 'active':
-                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="product_id asc"):
+                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to), ('company_id', '=', company_id)], order="product_id asc"):
                     if r.product_id not in product_list and r.product_id.active == True:
                         product_list.append(r.product_id)
 
             elif view == 'inactive':
-                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to)], order="product_id asc"):
+                for r in self.env['stock.move'].search([('date', '>=', date_from), ('date', '<=', date_to), ('company_id', '=', company_id)], order="product_id asc"):
                     if r.product_id not in product_list and r.product_id.active == False:
                         product_list.append(r.product_id)
 
@@ -128,6 +133,8 @@ class ProductMovesHistoryReport(models.AbstractModel):
             'date_to': date_to,
             'product_id': product_id,
             'product_name': product_name,
+            'company_id': company_id,
+            'company_name': company_name,
             'view': view,
             'lines': self._lines,
             'open_balance': self._sum_open_balance,

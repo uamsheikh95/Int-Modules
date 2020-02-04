@@ -16,6 +16,7 @@
 
 							<group>
 								<field name="date_to" string="To" required="1" />
+								<field name="company_id" groups="base.group_multi_company" required="1" />
 								<field name="view" widget="radio"/>
 							</group>
 						</group>

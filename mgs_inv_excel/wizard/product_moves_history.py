@@ -14,9 +14,9 @@ class ProductMovesHistory(models.TransientModel):
 
 class ProductMovesHistoryXLSX(ReportXlsx):
 
-    def _lines(self, product_id, date_from, date_to):
+    def _lines(self, product_id, date_from, date_to, company_id):
         full_move = []
-        params = [product_id.id, date_from, date_to]
+        params = [product_id.id, date_from, date_to, company_id]
 
         query = """
 
@@ -34,7 +34,7 @@ class ProductMovesHistoryXLSX(ReportXlsx):
             left join stock_location as sld on sm.location_dest_id=sld.id
             left join stock_location as sldu on sm.location_dest_id=sldu.id
             where sm.product_id = %s and sm.state<>'cancel' and   not (sl.usage='internal' and  sld.usage='internal' )
-            AND sm.date between %s and %s
+            AND sm.date between %s and %s and sm.company_id=%s
 
             order by 1
 
@@ -48,15 +48,15 @@ class ProductMovesHistoryXLSX(ReportXlsx):
         return full_move
 
 
-    def _sum_open_balance(self, product_id, date_from):
-        params = [product_id.id, date_from]
+    def _sum_open_balance(self, product_id, date_from, company_id):
+        params = [product_id.id, date_from, company_id]
         query = """
             select sum(case
             when sld.usage='internal' then product_uom_qty else -product_uom_qty end) as Balance
             from stock_move  as sm  left join stock_location as sl on sm.location_id=sl.id
             left join stock_location as sld on sm.location_dest_id=sld.id
             where sm.product_id = %s and sm.state<>'cancel' and   not (sl.usage='internal' and  sld.usage='internal' )
-            and sm.date<%s
+            and sm.date<%s and sm.company_id=%s
         """
         self.env.cr.execute(query, tuple(params))
 
@@ -141,21 +141,21 @@ class ProductMovesHistoryXLSX(ReportXlsx):
         product_list = []
 
         if obj.product_id:
-            for r in self.env['stock.move'].search([('date', '>=', obj.date_from), ('date', '<=', obj.date_to), ('product_id', '=', obj.product_id.id)], order="product_id asc"):
+            for r in self.env['stock.move'].search([('date', '>=', obj.date_from), ('date', '<=', obj.date_to), ('company_id', '=', obj.company_id.id), ('product_id', '=', obj.product_id.id)], order="product_id asc"):
                 if r.product_id not in product_list:
                     product_list.append(r.product_id)
         else:
             if obj.view == 'all':
-                for r in self.env['stock.move'].search([('date', '>=', obj.date_from), ('date', '<=', obj.date_to)], order="product_id asc"):
+                for r in self.env['stock.move'].search([('date', '>=', obj.date_from), ('date', '<=', obj.date_to), ('company_id', '=', obj.company_id.id)], order="product_id asc"):
                     if r.product_id not in product_list:
                         product_list.append(r.product_id)
             elif obj.view == 'active':
-                for r in self.env['stock.move'].search([('date', '>=', obj.date_from), ('date', '<=', obj.date_to)], order="product_id asc"):
+                for r in self.env['stock.move'].search([('date', '>=', obj.date_from), ('date', '<=', obj.date_to), ('company_id', '=', obj.company_id.id)], order="product_id asc"):
                     if r.product_id not in product_list and r.product_id.active == True:
                         product_list.append(r.product_id)
 
             elif obj.view == 'inactive':
-                for r in self.env['stock.move'].search([('date', '>=', obj.date_from), ('date', '<=', obj.date_to)], order="product_id asc"):
+                for r in self.env['stock.move'].search([('date', '>=', obj.date_from), ('date', '<=', obj.date_to), ('company_id', '=', obj.company_id.id)], order="product_id asc"):
                     if r.product_id not in product_list and r.product_id.active == False:
                         product_list.append(r.product_id)
 
@@ -165,15 +165,19 @@ class ProductMovesHistoryXLSX(ReportXlsx):
         qty_in = 0
         qty_out = 0
         balance = 0
+
         for product in product_list:
 
+            total_qty_in = 0
+            total_qty_out = 0
+
             row +=1
-            open_balance = self._sum_open_balance(product, obj.date_from)
+            open_balance = self._sum_open_balance(product, obj.date_from, obj.company_id.id)
             balance = open_balance
             worksheet.write(row, column, str(product.code if product.code else '') + ' - ' +  str(product.name), product_format)
             worksheet.write(row, column+9, open_balance, ob_format)
 
-            for r in self._lines(product, obj.date_from, obj.date_to):
+            for r in self._lines(product, obj.date_from, obj.date_to, obj.company_id.id):
                 row +=1
 
                 qty_in = r['product_uom_qty'] if r['location_usage'] == 'internal' else 0
@@ -186,12 +190,16 @@ class ProductMovesHistoryXLSX(ReportXlsx):
                 worksheet.write(row, column+5, r['origin'])
                 worksheet.write(row, column+6, r['partner_id'])
                 worksheet.write(row, column+7, qty_in)
+                total_qty_in = total_qty_in + qty_in
                 worksheet.write(row, column+8, qty_out)
+                total_qty_out = total_qty_out + qty_out
                 balance = (balance + qty_in) - qty_out
                 worksheet.write(row, column+9, balance)
 
             row +=1
             worksheet.write(row, column+1, 'Total', product_format)
+            worksheet.write(row, column+7, total_qty_in, ob_format)
+            worksheet.write(row, column+8, total_qty_out, ob_format)
             worksheet.write(row, column+9, balance, ob_format)
 
             open_balance = 0

@@ -51,6 +51,11 @@
                           <p class="m-0" t-if="view == 'active'">Active Products</p>
                           <p class="m-0" t-if="view == 'inactive'">Inactive Products</p>
         								</div>
+
+                        <div class="col-auto mw-100 mb-2" t-if="date_to" style="width: 20%; float: left;" groups="base.group_multi_company">
+        									<strong>Company:</strong>
+        									<p class="m-0" t-esc="company_name"/>
+        								</div>
         							</div>
 
                       <div class="row">
@@ -78,44 +83,44 @@
                               </tr>
 
                               <tr style="border:1px solid #dddddd;border-top:1px solid #dddddd" t-foreach="products" t-as="product">
-                                <t t-set="balance" t-value="open_balance(product.id, date_from)"/>
+                                <t t-set="balance" t-value="open_balance(product.id, date_from, company_id)"/>
                                 <t t-if="product.categ_id.name == category.name">
                                   <td colspan="2" style="padding-left:3px">
                                     <span t-if="product.active"><span t-esc="product.code"/> - <span t-esc="product.name"/></span>
                                     <span style="color:red" t-if="not product.active"><span t-esc="product.code"/> - <span t-esc="product.name"/></span>
                                   </td>
-                                  <td style="text-align:right"><span t-esc="open_balance(product.id, date_from)"/></td>
+                                  <td style="text-align:right"><span t-esc="open_balance(product.id, date_from, company_id)"/></td>
                                    <!-- Purchase  + -->
                                   <td style="text-align:right">
-                                    <span t-esc="'{0:,.2f}'.format(usage_qty('supplier', 'internal', product.id, date_from, date_to))"/>
-                                    <t t-set="balance" t-value="balance + usage_qty('supplier', 'internal', product.id, date_from, date_to)"/>
+                                    <span t-esc="'{0:,.2f}'.format(usage_qty('supplier', 'internal', product.id, date_from, date_to, company_id))"/>
+                                    <t t-set="balance" t-value="balance + usage_qty('supplier', 'internal', product.id, date_from, date_to, company_id)"/>
                                   </td>
                                   <!-- Sales return -->
                                   <td style="text-align:right">
-                                    <span t-esc="'{0:,.2f}'.format(usage_qty('customer', 'internal', product.id, date_from, date_to))"/>
-                                    <t t-set="balance" t-value="balance + usage_qty('customer', 'internal', product.id, date_from, date_to)"/>
+                                    <span t-esc="'{0:,.2f}'.format(usage_qty('customer', 'internal', product.id, date_from, date_to, company_id))"/>
+                                    <t t-set="balance" t-value="balance + usage_qty('customer', 'internal', product.id, date_from, date_to, company_id)"/>
                                   </td>
                                   <!-- Inv.Adj/Scrap+ -->
                                   <td style="text-align:right">
-                                    <span t-esc="'{0:,.2f}'.format(usage_qty('inventory', 'internal', product.id, date_from, date_to))"/>
-                                    <t t-set="balance" t-value="balance + usage_qty('inventory', 'internal', product.id, date_from, date_to)"/>
+                                    <span t-esc="'{0:,.2f}'.format(usage_qty('inventory', 'internal', product.id, date_from, date_to, company_id))"/>
+                                    <t t-set="balance" t-value="balance + usage_qty('inventory', 'internal', product.id, date_from, date_to, company_id)"/>
                                   </td>
                                   <!-- Purchase Return- -->
                                   <td style="text-align:right;color:red">
-                                    <span t-esc="'{0:,.2f}'.format(usage_qty('internal', 'supplier', product.id, date_from, date_to))"/>
-                                    <t t-set="balance" t-value="balance - usage_qty('internal', 'supplier', product.id, date_from, date_to)"/>
+                                    <span t-esc="'{0:,.2f}'.format(usage_qty('internal', 'supplier', product.id, date_from, date_to, company_id))"/>
+                                    <t t-set="balance" t-value="balance - usage_qty('internal', 'supplier', product.id, date_from, date_to, company_id)"/>
                                   </td>
 
                                   <!-- Soles (-) -->
                                   <td style="text-align:right;color:red">
-                                    <span t-esc="'{0:,.2f}'.format(usage_qty('internal', 'customer', product.id, date_from, date_to))"/>
-                                    <t t-set="balance" t-value="balance - usage_qty('internal', 'customer', product.id, date_from, date_to)"/>
+                                    <span t-esc="'{0:,.2f}'.format(usage_qty('internal', 'customer', product.id, date_from, date_to, company_id))"/>
+                                    <t t-set="balance" t-value="balance - usage_qty('internal', 'customer', product.id, date_from, date_to, company_id)"/>
                                   </td>
 
                                   <!-- Adj/Scraped -->
                                   <td style="text-align:right;color:red">
-                                    <span t-esc="'{0:,.2f}'.format(usage_qty('internal', 'inventory', product.id, date_from, date_to))"/>
-                                    <t t-set="balance" t-value="balance - usage_qty('internal', 'inventory', product.id, date_from, date_to)"/>
+                                    <span t-esc="'{0:,.2f}'.format(usage_qty('internal', 'inventory', product.id, date_from, date_to, company_id))"/>
+                                    <t t-set="balance" t-value="balance - usage_qty('internal', 'inventory', product.id, date_from, date_to, company_id)"/>
                                   </td>
 
 

@@ -29,9 +29,13 @@
         'views/report_product_moves_history_xlsx.xml',
         'views/report_moves_location_xlsx.xml',
         'views/report_product_moves_category_xlsx.xml',
+        'views/report_product_transfer.xml',
+        'views/report_product_moves_summary.xml',
         'wizard/product_moves_history.xml',
         'wizard/product_moves_location.xml',
         'wizard/product_moves_category.xml',
+        'wizard/product_transfer.xml',
+        'wizard/product_moves_summary.xml',
 
     ],
     # only loaded in demonstration mode

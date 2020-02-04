@@ -1,8 +1,8 @@
 <odoo>
-  <record id="product_moves_location_form_inherit" model="ir.ui.view">
-        <field name="name">mgs_inv.pr_moves_by_location.form.inherit</field>
-        <field name="model">mgs_inv.pr_moves_by_location</field>
-        <field name="inherit_id" ref="mgs_inv.pr_moves_by_location_form" />
+  <record id="product_transfer_form_inherit" model="ir.ui.view">
+        <field name="name">mgs_inv.product_transfer.form.inherit</field>
+        <field name="model">mgs_inv.product_transfer</field>
+        <field name="inherit_id" ref="mgs_inv.product_transfer_form" />
         <field name="type">form</field>
         <field name="arch" type="xml">
                <!-- CUSTOMIZATIONS -->
