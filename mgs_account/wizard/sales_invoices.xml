@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<record id="sales_invoices_form" model="ir.ui.view">
+			<field name="name">mgs_accounts.sales_invoices_wizard.form</field>
+			<field name="model">mgs_accounts.sales_invoices_wizard</field>
+			<field name="arch" type="xml">
+			   <form>
+					<group>
+
+					<group>
+						<field name="product_id" string="Product" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" />
+						<field name="date_from" string = "From" />
+						<field name="partner_id" string = "Partner" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" />
+						<field name="user_id" string = "User" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" />
+						<field name="state" widget="radio" />
+					</group>
+
+
+					<group>
+						<field name="categ_id" string = "Category" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" />
+						<field name="date_to" string="To" />
+						<field name="team_id" string="Sales Team" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" />
+						<field name="invoice_type" widget="radio" string="Show" />
+					</group>
+				</group>
+
+				<footer>
+					<button name="get_report" string="Get Report" type="object" class="oe_highlight"/>
+					<button string="Cancel" special="cancel"/>
+				</footer>
+
+			   </form>
+			</field>
+		</record>
+
+
+
+
+		<record id="action_sales_invoices_form" model="ir.actions.act_window">
+			<field name="name">Sales Invoices</field>
+			<field name="res_model">mgs_accounts.sales_invoices_wizard</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="sales_invoices_form"/>
+			<field name="target">new</field>
+		</record>
+
+
+		<!-- MenuItem For Invoices By Amount -->
+		<menuitem id="menu_mgs_account" name="Custom Reports" parent="account.menu_finance_reports" />
+
+		<menuitem id="menu_sales_invoices_report" name="Sales Invoices" parent="menu_mgs_account" action="action_sales_invoices_form" />
+
+</odoo>

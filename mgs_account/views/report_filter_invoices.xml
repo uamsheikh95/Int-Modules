@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+  <report
+     id="action_report_filter_invoices"
+     name="mgs_accounts.filter_invoices_report"
+     model="mgs_accounts.filter_invoices_report"
+     string="Invoices by detail"
+     report_type="qweb-html"
+     paperformat="paperformat_quickbooks"
+ />
+
+
+    <template id="filter_invoices_report">
+
+        <t t-call="web.html_container">
+             <t t-call="web.internal_layout">
+                <div class="page">
+                    <div class="container" style="font-size:12px;font-family:Arial;">
+                      <h3 class="text-center" style="margin-top:0">Invoices by detail</h3>
+                      <h6 class="text-center"><span t-esc="date_from"/> - <span t-esc="date_to"/></h6>
+
+                      <div class="row">
+                        <table style="width:100%;">
+                          <thead style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
+                            <tr>
+                              <th>Customer</th>
+                              <th>Inv#</th>
+                              <th>Item</th>
+                              <th>Qty</th>
+                              <th>U.Price</th>
+                              <th>Total</th>
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            <t t-set="tot_qty_all" t-value="0"/>
+                            <t t-set="tot_all" t-value="0"/>
+                            <t t-foreach="list_dates" t-as="date">
+                              <tr style="border-top:1px solid #dddddd;border-bottom:1px solid #dddddd">
+                                <td colspan="6" style="padding-top: 10px;">
+                                  <h5 style="font-family:Arial;font-weight:bold;font-size:12px"> - <t t-esc="date" /></h5>
+                                </td>
+                              </tr>
+
+                              <!-- qty & total per date -->
+                              <t t-set="tot_qty_per_date" t-value="0"/>
+                              <t t-set="tot_per_date" t-value="0"/>
+
+                              <tr t-foreach="invoices" t-as="invoice" style="border-top:1px solid #dddddd;border-bottom:1px solid #dddddd">
+                                <t t-if="invoice.date == date">
+                                      <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
+                                          <td><span t-field="invoice.partner_id"/></td>
+                                          <td><a t-attf-href="/web#id={{get_link(invoice.invoice_id.id)}}" target="_blank">
+                                            <span t-field="invoice.invoice_id.number"/></a>
+                                          </td>
+                                          <td><span t-field="invoice.product_id"/></td>
+                                          <td>
+                                            <span t-field="invoice.quantity"/>
+                                            <t t-set="tot_qty_per_date" t-value="tot_qty_per_date + invoice.quantity"/>
+                                          </td>
+                                          <!-- price_subtotal & u price -->
+                                          <td style="text-align:right">
+                                            <!-- ###################################3 -->
+                                            <t t-set="price_subtotal" t-value="0"/>
+                                            <t t-if="invoice.credit">
+                                              <t t-set="price_subtotal" t-value="invoice.credit"/>
+                                            </t>
+                                            <t t-if="invoice.debit">
+                                              <t t-set="price_subtotal" t-value="invoice.debit"/>
+                                            </t>
+                                            <!-- ###################################3 -->
+
+                                            <t t-set="price_unit" t-value="0"/>
+                                            <t t-set="price_unit" t-value="price_subtotal / invoice.quantity"/>
+                                            <span t-esc="'{0:,.2f}'.format(price_unit)"/>
+                                          </td>
+                                          <!-- tot price -->
+                                          <td style="text-align:right">
+                                            <span t-esc="'{0:,.2f}'.format(price_subtotal)"/>
+                                            <t t-set="tot_per_date" t-value="tot_per_date + price_subtotal"/>
+                                          </td>
+                                      </tr>
+                                    </t>
+                              </tr>
+                              <tr>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td style="text-align:right;border-top:1px solid">
+                                    <span t-esc="tot_qty_per_date"/>
+                                    <t t-set="tot_qty_all" t-value="tot_qty_all + tot_qty_per_date"/>
+                                  </td>
+                                  <td></td>
+                                  <td style="text-align:right;border-top:1px solid">
+                                    <span t-esc="tot_per_date"/>
+                                    <t t-set="tot_all" t-value="tot_all + tot_per_date"/>
+                                  </td>
+                              </tr>
+                            </t> <!--<t t-foreach="partners"-->
+
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style="text-align:right;border-top:1px solid">
+                                  <span t-esc="tot_qty_all"/>
+                                </td>
+                                <td></td>
+                                <td style="text-align:right;border-top:1px solid">
+                                  <span t-esc="tot_all"/>
+                                </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div> <!--tow-->
+
+
+                    </div> <!--container-->
+                </div> <!--page-->
+              </t> <!--web.external_layout-->
+        </t> <!--web.html_container-->
+    </template>
+</odoo>

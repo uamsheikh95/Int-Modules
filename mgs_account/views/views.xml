@@ -1,0 +1,60 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="mgs_account.list">
+      <field name="name">mgs_account list</field>
+      <field name="model">mgs_account.mgs_account</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+    -->
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="mgs_account.action_window">
+      <field name="name">mgs_account window</field>
+      <field name="res_model">mgs_account.mgs_account</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="mgs_account.action_server">
+      <field name="name">mgs_account server</field>
+      <field name="model_id" ref="model_mgs_account_mgs_account"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="mgs_account" id="mgs_account.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="mgs_account.menu_1" parent="mgs_account.menu_root"/>
+    <menuitem name="Menu 2" id="mgs_account.menu_2" parent="mgs_account.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="mgs_account.menu_1_list" parent="mgs_account.menu_1"
+              action="mgs_account.action_window"/>
+    <menuitem name="Server to list" id="mgs_account" parent="mgs_account.menu_2"
+              action="mgs_account.action_server"/>
+    -->
+  </data>
+</odoo>
