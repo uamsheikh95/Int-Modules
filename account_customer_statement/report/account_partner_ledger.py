@@ -90,6 +90,8 @@ class ReportPartnerLedger_statement(models.AbstractModel):
         params = [tuple(data['computed']['move_state']), tuple(data['computed']['account_ids'])] + query_get_data[2]
         reconcile_clause = "" if data['form']['reconciled'] else ' AND "account_move_line".reconciled = false '
         print (":::::::::::::::::::::::::params",params)
+        print('--------------------------------------------------------------------------------------------')
+        print (":::::::::::::::::::::::::data",data)
         query = """
             SELECT DISTINCT "account_move_line".partner_id
             FROM """ + query_get_data[0] + """, account_account AS account, account_move AS am

@@ -65,7 +65,7 @@ customer statement
  """,
     'author': 'Probuse Consulting Service Pvt. Ltd.',
     'website': 'www.probuse.com',
-    'depends': ['account'],
+    'depends': ['account', 'base_accounting_kit'],
     'images': ['static/description/img1.jpg'],
     'data': [
 #            ACCOUNT,
