@@ -52,14 +52,22 @@
                               <th style="text-align:center" nowrap="nowrap">Qty</th>
                               <th style="text-align:right" nowrap="nowrap">Sales Price</th>
                               <th style="text-align:right" nowrap="nowrap">Amount</th>
-                              <!-- <th>Total</th> -->
+                              <th>Invoice Status</th>
                             </tr>
                           </thead>
 
                           <tbody>
-                            <t t-set="balance" t-value="0"/>
+                            <!-- <t t-set="balance" t-value="0"/> -->
+                            <t t-set="total_balance" t-value="0"/>
+                            <t t-set="total_all_qty" t-value="0"/>
+                            <t t-set="total_all_price_unit" t-value="0"/>
+
                             <t t-set="total_balance" t-value="0"/>
                             <t t-foreach="product_list" t-as="product">
+                              <t t-set="balance" t-value="0"/>
+                              <t t-set="total_qty" t-value="0"/>
+                              <t t-set="total_price_unit" t-value="0"/>
+
                               <tr style="border-bottom:1px solid #696767;border-top:1px solid #696767">
                                 <td colspan="8"><p style="font-weight: bold; margin-bottom: 0; font-size: 12px;">- <span t-esc="product.name"/></p></td>
                               </tr>
@@ -68,37 +76,56 @@
                                   <td nowrap="nowrap"><span t-esc="line['date']"/></td>
                                   <td><span t-esc="line['order_id']"/></td>
                                   <td colspan="2"><span t-esc="line['partner_name']"/></td>
-                                  <td style="text-align:center"><span t-esc="line['qty_invoiced']"/></td>
+                                  <td style="text-align:center">
+                                    <span t-esc="line['qty_invoiced']"/>
+                                    <t t-set="total_qty" t-value="total_qty + line['qty_invoiced']"/>
+                                  </td>
                                   <td style="text-align:right">
                                       <t t-set="price_unit" t-value="line['price_total'] / line['qty_invoiced']" t-if="line['qty_invoiced']" />
-                                      <span t-esc="'{0:,.2f}'.format(price_unit)"/>
-                                         </td>
+                                        <span t-esc="'{0:,.4f}'.format(price_unit)"/>
+                                      <t t-set="total_price_unit" t-value="total_price_unit + price_unit"/>
+                                  </td>
                                   <td style="text-align:right"><span t-esc="'{0:,.2f}'.format(line['price_total'])"/></td>
                                   <t t-set="balance" t-value="balance + line['price_total']"/>
                                   <td style="padding-left:20px"><span t-esc="line['invoice_status']"/></td>
                               </tr>
 
                               <tr style="border-top:1px solid #dddddd;">
-                                <td colspan="7"><p style="font-weight:bold;margin-bottom:0;">Total <span t-esc="product.name" />  : </p></td>
-
-                                <td style="text-align:right;font-weight:bold">
-                                  <span t-esc="'{0:,.2f}'.format(balance)" />
-                                  <t t-set="total_balance" t-value="total_balance + balance"/>
-                                  <t t-set="balance" t-value="0"/>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style="text-align:center;font-weight:bold;">
+                                  <span style="border-top: 1px solid black;" t-esc="'{0:,.2f}'.format(total_qty)" />
+                                  <t t-set="total_all_qty" t-value="total_all_qty + total_qty"/>
                                 </td>
+                                <td style="text-align:right;font-weight:bold;">
+                                  <span style="border-top: 1px solid black;"  t-esc="'{0:,.4f}'.format(total_price_unit)" />
+                                  <t t-set="total_all_price_unit" t-value="total_all_price_unit + total_price_unit"/>
+                                </td>
+                                <td style="text-align:right;font-weight:bold;">
+                                  <span style="border-top: 1px solid black;"  t-esc="'{0:,.2f}'.format(balance)" />
+                                  <t t-set="total_balance" t-value="total_balance + balance"/>
+                                </td>
+                                <td></td>
                               </tr>
                           </t>
                           <tr style="border-bottom:1px solid #000000;border-top:1px solid #dddddd;background-color: #F2F4F4;">
-                                <td colspan="4"><p style="font-weight:bold;margin-bottom:0;">Total All Balances  : </p></td>
-
                                 <td></td>
                                 <!-- <td></td> -->
-                                <!-- <td></td> -->
                                 <td></td>
                                 <td></td>
-                                <td style="text-align:right;font-weight:bold">
-                                  <span t-esc="'{0:,.2f}'.format(total_balance)" />
+                                <td></td>
+                                <td style="text-align:center;font-weight:bold">
+                                  <span style="border-top: 2px solid black;"  t-esc="'{0:,.2f}'.format(total_all_qty)" />
                                 </td>
+                                <td style="text-align:right;font-weight:bold;">
+                                  <span style="border-top: 2px solid black;"  t-esc="'{0:,.4f}'.format(total_all_price_unit)" />
+                                </td>
+                                <td style="text-align:right;font-weight:bold;">
+                                  <span style="border-top: 2px solid black;"  t-esc="'{0:,.2f}'.format(total_balance)" />
+                                </td>
+                                <td></td>
                               </tr>
                           </tbody>
                         </table>
