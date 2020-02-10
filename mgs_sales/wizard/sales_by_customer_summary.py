@@ -54,23 +54,56 @@ class SalesByCustomerSummaryReport(models.AbstractModel):
             and sr.state NOT IN ('draft', 'cancel', 'sent') and sr.invoice_status <> 'no'
             order by 1
         """
-        
 
         self.env.cr.execute(query, tuple(params))
-        res = self.env.cr.dictfetchall()
 
-        displayed_total = 0
-        for r in res:
-            # if r['balance']:
-            #     displayed_total = '{:,}'.format(float(r['balance']))
-            #     r['balance'] = displayed_total
-            # print('--------------------------------------------------')
-            # print(r['balance'])
-            # print(type(r['balance']))
+        contemp = self.env.cr.fetchone()
+        if contemp is not None:
+            result = contemp[0] or 0.0
+        return result
 
-            full_move.append(r)
+    @api.model
+    def discount(self, partner, date_from, date_to, company_id):  # , company_branch_id
+        full_move = []
+        params = [partner, date_from, date_to, company_id]  # , company_branch_id
 
-        return full_move
+        query = """
+                select cast(sum(sr.discount_amount) as INTEGER) as balance
+                from  sale_report as sr
+                where sr.partner_id = %s
+                and sr.date between %s and %s and company_id=%s
+                and sr.state NOT IN ('draft', 'cancel', 'sent') and sr.invoice_status <> 'no'
+                order by 1
+            """
+
+        self.env.cr.execute(query, tuple(params))
+
+        contemp = self.env.cr.fetchone()
+        if contemp is not None:
+            result = contemp[0] or 0.0
+        return result
+
+    @api.model
+    def qty(self, partner, date_from, date_to, company_id):  # , company_branch_id
+        full_move = []
+        params = [partner, date_from, date_to, company_id]  # , company_branch_id
+
+        query = """
+                select cast(sum(sr.qty_invoiced) as INTEGER) as balance
+                from  sale_report as sr
+                where sr.partner_id = %s
+                and sr.date between %s and %s and company_id=%s
+                and sr.state NOT IN ('draft', 'cancel', 'sent') and sr.invoice_status <> 'no' 
+                order by 1
+            """
+
+        self.env.cr.execute(query, tuple(params))
+
+        contemp = self.env.cr.fetchone()
+        if contemp is not None:
+            result = contemp[0] or 0.0
+        return result
+
 
 
     @api.model
@@ -114,5 +147,6 @@ class SalesByCustomerSummaryReport(models.AbstractModel):
             # 'company_branch_id': company_branch_id,
             # 'company_branch_name': company_branch_name,
             'balance': self.balance,
-            # 'location_list': location_list,
+            'qty': self.qty,
+            'discount': self.discount,
         }
