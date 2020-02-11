@@ -65,23 +65,23 @@ class SalesByCustomerSummaryReport(models.AbstractModel):
     @api.model
     def discount(self, partner, date_from, date_to, company_id):  # , company_branch_id
         full_move = []
-        params = [partner, date_from, date_to, company_id]  # , company_branch_id
+        date_f = datetime.strptime(date_from, "%Y-%m-%d %H:%M:%S").date()
+        date_t = datetime.strptime(date_to, "%Y-%m-%d %H:%M:%S").date()
 
-        query = """
-                select cast(sum(sr.discount_amount) as INTEGER) as balance
-                from  sale_report as sr
-                where sr.partner_id = %s
-                and sr.date between %s and %s and company_id=%s
-                and sr.state NOT IN ('draft', 'cancel', 'sent') and sr.invoice_status <> 'no'
-                order by 1
-            """
-
-        self.env.cr.execute(query, tuple(params))
-
-        contemp = self.env.cr.fetchone()
-        if contemp is not None:
-            result = contemp[0] or 0.0
-        return result
+        total_discount = 0
+        for r in self.env['account.invoice'].search([('partner_id', '=', partner), ('date_invoice', '>=', str(date_f)), ('date_invoice', '<=', str(date_t)), ('company_id', '=', company_id)]):
+            if r.type == 'out_invoice':
+                for line in r.invoice_line_ids:
+                    if 'Discount'.lower() in line.product_id.name.lower() or 'Discount'.lower() in line.account_id.name.lower():
+                    # if line.product_id.name == 'Discount':
+                        total_discount = total_discount + (line.price_subtotal * -1)
+            elif r.type == 'out_refund':
+                for line in r.invoice_line_ids:
+                    if 'Discount'.lower() in line.product_id.name.lower() or 'Discount'.lower() in line.account_id.name.lower():
+                    # if line.product_id.name == 'Discount':
+                        total_discount = total_discount - (line.price_subtotal * -1)
+        total_discount = total_discount
+        return total_discount
 
     @api.model
     def qty(self, partner, date_from, date_to, company_id):  # , company_branch_id
@@ -93,7 +93,7 @@ class SalesByCustomerSummaryReport(models.AbstractModel):
                 from  sale_report as sr
                 where sr.partner_id = %s
                 and sr.date between %s and %s and company_id=%s
-                and sr.state NOT IN ('draft', 'cancel', 'sent') and sr.invoice_status <> 'no' 
+                and sr.state NOT IN ('draft', 'cancel', 'sent') and sr.invoice_status <> 'no'
                 order by 1
             """
 

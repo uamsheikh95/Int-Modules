@@ -85,6 +85,7 @@
                                   </t> -->
 
                                   <t t-set="total" t-value="balance(partner.id, date_from, date_to, company_id)"/>
+                                  <t t-set="total_with_discount" t-value="balance(partner.id, date_from, date_to, company_id) - discount(partner.id, date_from, date_to, company_id)"/>
                                   <!-- -++++++++++++ TOTAL PRICE UNIT +++++++++++++++ -->
                                   <t t-set="total_sales_price" t-value="total / total_qty" t-if="total_qty"/>
 
@@ -108,7 +109,7 @@
                                   </td>
 
                                   <td style="border:1px solid #dddddd;text-align:right;padding-left: 5px;">
-                                    <span t-esc="'{0:,.2f}'.format(total)" />
+                                    <span t-esc="'{0:,.2f}'.format(total_with_discount)" />
                                     <t t-set="total_balance" t-value="total_balance + total" t-if="total"/>
                                   </td>
 
