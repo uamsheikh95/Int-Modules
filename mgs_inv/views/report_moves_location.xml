@@ -94,7 +94,7 @@
                             </tr>
 
 
-                            <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd" t-foreach="lines(product_id, date_from, date_to, stock_location_id, stock_location_id, company_id)" t-as="line">
+                            <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd" t-foreach="lines(product_id, date_from, date_to, company_id, stock_location_id)" t-as="line">
                                 <td nowrap="nowrap">
                                   <span t-esc="line['date']"/>
                                 </td>

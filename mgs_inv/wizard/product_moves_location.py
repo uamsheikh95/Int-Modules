@@ -40,9 +40,9 @@ class ProductMovesByLocationReport(models.AbstractModel):
     _name = 'report.mgs_inv.pr_moves_by_location_report'
     _description = 'Product Moves By Location Report'
 
-    def _lines(self, product_id, date_from, date_to, company_id, location_id, location_dest_id):
+    def _lines(self, product_id, date_from, date_to, company_id, location_id):
         full_move = []
-        params = [product_id, date_from, date_to, location_id, location_dest_id]
+        params = [product_id, date_from, date_to, company_id]
 
         query = """
 
@@ -59,7 +59,7 @@ class ProductMovesByLocationReport(models.AbstractModel):
             left join product_uom as uom on sm.product_uom=uom.id
             left join stock_location as sld on sm.location_dest_id=sld.id
             where sm.product_id = %s and sm.state<>'cancel'
-            AND sm.date between %s and %s and (sm.location_id = %s or sm.location_dest_id = %s)
+            AND sm.date between %s and %s and sm.company_id=%s and (sm.location_id = """ + str(location_id) + """ or sm.location_dest_id=""" + str(location_id) + """)
             order by 1
         """
 
@@ -72,14 +72,14 @@ class ProductMovesByLocationReport(models.AbstractModel):
 
 
     def _sum_open_balance(self, product_id, date_from, company_id):
-        params = [product_id, date_from]
+        params = [product_id, date_from, company_id]
         query = """
             select sum(case
             when sld.usage='internal' then product_uom_qty else -product_uom_qty end) as Balance
             from stock_move  as sm  left join stock_location as sl on sm.location_id=sl.id
             left join stock_location as sld on sm.location_dest_id=sld.id
             where sm.product_id = %s and sm.state<>'cancel' and   not (sl.usage='internal' and  sld.usage='internal' )
-            and sm.date<%s
+            and sm.date<%s and sm.company_id=%s
         """
         self.env.cr.execute(query, tuple(params))
 
