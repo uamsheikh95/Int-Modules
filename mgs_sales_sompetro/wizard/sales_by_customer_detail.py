@@ -37,6 +37,28 @@ class SalesByCustomerDetail(models.TransientModel):
 
         return self.env.ref('mgs_sales.action_sales_by_customer_detail').report_action(self, data=data)
 
+    # Generate this report when user clicked the summary records
+    @api.model
+    def link_to_sales_by_customer_detail(self, partner_id, partner_name, date_from, date_to, company_id, company_name):
+        """Call when button 'Get Rep=t' clicked.
+        """
+        data = {
+            'active_ids': self.env['mgs_sales.sales_by_customer_detail'].ids,
+            'model': self.env['mgs_sales.sales_by_customer_detail']._name,
+            'form': {
+                'partner_id': partner_id,
+                'partner_name': partner_name,
+                'date_from': date_from,
+                'date_to': date_to,
+                'company_id': company_id,
+                'company_name': company_name,
+                # 'company_branch_id': self.company_branch_id.id,
+            },
+        }
+
+
+        return self.env.ref('mgs_sales.action_sales_by_customer_detail').report_action(self, data=data)
+
 class SalesByCustomerDetailReport(models.AbstractModel):
     _name = 'report.mgs_sales.sales_by_customer_detail_report'
     _description = 'Sales by Customer Detail Report'

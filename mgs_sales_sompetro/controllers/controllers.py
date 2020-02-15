@@ -1,20 +1,11 @@
 # -*- coding: utf-8 -*-
 from odoo import http
+from odoo.http import request
 
-# class MgsSales(http.Controller):
-#     @http.route('/mgs_sales/mgs_sales/', auth='public')
-#     def index(self, **kw):
-#         return "Hello, world"
+class SalesByCustomerDetail(http.Controller):
+    @http.route('/sales_customer_detail', auth='public')
+    def sales_by_customer_detail(self, partner_id, partner_name, date_from, date_to, company_id, company_name, **kw):
+        # request.env['mgs_sales.sales_by_customer_detail'].link_to_sales_by_customer_detail(partner_id, partner_name, date_from, date_to, company_id, company_name)
 
-#     @http.route('/mgs_sales/mgs_sales/objects/', auth='public')
-#     def list(self, **kw):
-#         return http.request.render('mgs_sales.listing', {
-#             'root': '/mgs_sales/mgs_sales',
-#             'objects': http.request.env['mgs_sales.mgs_sales'].search([]),
-#         })
-
-#     @http.route('/mgs_sales/mgs_sales/objects/<model("mgs_sales.mgs_sales"):obj>/', auth='public')
-#     def object(self, obj, **kw):
-#         return http.request.render('mgs_sales.object', {
-#             'object': obj
-#         })
+        sale_details = request.env['sale.report'].sudo().search([('partner_id', '=', partner_id), ('date', '>=', date_from), ('date', '<=', date_to)])
+         return  request.render('my_sale_addons.sale_details_page', {'my_details': sale_details})
