@@ -28,7 +28,7 @@
         'views/views.xml',
         'views/templates.xml',
         'wizard/account_report_partner_ledger.xml',
-        'views/email_template.xml'
+        'views/report_partnerledger.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

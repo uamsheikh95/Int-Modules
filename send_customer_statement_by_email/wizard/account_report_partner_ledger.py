@@ -115,7 +115,7 @@ class AccountPartnerLedger(models.TransientModel):
             result = contemp[0] or 0.0
         return result
 
-    @api.multi
+    @api.model
     def action_statement_send(self):
         data = {
         'context': {

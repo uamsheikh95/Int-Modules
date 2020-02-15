@@ -1,0 +1,24 @@
+<odoo>
+  <template id="report_partnerledger_custom_inherit" inherit_id="account_customer_statement.report_partnerledger_custom">
+
+    <xpath expr="//t[@t-call='web.internal_layout']" position="after">
+        <script type="text/javascript" src="/send_customer_statement_by_email/static/src/js/customer_statement.js"></script>
+    </xpath>
+
+    <xpath expr="//t[@t-call='web.internal_layout']" position="before">
+      <!-- <xpath expr="//template[@id='report_partnerledger_custom']" position="after"> -->
+      <t t-set="partner_ids" t-value="s"/>
+          <t t-foreach="docs" t-as="doc">
+            <t t-set="partner_ids" t-value="str(partner_ids) + str(' ') + str(doc.id)"/>
+
+          </t>
+          <span t-esc="partner_ids"/>
+
+          <a style="height: 30px; position: absolute; left: 11px; top: 10px; background: #00a09d;
+           border: none; padding: 4.5px 9px; font-family: Roboto, Noto; color: white; font-size: 13px; font-weight: 500;cursor: pointer;text-decoration: none"
+            t-att-href="('/send_email?context=%s&amp;ids=%s&amp;model=%s&amp;form=%s&amp;report_type=%s&amp;computed=%s&amp;partner_ids=%s&amp;error=%s' % (data['context'],data['ids'],data['model'],data['form'],data['report_type'],data['computed'],partner_ids,' '))">SEND BY EMAIL</a>
+
+            <t t-esc="request.params.get('error')" style="color:red;font-weight:bold" />
+    </xpath>
+  </template>
+</odoo>
