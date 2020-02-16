@@ -36,6 +36,8 @@
         'wizard/sales_by_customer_summary.xml',
         'wizard/sales_by_item_detail.xml',
         'wizard/sales_by_item_summary.xml',
+        #templates
+        'views/template_sale_customer_detail.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
