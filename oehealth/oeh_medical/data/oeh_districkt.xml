@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+      <record id="abdiaziz_district" model="oeh.medical.districkt">
+          <field name="name">Abdiaziz District</field>
+      </record>
+
+      <record id="bondhere_district" model="oeh.medical.districkt">
+          <field name="name">Bondhere District</field>
+      </record>
+
+      <record id="daynile_district" model="oeh.medical.districkt">
+          <field name="name">Daynile District</field>
+      </record>
+
+      <record id="dharkenley_district" model="oeh.medical.districkt">
+          <field name="name">Dharkenley District</field>
+      </record>
+
+      <record id="ha_jajab_district" model="oeh.medical.districkt">
+          <field name="name">Hamar-Jajab District</field>
+      </record>
+
+      <record id="hweyne_district" model="oeh.medical.districkt">
+          <field name="name">Hamar-Weyne District</field>
+      </record>
+
+      <record id="hodan_district" model="oeh.medical.districkt">
+          <field name="name">Hodan District</field>
+      </record>
+
+      <record id="hwadag_district" model="oeh.medical.districkt">
+          <field name="name">Howl-Wadag District</field>
+      </record>
+
+      <record id="huriwa_district" model="oeh.medical.districkt">
+          <field name="name">Huriwa District</field>
+      </record>
+
+      <record id="kaxda_district" model="oeh.medical.districkt">
+          <field name="name">Kaxda District</field>
+      </record>
+
+      <record id="karan_district" model="oeh.medical.districkt">
+          <field name="name">Karan District</field>
+      </record>
+
+      <record id="shangani_district" model="oeh.medical.districkt">
+          <field name="name">Shangani District</field>
+      </record>
+
+      <record id="shibis_district" model="oeh.medical.districkt">
+          <field name="name">Shibis District</field>
+      </record>
+
+      <record id="waberi_district" model="oeh.medical.districkt">
+          <field name="name">Waberi District</field>
+      </record>
+
+      <record id="wadajir_district" model="oeh.medical.districkt">
+          <field name="name">Wadajir District</field>
+      </record>
+
+      <record id="warta_nabada_district" model="oeh.medical.districkt">
+          <field name="name">Warta Nabada District</field>
+      </record>
+
+      <record id="yaqshid_district" model="oeh.medical.districkt">
+          <field name="name">Yaqshid District</field>
+      </record>
+
+    </data>
+</odoo>
