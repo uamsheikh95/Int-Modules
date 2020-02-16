@@ -108,6 +108,7 @@ Allow your doctors and patients to login inside your oeHealth system to manage t
 
         'oeh_medical/data/oeh_disease_categories.xml',
         'oeh_medical/data/oeh_diseases.xml',
+        'oeh_medical/data/oeh_districkt.xml',
 
     ],
     "images": ['images/main_screenshot.png'],

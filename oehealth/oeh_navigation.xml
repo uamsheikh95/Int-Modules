@@ -2,7 +2,7 @@
 <openerp>
 	<data>
 		<!-- Main Menu -->
-		<menuitem name="oeHealth" id="oeh_medical_menu" icon="STOCK_ZOOM_IN"/>
+		<menuitem name="oeHealth" id="oeh_medical_menu" web_icon="oehealth,static/description/icon.png"/>
 
         <!-- Health Centers -->
 

@@ -47,5 +47,6 @@ class oeHealthPartner(models.Model):
     is_person = fields.Boolean(string='Person', help='Check if the party is a person.')
     is_pharmacy = fields.Boolean(string='Pharmacy', help='Check if the party is a Pharmacy')
     ref = fields.Char(size=256, string='SSN', help='Patient Social Security Number or equivalent')
+    districkt_id = fields.Many2one('oeh.medical.districkt', string="Districkt")
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
