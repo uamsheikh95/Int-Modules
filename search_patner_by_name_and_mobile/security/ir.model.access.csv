@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_search_patner_by_name_and_mobile_search_patner_by_name_and_mobile,search_patner_by_name_and_mobile.search_patner_by_name_and_mobile,model_search_patner_by_name_and_mobile_search_patner_by_name_and_mobile,,1,0,0,0
