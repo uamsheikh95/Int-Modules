@@ -1,22 +1,21 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "search_patner_by_name_and_mobile",
+    'name': "Search Patner by Name and Mobile",
 
     'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
+        alllow the user to search partners by their name and phone""",
 
     'description': """
-        Long description of module's purpose
+        This module allows you to search customer by it's name and mobile
     """,
 
-    'author': "My Company",
-    'website': "http://www.yourcompany.com",
+    'author': "Meisour LLC",
+    'website': "http://www.meisour.com",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/11.0/odoo/addons/base/module/module_data.xml
     # for the full list
-    'category': 'Uncategorized',
+    'category': 'Customer',
     'version': '0.1',
 
     # any module necessary for this one to work correctly
@@ -25,8 +24,8 @@
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
-        'views/views.xml',
-        'views/templates.xml',
+        # 'views/views.xml',
+        # 'views/templates.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
