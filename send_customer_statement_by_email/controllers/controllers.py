@@ -174,6 +174,7 @@ class SendCustomerStatementByEmail(http.Controller):
             mail = mail_obj.create({
                 'subject': '[' + company_id + '] Customer Statement',
                 'body_html': body_html,
+                'email_from': request.env.user.email,
                 'email_to': (o.email)
             })
 
