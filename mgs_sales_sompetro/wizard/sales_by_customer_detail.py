@@ -43,8 +43,6 @@ class SalesByCustomerDetail(models.TransientModel):
         """Call when button 'Get Rep=t' clicked.
         """
         data = {
-            'active_ids': self.env['mgs_sales.sales_by_customer_detail'].ids,
-            'model': self.env['mgs_sales.sales_by_customer_detail']._name,
             'form': {
                 'partner_id': partner_id,
                 'partner_name': partner_name,
@@ -55,8 +53,7 @@ class SalesByCustomerDetail(models.TransientModel):
                 # 'company_branch_id': self.company_branch_id.id,
             },
         }
-
-
+        print('*******000000000****************************************/>')
         return self.env.ref('mgs_sales.action_sales_by_customer_detail').report_action(self, data=data)
 
 class SalesByCustomerDetailReport(models.AbstractModel):

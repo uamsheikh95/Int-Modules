@@ -94,7 +94,7 @@
                                   <td style="border: 1px solid #dddddd; padding-left: 5px; width: 80%;">
                                     <!-- <a
                                       t-att-href="('/send_email?context=%s&amp;ids=%s&amp;model=%s&amp;form=%s&amp;report_type=%s&amp;computed=%s&amp;partner_ids=%s&amp;error=%s' % (data['context'],data['ids'],data['model'],data['form'],data['report_type'],data['computed'],partner_ids,' '))">SEND BY EMAIL</a> -->
-                                      <a style="text-decoration: none; color: inherit" t-att-href="('/sales_customer_detail?partner_id=%s&amp;partner_name=%s&amp;date_from=%s&amp;date_to=%s&amp;company_id=%s&amp;company_name=%s' %(partner.id, partner.name, date_from, date_to, company_id, company_name))"><span t-esc="partner.name"/></a>
+                                      <para><a style="text-decoration: none; color: inherit" t-att-href="('/sales_customer_detail?partner_id=%s&amp;partner_name=%s&amp;date_from=%s&amp;date_to=%s&amp;company_id=%s&amp;company_name=%s' %(partner.id, partner.name, date_from, date_to, company_id, company_name))"><span t-esc="partner.name"/></a></para>
                                     </td>
 
                                   <td style="border:1px solid #dddddd;text-align:center;padding-left: 5px;">

@@ -131,39 +131,39 @@
       </template> -->
 
       <template id="sale_details_page" name="Sale Details">
-    <t t-call="website.layout">
-     <div class="oe_structure">
-       <div class="container">
-         <br />
-         <center><h3>Sale Order Details</h3></center>
-         <br />
-           <table class="table-striped table">
-             <thead style="font-size: 23px;">
-             <tr>
-               <h6>
-                 <b>
-                   <th>Sale Order</th>
-                   <th>Customer</th>
-                   <th>Date</th>
-                   <th><b>State</b></th>
-                 </b>
-               </h6>
-             </tr>
-             </thead>
-             <tbody>
-               <t t-foreach="my_details" t-as="order">
-               <tr>
-               <td><span t-esc="order.name"/></td>
-               <td><span t-esc="order.partner_id.name"/></td>
-               <td><span t-esc="order.date_order"/></td>
-               <td><span t-esc="order.state"/></td>
-               </tr>
-               </t>
-             </tbody>
-           </table>
-       </div>
-     </div>
- </t>
-</template>
+          <t t-call="website.layout">
+           <div class="oe_structure">
+             <div class="container">
+               <br />
+               <center><h3>Sale Order Details</h3></center>
+               <br />
+                 <table class="table-striped table">
+                   <thead style="font-size: 23px;">
+                   <tr>
+                     <h6>
+                       <b>
+                         <th>Sale Order</th>
+                         <th>Customer</th>
+                         <th>Date</th>
+                         <th><b>State</b></th>
+                       </b>
+                     </h6>
+                   </tr>
+                   </thead>
+                   <tbody>
+                     <t t-foreach="my_details" t-as="order">
+                     <tr>
+                     <td><span t-esc="order.name"/></td>
+                     <td><span t-esc="order.partner_id.name"/></td>
+                     <td><span t-esc="order.date_order"/></td>
+                     <td><span t-esc="order.state"/></td>
+                     </tr>
+                     </t>
+                   </tbody>
+                 </table>
+             </div>
+           </div>
+       </t>
+      </template>
     </data>
 </odoo>

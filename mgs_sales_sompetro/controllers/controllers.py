@@ -3,11 +3,27 @@ from odoo import http
 from odoo.http import request
 from datetime import datetime, timedelta, date
 
-class Sale(http.Controller):
-   @http.route('/my_sale_details', type='http', auth='public', website=True)
-   def sale_details(self , **kwargs):
-       sale_details = request.env['sale.order'].sudo().search([])
-       return  request.render('mgs_sales.sale_details_page', {'my_details': sale_details})
+class SalesByCustomerDetail(http.Controller):
+    @http.route('/sales_customer_detail', type='http', auth='public', website=True)
+    def lines(self, partner_id, partner_name, date_from, date_to, company_id, company_name, **kw):
+        request.env['mgs_sales.sales_by_customer_detail'].link_to_sales_by_customer_detail(partner_id, partner_name, date_from, date_to, company_id, company_name)
+        # return {
+        #     'name': 'oo',
+        #
+        #     'view_type': 'form',
+        #
+        #     'view_mode': 'tree',
+        #
+        #     'type': 'ir.actions.act_window',
+        #
+        #     'view_id': request.env.ref('account.invoice_tree_with_onboarding').id,
+        # 
+        #     'res_model': 'account.invoice',
+        #
+        #     'target': 'new',
+        #
+        # }
+
 
 # class SalesByCustomerDetail(http.Controller):
 #     @http.route('/sales_customer_detail', type='http', auth='public', website=True)
