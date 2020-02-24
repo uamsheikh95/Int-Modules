@@ -44,5 +44,6 @@ from . import oeh_medical_ethnic_groups
 from . import oeh_medical_genetics
 from . import oeh_medical
 from . import account_invoice
+from . import account_payment
 from . import oeh_medical_inpatient
 from . import oeh_medical_districkt

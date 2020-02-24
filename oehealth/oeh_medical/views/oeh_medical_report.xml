@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+      <record id="paperformat_a5" model="report.paperformat">
+        <field name="name">Short (Half-A4)</field>
+        <field name="default" eval="False" />
+        <field name="format">A5</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">25</field>
+        <field name="margin_bottom">7</field>
+        <field name="margin_left">3</field>
+        <field name="margin_right">3</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">23</field>
+        <field name="dpi">90</field>
+     </record>
+
         <report
             string="Patient Card"
             id="action_report_patient_label"
@@ -8,6 +22,7 @@
             report_type="qweb-pdf"
             name="oehealth.report_patient_label"
             file="oehealth.report_patient_label"
+            paperformat="oehealth.paperformat_a5"
         />
 
         <report
@@ -17,27 +32,32 @@
             report_type="qweb-pdf"
             name="oehealth.report_patientmedicine"
             file="oehealth.report_patientmedicine"
+            paperformat="oehealth.paperformat_a5"
         />
 
 	    <report
             id="action_report_appointment_receipt"
             string="Appointment Receipt"
             model="oeh.medical.appointment"
-            report_type="qweb-pdf"
+            report_type="qweb-html"
             name="oehealth.report_appointment_receipt"
             file="oehealth.report_appointment_receipt"
-            paperformat="oehealth.oeh_paperformat_appointmentreceipt"
+            paperformat="oehealth.paperformat_a5"
 
         />
+
+        <!-- oeh_paperformat_appointmentreceipt -->
 
         <report
             string="Prescription Report"
             id="action_oeh_medical_report_patient_prescriptions"
             model="oeh.medical.prescription"
-            report_type="qweb-pdf"
+            report_type="qweb-html"
             name="oehealth.report_oeh_medical_patient_prescription"
             file="oehealth.report_oeh_medical_patient_prescription"
+            paperformat="oehealth.paperformat_a5"
         />
+        <!-- paperformat="oehealth.paperformat_a5" -->
 
     </data>
 </odoo>

@@ -38,5 +38,7 @@ class account_invoice(models.Model):
     _inherit = 'account.invoice'
 
     patient = fields.Many2one('oeh.medical.patient', string='Related Patient', help="Patient Name")
+    appointment_id = fields.Many2one('oeh.medical.appointment', string='Related Appointment', help="Appointment number")
+    lab_test_id = fields.Many2one('oeh.medical.lab.test', string='Related Lab Test', help="Lab Test number")
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

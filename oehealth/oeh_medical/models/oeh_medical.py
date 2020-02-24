@@ -216,6 +216,9 @@ class OeHealthPatient(models.Model):
     invoice_count = fields.Integer(compute=_invoice_count, string="Invoices")
     oeh_patient_user_id = fields.Many2one('res.users', string='Responsible Odoo User')
     prescription_line = fields.One2many('oeh.medical.prescription.line', 'patient', string='Medicines', readonly=True)
+    districkt_id = fields.Many2one('oeh.medical.districkt', string="Districkt")
+    payment_ids = fields.One2many('account.payment', 'patient', string="Payments")
+    payment_count = fields.Integer(compute='_compute_payments')
 
     _sql_constraints = [
         ('code_oeh_patient_userid_uniq', 'unique (oeh_patient_user_id)', "Selected 'Responsible' user is already assigned to another patient !")
@@ -259,6 +262,28 @@ class OeHealthPatient(models.Model):
     @api.multi
     def print_patient_label(self):
         return self.env.ref('oehealth.action_report_patient_label').report_action(self)
+
+    @api.multi
+    def payment_create(self):
+        action = self.env.ref('account.action_account_payments')
+        result = action.read()[0]
+
+        result['context'] = {'partner_id': self.partner_id.id}
+
+        # result['context']['default_appointment_id'] = self.id
+        result['context']['default_partner_id'] = self.partner_id.id
+        result['context']['default_payment_type'] = 'inbound'
+        result['domain'] = "[('partner_id', '=', " + str(self.partner_id.id) + ")]"
+
+        return result
+
+    @api.one
+    @api.depends('payment_ids')
+    def _compute_payments(self):
+        payment_count = 0
+        for r in self.payment_ids:
+            payment_count = payment_count + 1
+        self.payment_count = payment_count
 
 # Physician Management
 
@@ -417,7 +442,7 @@ class OeHealthAppointment(models.Model):
     APPOINTMENT_STATUS = [
             ('Scheduled', 'Scheduled'),
             ('Completed', 'Completed'),
-            ('Invoiced', 'Invoiced'),
+            # ('Invoiced', 'Invoiced'),
         ]
 
     # Automatically detect logged in physician
@@ -456,8 +481,39 @@ class OeHealthAppointment(models.Model):
     comments = fields.Text(string='Comments', readonly=True, states={'Scheduled': [('readonly', False)]})
     patient_status = fields.Selection(PATIENT_STATUS, string='Patient Status', readonly=True, states={'Scheduled': [('readonly', False)]}, default=lambda *a: 'Inpatient')
     state = fields.Selection(APPOINTMENT_STATUS, string='State', readonly=True, default=lambda *a: 'Scheduled')
+    service_ids = fields.One2many('oeh.medical.appointment.service', 'appointment_id', string='Services', copy=False, store=True)
+    lab_test_ids = fields.One2many('oeh.medical.lab.test', 'appointment_id', string='Lab Tests', copy=False, store=True)
+    lab_test_count = fields.Integer(compute="_compute_lab_test", string='# of Lab Tests', copy=False, default=0,store=True)
+
+    prescription_ids = fields.One2many('oeh.medical.prescription', 'appointment_id', string='Prescription', copy=False, store=True)
+    prescription_count = fields.Integer(compute="_compute_prescription", string='# of Prescription', copy=False, default=0,store=True)
+
+    payment_count = fields.Integer(compute='_compute_payments')
+    invoice_id = fields.Many2one('account.invoice')
+    queue_no = fields.Char(string='Queue No.')
 
     _order = "appointment_date desc"
+
+    @api.model
+    def generate_queue_number(self, vals):
+        for r in self:
+            doctor = r.doctor.id
+        # prefix          =   "D"
+        code            =   "oeh.medical.queue_no" + str(vals['doctor'])
+        name            =   code
+        implementation  =   "no_gap"
+        padding  =   "1"
+        dict            =   {
+        "code":code,
+        "name":name,
+        "active":True,
+        "implementation":implementation,
+        "padding":padding}
+        if self.env['ir.sequence'].search([('code','=',code)]).code == code:
+            vals['queue_no'] =  self.env['ir.sequence'].next_by_code(code)
+        else:
+            new_seq = self.env['ir.sequence'].create(dict)
+            vals['queue_no'] = self.env['ir.sequence'].next_by_code(code)
 
     @api.model
     def create(self, vals):
@@ -466,6 +522,7 @@ class OeHealthAppointment(models.Model):
 
         sequence = self.env['ir.sequence'].next_by_code('oeh.medical.appointment')
         vals['name'] = sequence
+        self.generate_queue_number(vals)
         health_appointment = super(OeHealthAppointment, self).create(vals)
         return health_appointment
 
@@ -535,6 +592,116 @@ class OeHealthAppointment(models.Model):
         journal = self.env['account.journal'].search([('type', '=', 'sale')], limit=1)
         return journal.default_credit_account_id.id
 
+    #Customer invoices smart button
+    @api.multi
+    def invoice_create(self):
+        # pass
+        invoice_obj = self.env["account.invoice"]
+        invoice_line_obj = self.env["account.invoice.line"]
+        inv_ids = []
+        #
+        for acc in self:
+            # Create Invoice
+            if acc.patient:
+                curr_invoice = {
+                    'partner_id': acc.patient.partner_id.id,
+                    'account_id': acc.patient.partner_id.property_account_receivable_id.id,
+                    'patient': acc.patient.id,
+                    'state': 'draft',
+                    'type':'out_invoice',
+                    'date_invoice':acc.appointment_date,
+                    'origin': "Appointment # : " + acc.name,
+                }
+
+                inv_ids = invoice_obj.create(curr_invoice)
+                inv_id = inv_ids.id
+                acc.invoice_id = inv_id
+
+                if inv_ids:
+                    prd_account_id = self._default_account()
+                    for service in acc.service_ids:
+                        # Create Invoice line
+                        curr_invoice_line = {
+                            'product_id': service.product_id.id,
+                            'name':service.product_id.name,
+                            'price_unit': acc.doctor.consultancy_price,
+                            'quantity': 1,
+                            'price_unit': service.rate,
+                            'account_id': prd_account_id,
+                            'invoice_id': inv_id,
+                        }
+
+                        inv_line_ids = invoice_line_obj.create(curr_invoice_line)
+
+        action = self.env.ref('account.action_invoice_tree1').read()[0]
+        action['views'] = [(self.env.ref('account.invoice_form').id, 'form')]
+        action['res_id'] = inv_id
+        return action
+
+    @api.multi
+    def action_view_invoice(self):
+        invoices = self.mapped('invoice_id')
+        action = self.env.ref('account.action_invoice_tree1').read()[0]
+        if len(invoices) > 1:
+            action['domain'] = [('id', 'in', invoices.id)]
+        elif len(invoices) == 1:
+            action['views'] = [(self.env.ref('account.invoice_form').id, 'form')]
+            action['res_id'] = self.invoice_id.id
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        return action
+
+    @api.multi
+    def lab_test_create(self):
+        action = self.env.ref('oehealth.oeh_medical_lab_test_action_tree')
+        result = action.read()[0]
+
+        result['context'] = {'patient': self.patient.id}
+
+        result['context']['default_appointment_id'] = self.id
+        result['context']['default_patient'] = self.patient.id
+        result['context']['default_date_requested'] = self.appointment_date
+        result['context']['default_physician_id'] = self.doctor.id
+        result['domain'] = "[('appointment_id', '=', " + str(self.id) + "), ('patient', '=', " + str(self.patient.id) + ")]"
+
+        return result
+
+    @api.multi
+    def prescription_create(self):
+        action = self.env.ref('oehealth.oeh_medical_prescription_action_tree')
+        result = action.read()[0]
+
+        result['context'] = {'patient': self.patient.id}
+
+        result['context']['default_appointment_id'] = self.id
+        result['context']['default_patient'] = self.patient.id
+        result['context']['default_date'] = self.appointment_date
+        result['context']['default_doctor'] = self.doctor.id
+
+        result['domain'] = "[('appointment_id', '=', " + str(self.id) + "), ('patient', '=', " + str(self.patient.id) + ")]"
+
+        return result
+
+
+
+    @api.one
+    @api.depends('lab_test_ids')
+    def _compute_lab_test(self):
+        lab_test_count = 0
+        for r in self.lab_test_ids:
+            lab_test_count = lab_test_count + 1
+        self.lab_test_count = lab_test_count
+
+    @api.one
+    @api.depends('prescription_ids')
+    def _compute_prescription(self):
+        prescription_count = 0
+        for r in self.prescription_ids:
+            prescription_count = prescription_count + 1
+        self.prescription_count = prescription_count
+
+
+
     def action_appointment_invoice_create(self):
         invoice_obj = self.env["account.invoice"]
         invoice_line_obj = self.env["account.invoice.line"]
@@ -584,7 +751,28 @@ class OeHealthAppointment(models.Model):
     def set_to_completed(self):
         return self.write({'state': 'Completed'})
 
+class OeHealthAppointmentQueueNo(models.TransientModel):
+    _inherit = 'res.config.settings'
+    description = 'Appointment queue number config'
 
+    @api.multi
+    def reset_queue_sequences(self):
+        for physician in self.env['oeh.medical.physician'].search([]):
+            for seq in self.env['ir.sequence'].search([('code', '=', 'oeh.medical.queue_no' + str(physician.id))]):
+                seq.number_next_actual = 1
+
+class OeHealthAppointmentService(models.Model):
+    _name = 'oeh.medical.appointment.service'
+    _description = 'Appointment Services'
+
+    product_id = fields.Many2one('product.product', 'Service')
+    rate = fields.Float('Rate')
+    appointment_id = fields.Many2one('oeh.medical.appointment', string='Related Appointment', help="Appointment No.")
+
+    @api.onchange('product_id')
+    def _onchage_rate(self):
+        for r in self:
+            r.rate = r.product_id.lst_price
 # Prescription Management
 
 class OeHealthPrescriptions(models.Model):
@@ -617,6 +805,7 @@ class OeHealthPrescriptions(models.Model):
     info = fields.Text(string='Prescription Notes', readonly=True, states={'Draft': [('readonly', False)]})
     prescription_line = fields.One2many('oeh.medical.prescription.line', 'prescription_id', string='Prescription Lines', readonly=True, states={'Draft': [('readonly', False)]})
     state = fields.Selection(STATES, 'State', readonly=True, default=lambda *a: 'Draft')
+    appointment_id = fields.Many2one('oeh.medical.appointment', string='Related Appointment', help="Appointment number")
 
     @api.model
     def create(self, vals):

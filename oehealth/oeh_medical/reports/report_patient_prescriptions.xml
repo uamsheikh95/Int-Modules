@@ -2,14 +2,16 @@
 <odoo>
 <data>
 <template id="report_oeh_medical_patient_prescription">
+  <t t-call="web.html_container">
     <t t-call="web.external_layout">
         <t t-foreach="docs" t-as="o">
-            <div class="page">
+
+            <div class="page" style="font-size: 12px">
                 <div class="oe_structure"/>
                 <div class="row">
                     <p style="font-size:24px;text-align:center;font-weight:bold;">Prescription Detail</p>
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-xs-8">
                         <div t-if="o.patient">
                             <strong>Patient:</strong>
@@ -39,7 +41,51 @@
                             <p t-field="o.pharmacy"/>
                         </div>
                     </div>
-                </div>
+                </div> -->
+                <!-- +++++++++++++++++ -->
+                <!-- <div id="informations" class="row mt32 mb32">
+                        <div class="col-auto mw-100 mb-2" style="width: 30%;float: left">
+                            <strong>Patient:</strong>
+                            <p class="m-0" t-field="o.patient.name"/>
+                        </div>
+                        <div t-if="o.name" class="col-auto mw-100 mb-2" style="float: left; margin-right: 16px;">
+                            <strong>Prescription#:</strong>
+                            <p class="m-0" t-field="o.name"/>
+                        </div>
+                        <div t-if="o.doctor" class="col-auto mw-100 mb-2" style="float: left; margin-right: 16px;">
+                            <strong>Physician:</strong>
+                            <p class="m-0" t-field="o.doctor.name"/>
+                        </div>
+                        <div t-if="o.patient.partner_id" class="col-auto mw-100 mb-2" style="float: left; margin-right: 16px;" >
+                            <strong>Address:</strong>
+                            <p class="m-0" t-field="o.patient.partner_id"
+                                t-field-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+                        </div>
+                        <div t-if="o.date" class="col-auto mw-100 mb-2" style="float: left;margin-right: 16px;">
+                          <strong>Date: </strong>
+                          <p class="m-0" t-field="o.date"/>
+                        </div>
+
+                        <div t-if="o.pharmacy" class="col-auto mw-100 mb-2" style="float: left; margin-left: 16px;">
+                          <strong>Pharmacy:</strong>
+                          <p class="m-0" t-field="o.pharmacy"/>
+                        </div>
+                    </div> -->
+
+                    <div class="row">
+                      <div style="width: 30%; float: left">
+                        <strong>Patient:</strong>
+                        <p class="m-0" t-field="o.patient.name"/>
+                      </div>
+                      <div style="width: 30%; float: left">
+                        <strong>Prescription#:</strong>
+                        <p class="m-0" t-field="o.name"/>
+                      </div>
+                      <div style="width: 30%; float: left">
+                        <strong>Physician:</strong>
+                        <p class="m-0" t-field="o.doctor.name"/>
+                      </div>
+                    </div>
 
                <table class="table table-condensed mt32">
                     <thead>
@@ -82,6 +128,7 @@
                 <div class="oe_structure"/>
             </div>
         </t>
+      </t>
    </t>
 </template>
 </data>

@@ -104,6 +104,20 @@ class OeHealthLabTests(models.Model):
     date_requested = fields.Datetime(string='Date requested', readonly=True, states={'Draft': [('readonly', False)]}, default=lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'))
     date_analysis = fields.Datetime(string='Date of the Analysis', readonly=True, states={'Draft': [('readonly', False)], 'Test In Progress': [('readonly', False)]})
     state = fields.Selection(LABTEST_STATE, string='State', readonly=True, default=lambda *a: 'Draft')
+    appointment_id = fields.Many2one('oeh.medical.appointment', string='Related Appointment', help="Appointment number")
+    physician_id = fields.Many2one('oeh.medical.physician', string='Related Physician', help="Related Physician")
+
+    invoice_ids = fields.One2many('account.invoice', 'lab_test_id', string='Invoices', copy=False,domain=[('type','=', 'out_invoice')], store=True)
+    invoice_count = fields.Integer(compute="_compute_invoice", string='# of Invoices', copy=False, default=0,store=True)
+
+    total_invoices = fields.Monetary('Total Invoices', compute='_get_total_invoices')
+    company_id = fields.Many2one('res.company',
+                                 string='Company',
+                                 default=lambda self: self.env['res.company']._company_default_get())
+    currency_id = fields.Many2one('res.currency', compute='_compute_currency', store=True, string="Currency")
+
+    payment_ids = fields.One2many('account.payment', 'patient', string="Payments")
+    payment_count = fields.Integer(compute='_compute_payments')
 
     @api.model
     def create(self, vals):
@@ -154,6 +168,61 @@ class OeHealthLabTests(models.Model):
             'lab_test_criteria': labtest_ids,
         })
         return res
+
+    #Customer invoices smart button
+    @api.multi
+    def invoice_create(self):
+        action = self.env.ref('account.action_invoice_tree1')
+        result = action.read()[0]
+
+        result['context'] = {'type': 'out_invoice'}
+
+        journal_domain = [
+            ('type', '=', 'sale'),
+            ('company_id', '=', self.company_id.id),
+            # ('currency_id', '=', self.currency_id.id),
+        ]
+
+        default_journal_id = self.env['account.journal'].search(journal_domain, limit=1)
+
+        if default_journal_id:
+            result['context']['default_journal_id'] = default_journal_id.id
+
+        result['context']['default_origin'] = self.name
+        # result['context']['account_analytic_id'] = self.analytic_account_id.id
+
+        if self.patient:
+            result['context']['default_partner_id'] = self.patient.partner_id.id
+        result['context']['default_lab_test_id'] = self.id
+        result['context']['default_date_invoice'] = self.date_requested
+
+        result['domain'] = "[('lab_test_id', '=', " + str(self.id) + "), ('type', '=', 'out_invoice')]"
+
+
+        return result
+
+    @api.one
+    @api.depends('company_id')
+    def _compute_currency(self):
+        self.currency_id = self.company_id.currency_id or self.env.user.company_id.currency_id
+
+    @api.multi
+    @api.depends('invoice_ids')
+    def _get_total_invoices(self):
+        total_invoices = 0
+        for r in self:
+            if r.invoice_ids:
+                for invoice in r.invoice_ids.filtered(lambda r: r.state != 'draft'):
+                    total_invoices = total_invoices + invoice.amount_total
+            r.total_invoices = total_invoices
+
+    @api.one
+    @api.depends('invoice_ids')
+    def _compute_invoice(self):
+        invoice_count = 0
+        for r in self.invoice_ids:
+            invoice_count = invoice_count + 1
+        self.invoice_count = invoice_count
 
 
     # This function prints the lab test
@@ -238,7 +307,7 @@ class OeHealthLabTestsResultCriteria(models.Model):
 # Inheriting Patient module to add "Lab" screen reference
 class OeHealthPatient(models.Model):
     _inherit='oeh.medical.patient'
-    
+
     @api.multi
     def _labtest_count(self):
         oe_labs = self.env['oeh.medical.lab.test']

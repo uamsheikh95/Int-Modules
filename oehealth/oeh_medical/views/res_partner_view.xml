@@ -9,11 +9,6 @@
             <field name="priority" eval="1" />
             <field name="arch" type="xml">
 
-              <xpath expr="/form/sheet/group/group/div[@class='o_address_format']/field[@name='city']" position="replace">
-                  <field name="districkt_id" placeholder="Districkt" class="o_address_city" options="{'no_quick_create': True, 'no_create': True}" />
-                  <field name="city" placeholder="City" class="o_address_city" attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}" invisible="1" />
-              </xpath>
-
                 <notebook colspan="4" position="inside">
                     <page string="oeHealth" groups="oehealth.group_oeh_medical_manager">
                         <group>

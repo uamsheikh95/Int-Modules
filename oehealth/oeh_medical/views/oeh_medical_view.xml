@@ -48,25 +48,53 @@
                 <field name="arch" type="xml">
                 <form string="Appointment">
                     <header>
+                        <button confirm="Are you sure you want to create an invoice?" name="invoice_create" string="Create Invoice" type="object" class="oe_highlight" groups="oehealth.group_oeh_medical_physician,oehealth.group_oeh_medical_manager"/>
                         <button confirm="Are you sure you want to mark appointment as completed?" name="set_to_completed" states="Scheduled" string="Mark as Completed" type="object" class="oe_highlight" groups="oehealth.group_oeh_medical_physician,oehealth.group_oeh_medical_manager"/>
                         <button confirm="Are you sure you want to create the invoice?" name="action_appointment_invoice_create" states="Completed" string="Consultancy Invoice" type="object" class="oe_highlight" groups="oehealth.group_oeh_medical_physician,oehealth.group_oeh_medical_manager"/>
-                        <field name="state" widget="statusbar" statusbar_visible="Scheduled,Completed,Invoiced" statusbar_colors='{"Scheduled":"blue","Completed":"green","Invoiced":"grey"}'/>
+                        <field name="state" widget="statusbar" statusbar_visible="Scheduled,Completed" statusbar_colors='{"Scheduled":"blue","Completed":"green","Invoiced":"grey"}'/>
                     </header>
                     <sheet>
                         <div class="oe_left" style="width: 500px;">
                             <div class="oe_title" style="width: 390px;">
+                                <h4><span> <strong>Queue No. : </strong> <field style="margin-left: 7px; font-weight: bold;" name="queue_no" readonly="1"/></span></h4>
                                 <label class="oe_edit_only" for="name" string="Appointment #"/>
                                 <h1><field name="name" class="oe_inline"/></h1>
                                 <label for="patient" class="oe_edit_only"/>
                                 <field name="patient"/>
                             </div>
                         </div>
+
+                        <div class="oe_button_box">
+
+                          <button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('invoice_id', '=', False)]}">
+                    					Invoice
+                  				</button>
+
+                          <button type="object"  name="lab_test_create"
+                              class="oe_stat_button"
+                              icon="fa-flask">
+                              <field name="lab_test_count" widget="statinfo" string="Lab Tests" />
+
+                              <field name='lab_test_ids' invisible="1"/>
+                          </button>
+
+                          <button type="object"  name="prescription_create"
+                              class="oe_stat_button"
+                              icon="fa-list-alt">
+                              <field name="prescription_count" widget="statinfo" string="Prescriptions" />
+
+                              <field name='prescription_ids' invisible="1"/>
+                          </button>
+
+                        </div>
                         <group>
                             <group>
                                 <field name="doctor" options="{'no_create': True}"/>
                                 <field name="appointment_date"/>
+
                                 <field name="patient_status"/>
                                 <field name="appointment_end" invisible="1"/>
+                                <field name="invoice_id" invisible="1"/>
                             </group>
                             <group>
                                 <field name="institution" options="{'no_create': True}"/>
@@ -75,6 +103,14 @@
                             </group>
                         </group>
                         <notebook>
+                            <page string="Services">
+                              <field name="service_ids" context="{'default_appointment_id': id}">
+                                 <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="rate"/>
+                                 </tree>
+                                </field>
+                            </page>
                             <page string="Comments">
                                 <group>
                                     <group>
@@ -109,6 +145,57 @@
                         </tree>
                     </field>
             </record>
+
+            <record id="appointment_queue_no_config" model="ir.ui.view">
+                <field name="name">Amaana configuration</field>
+                <field name="model">res.config.settings</field>
+                <field name="inherit_id" ref="base.res_config_settings_view_form" />
+                <field name="arch" type="xml">
+                  <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div class="app_settings_block" data-string="Amaana" string="Queue Numbers Configuration" data-key="queue">
+                      <h2>Queue Numbers Settings</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                  
+                                    <div class="text-muted">
+                                        Reset Queue numbers
+                                    </div>
+                                    <div class="content-group">
+                                        <div class="mt16">
+                                            <button confirm="Are you sure you want to reset the queue numbers?" name="reset_queue_sequences" string="Reset Queue Numbers" type="object" class="oe_highlight" groups="oehealth.group_oeh_medical_physician,oehealth.group_oeh_medical_manager"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </xpath>
+                </field>
+            </record>
+
+            <!--Configuratin Action-->
+            <record id="queue_settings_action" model="ir.actions.act_window">
+                <field name="name">Queue Number</field>
+                <field name="res_model">res.config.settings</field>
+                <field name="view_id" ref="appointment_queue_no_config"/>
+                <field name="view_mode">form</field>
+                <field name="target">inline</field>
+            </record>
+
+            <menuitem
+                    id="queue_settings_menu"
+                    name="Queue"
+                    parent="oeh_medical_conf_menu"
+                    sequence="1"
+        			/>
+
+              <menuitem
+                      id="queue_configuration_menu"
+                      name="Queue Numbers"
+                      parent="queue_settings_menu"
+                      action="queue_settings_action"
+          			/>
 
 
             <record id="oeh_medical_appointment_action_tree" model="ir.actions.act_window">
@@ -462,6 +549,14 @@
                             <button type="action" class="oe_stat_button" name="%(account.action_invoice_tree1)d" context="{'search_default_patient': active_id,'default_patient': active_id}" icon="fa-pencil-square-o">
                                 <field string="Invoices" name="invoice_count" widget="statinfo"/>
                             </button>
+
+                            <button type="object"  name="payment_create"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o">
+                                <field name="payment_count" widget="statinfo" string="Payments" />
+
+                                <field name='payment_ids' invisible="1"/>
+                            </button>
                         </div>
                         <div>
                             <field name="image" widget='image' class="oe_left oe_avatar" options='{"preview_image": "image_medium", "size": [90, 90]}'/>
@@ -503,7 +598,8 @@
                                                 <field name="street" placeholder="Street..."/>
                                                 <field name="street2"/>
                                                 <div class="address_format">
-                                                    <field name="city" placeholder="City" style="width: 40%%"/>
+                                                    <field name="city" placeholder="City" style="width: 40%%" invisible="1" />
+                                                    <field name="districkt_id" placeholder="Districkt" style="width: 40%%"/>
                                                     <field name="state_id" class="oe_no_button" placeholder="State" style="width: 37%%" options='{"no_open": True}' on_change="onchange_state(state_id)"/>
                                                     <field name="zip" placeholder="ZIP" style="width: 20%%"/>
                                                 </div>
@@ -714,6 +810,7 @@
             </record>
 
             <menuitem action="oeh_medical_patient_action_tree" parent="oeh_medical_patients_menu"  id="oeh_medical_edit_patient" sequence="1"/>
+            <menuitem action="account.action_account_payments" parent="oeh_medical_patients_menu"  id="oeh_medical_my_patient_payments" name="Patient Payments"/>
 
             <record id="oeh_medical_patient_action_tree1" model="ir.actions.act_window">
                     <field name="name">My Profile</field>

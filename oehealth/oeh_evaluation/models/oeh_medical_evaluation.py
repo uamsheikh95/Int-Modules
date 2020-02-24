@@ -239,6 +239,13 @@ class OeHealthPatientEvaluation(models.Model):
             self.bmi = 0
         return res
 
+    @api.onchange('appointment')
+    def onchange_patient_physician_date(self):
+        self.patient = self.appointment.patient.id
+        self.evaluation_start_date = self.appointment.appointment_date
+        self.doctor =self.appointment.doctor.id
+
+
     @api.onchange('loc_motor','loc_eyes','loc_verbal')
     def onchange_loc(self):
         res = {}

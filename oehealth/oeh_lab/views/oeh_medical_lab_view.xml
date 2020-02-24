@@ -200,6 +200,16 @@
                                     <h1><field name="name" class="oe_inline"/></h1>
                                 </div>
                             </div>
+
+                            <div class="oe_button_box">
+                              <button type="object"  name="invoice_create"
+                                  class="oe_stat_button"
+                                  icon="fa-pencil-square-o">
+                                  <field name="invoice_count" widget="statinfo" string="Invoices" />
+
+                                  <field name='invoice_ids' invisible="1"/>
+                              </button>
+                            </div>
                             <group>
                                 <group>
                                     <field name="lab_department" required="1"/>
@@ -212,7 +222,8 @@
                                 <group>
                                     <field name="patient" options="{'no_create': True}"/>
                                     <field name="date_requested"/>
-                                    <field name="requestor" options="{'no_create': True}"/>
+                                    <field name="requestor" options="{'no_create': True}" invisible="1"/>
+                                    <field name="physician_id" string="Doctor who requested the test" options="{'no_create': True}"/>
                                 </group>
                                 <group>
                                     <field name="pathologist" options="{'no_create': True}"/>
