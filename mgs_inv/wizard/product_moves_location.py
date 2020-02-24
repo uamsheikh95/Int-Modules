@@ -71,15 +71,15 @@ class ProductMovesByLocationReport(models.AbstractModel):
         return full_move
 
 
-    def _sum_open_balance(self, product_id, date_from, company_id):
-        params = [product_id, date_from, company_id]
+    def _sum_open_balance(self, product_id, date_from, location_id, company_id):
+        params = [product_id, date_from, location_id, company_id]
         query = """
             select sum(case
             when sld.usage='internal' then product_uom_qty else -product_uom_qty end) as Balance
             from stock_move  as sm  left join stock_location as sl on sm.location_id=sl.id
             left join stock_location as sld on sm.location_dest_id=sld.id
             where sm.product_id = %s and sm.state<>'cancel' and   not (sl.usage='internal' and  sld.usage='internal' )
-            and sm.date<%s and sm.company_id=%s
+            and sm.date<%s and sm.location_id=%s and sm.company_id=%s
         """
         self.env.cr.execute(query, tuple(params))
 
