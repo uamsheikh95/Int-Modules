@@ -72,22 +72,38 @@
                         </div>
                     </div> -->
 
-                    <div class="row">
-                      <div style="width: 30%; float: left">
+                    <div style="width: 99%; margin: auto auto">
+                      <div style="width: 33%; float: left">
                         <strong>Patient:</strong>
                         <p class="m-0" t-field="o.patient.name"/>
                       </div>
-                      <div style="width: 30%; float: left">
+                      <div style="width: 33%; float: left">
                         <strong>Prescription#:</strong>
                         <p class="m-0" t-field="o.name"/>
                       </div>
-                      <div style="width: 30%; float: left">
+                      <div style="width: 33%; float: left">
                         <strong>Physician:</strong>
                         <p class="m-0" t-field="o.doctor.name"/>
                       </div>
                     </div>
 
-               <table class="table table-condensed mt32">
+                    <div style="width: 99%; margin: auto auto">
+                      <div style="width: 33%; float: left" t-if="o.patient.partner_id.street">
+                        <strong>Address:</strong>
+                        <p class="m-0" t-field="o.patient.partner_id"
+                                t-field-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+                      </div>
+                      <div style="width: 33%; float: left">
+                        <strong>Date:</strong>
+                        <p t-field="o.date"/>
+                      </div>
+                      <div style="width: 33%; float: left">
+                        <strong>Pharmacy:</strong>
+                        <p class="m-0" t-field="o.pharmacy"/>
+                      </div>
+                    </div>
+
+               <table class="table table-condensed mt32" style="font-size: 12px">
                     <thead>
                         <tr>
                             <th class="text-left">MEDICINE</th>
@@ -95,8 +111,8 @@
                             <th class="text-left">DOSE</th>
                             <th class="text-left">FORM</th>
                             <th class="text-center">X</th>
-                            <th class="text-left">TREATMENT DURATION</th>
-                            <th class="text-left">TREATMENT PERIOD</th>
+                            <th nowrap="nowrap" class="text-left">TREATMENT DURATION</th>
+                            <th nowrap="nowrap" class="text-left">TREATMENT PERIOD</th>
                         </tr>
                    </thead>
                    <tbody class="invoice_tbody">

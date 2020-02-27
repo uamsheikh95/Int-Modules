@@ -5,9 +5,9 @@
 <template id="report_appointment_receipt">
     <t t-call="web.html_container">
         <t t-foreach="docs" t-as="o">
-            <div class="page">
-                <div class="row">
-                    <div class="col-xs-6">
+          <t t-call="web.external_layout">
+            <div class="page" style="border: 2px solid;">
+                    <!-- <div class="col-xs-6">
                         <strong>Patient:</strong>
                         <p t-field="o.patient.name"/>
                         <strong>Patient ID#:</strong>
@@ -30,9 +30,57 @@
                             <strong>Comments:</strong>
                             <p t-field="o.comments"/>
                         </div>
+                    </div> -->
+                    <h2 class="text-center">Appointment Receipt</h2>
+
+                    <div class="row" style="margin: 20px 0">
+                      <div style="width: 60%;float: left">
+
+                      </div>
+
+                      <div style="width: auto; float: right; margin-right: 10px; border: 1px solid #848488; border-radius: 10px; padding: 5px;">
+                        <span><strong style="font-size: 19px;">Queue No. </strong> <span t-field="o.queue_no" style="font-size: 19px;" /></span>
+                      </div>
                     </div>
-                </div>
+
+                    <table class="table-borderless" style="width: 100%; font-size: 12px">
+                        <tbody>
+                            <tr style="height: 40px;">
+                                <td style="width: 20%;padding-top: 19px;"><strong>Patient Name: </strong></td>
+                                <td style="border-bottom: 1px solid #716e6e;padding-top: 19px;"><p t-field="o.patient.name"/></td>
+
+                                <td style="width: 10%; padding-top: 19px; padding-left: 10px;"><strong>ID#: </strong></td>
+                                <td style="border-bottom: 1px solid #716e6e;padding-top: 19px;"><p t-field="o.patient.identification_code"/></td>
+                            </tr>
+
+                            <tr style="height: 40px;">
+                                <td style="width: 20%;padding-top: 19px;"><strong>Appointment#:</strong></td>
+                                <td style="border-bottom: 1px solid #716e6e;padding-top: 19px;;"><p t-field="o.name"/></td>
+
+                                <td style="width: 10%; padding-top: 716e6e; padding-left: 10px;"><strong>Date: </strong></td>
+                                <td style="border-bottom: 1px solid #000000;padding-top: 19px;"><p t-field="o.appointment_date"/></td>
+                            </tr>
+
+                            <tr style="height: 40px;">
+                                <td style="width: 20%;padding-top: 19px;"><strong>Doctor: </strong></td>
+                                <td style="border-bottom: 1px solid #716e6e;padding-top: 19px;"><p t-field="o.doctor.name"/></td>
+
+                                <td style="width: 15%; padding-top: 19px; padding-left: 10px;"><strong>Specialty: </strong></td>
+                                <td style="border-bottom: 1px solid #716e6e;padding-top: 19px;"><p t-field="o.doctor.speciality.name"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row" style="margin-top: 60px;">
+                      <h3 style="margin-left: 15px;">Notes</h3>
+
+                      <ul>
+                        <li>Please preverse this card and show it on each attendence.</li>
+                        <li>Patients Must notify the Appointments Officer either by Phone or writing if unable to keep their appointment.</li>
+                      </ul>
+                    </div>
             </div>
+          </t>
         </t>
     </t>
 </template>
