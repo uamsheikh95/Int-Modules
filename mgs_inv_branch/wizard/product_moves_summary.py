@@ -72,6 +72,7 @@ class ProductMovesByLocationReport(models.AbstractModel):
             from stock_move_line  as sm  left join stock_location as sl on sm.location_id=sl.id
             left join stock_location as sld on sm.location_dest_id=sld.id
             where product_id = %s and sm.date between %s and %s and sm.company_branch_id=%s
+            and sm.state<>'cancel'
         """
 
         self.env.cr.execute(query, tuple(params))
