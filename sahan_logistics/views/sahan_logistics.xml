@@ -1,0 +1,693 @@
+<odoo>
+			<record model="ir.ui.view" id="freight_booking_form">
+							<field name="name">sahan_logistics.freight_booking.form</field>
+							<field name="model">sahan_logistics.freight_booking</field>
+							<field name="arch" type="xml">
+									<form string="Freight Booking Form">
+
+											<header>
+													<button string="Create Invoice" type="object" name="invoice_create" class="oe_highlight" attrs="{'invisible': [('state', 'in', ['quotation', 'invoiced','departed'])]}" />
+													<button string="Confirm" type="object" name="confirm"
+																	confirm="Are you sure you want to Confirm?"
+																	class="oe_highlight" attrs="{'invisible': [('state', '!=', 'quotation')]}"/>
+
+													<field name="state" widget="statusbar"/>
+											</header>
+
+											<sheet>
+
+													<div class="oe_title" style="float:left;width:50%;margin-top:20px">
+															<h1>
+																	<field name="name" string="Job" attrs="{'invisible': [('state', '=', 'quotation')]}"/>
+																	<field name="quote_name" string="Quote" attrs="{'invisible': [('state', '!=', 'quotation')]}"/>
+															</h1>
+															<div name="options_active">
+																	<div>
+																			<label for="shipment_type" class="oe_inline" string="Shipment Type :"/>
+																			<field name="shipment_type" class="oe_inline oe_input_align" />
+																	</div>
+															</div>
+													</div>
+													<div class="oe_button_box" name="button_box">
+
+																<button name="invoice_create" type="object" class="oe_stat_button" icon="fa-dollar" attrs="{'invisible': [('invoice_id', '=', False)]}">
+																			Invoice
+																			<field name="invoice_id" invisible="1"/>
+																</button>
+																	<button type="object"  name="bill_create"
+																			class="oe_stat_button"
+																			icon="fa-pencil-square-o" attrs="{'invisible': [('state', '=', 'quotation')]}">
+																			<field name="bill_count" widget="statinfo" string="Bills" />
+
+																			<field name='bill_ids' invisible="1" context="{'default_freight_booking_id': id}"/>
+																	</button>
+													</div>
+													<group>
+															<group>
+																	<field name="shipper_id" context="{'default_shipper':1}" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"/>
+																	<field name="port_of_loading_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"
+																	 />
+																	<field name="port_of_discharge_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"
+																		/>
+																	<field name="port_of_delivery_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"
+																		/>
+																	<field name="customs_doc_ref"
+																	 />
+																	<field name="carrier_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"
+																	 />
+																	<field name="bill_of_landing"
+																	 />
+															</group>
+															<group>
+																	<field name="partner_id" string="Consignee" context="{'default_consignee':1}"
+																				 options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"
+																	 />
+
+
+																	<field name="job_date"
+																	 />
+
+																	<field name="hawb"
+																	 />
+																	<field name="mawb"
+																	 />
+																	<field name="qty" readonly="1" string="Total PKG QTY"/>
+																	<field name="actual_weight" readonly="1"/>
+																	<field name="chargeable_weight" readonly="1" string="Total CBM"/>
+															</group>
+													</group>
+
+													<notebook>
+															<page string="Packing List">
+																	<field name="packing_list_line_ids" context="{'default_freight_booking': id}" >
+																			<tree editable="bottom">
+																					<field name="name"/>
+																					<field name="qty"/>
+																					<field name="departed_qty" string="Departed"/>
+																					<field name="remaining_qty" string="Remaining"/>
+																					<field name="volume_weight"/>
+																					<field name="uom_id" />
+																					<field name="total_cbm" />
+																					<field name="remarks"/>
+																			</tree>
+																	</field>
+																	<group class="oe_subtotal_footer oe_right">
+																			<div class="oe_subtotal_footer_separator oe_inline">
+																					<label for="actual_weight"/>
+																			</div>
+																			<field name="actual_weight" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary"/>
+																			<div class="oe_subtotal_footer_separator oe_inline">
+																					<label for="chargeable_weight"/>
+																			</div>
+																			<field name="chargeable_weight" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary"/>
+																	</group>
+															</page>
+															<page string="Cost Estimation">
+
+																	<field name="cost_estimation_line_ids" context="{'default_freight_booking': id}" >
+																			<tree editable="bottom">
+																					<field name="product_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"/>
+																					<field name="name"/>
+																					<field name="qty" />
+																					<field name="uom_id" />
+																					<field name="rate"/>
+																					<field name="price_subtotal"/>
+																			</tree>
+																	</field>
+																	<group class="oe_subtotal_footer oe_right">
+																			<div class="oe_subtotal_footer_separator oe_inline">
+																					<label for="total"/>
+																			</div>
+																			<field name="total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary"/>
+																	</group>
+
+
+
+															</page>
+
+													</notebook>
+
+											</sheet>
+											<div class="oe_chatter">
+												<field name="message_follower_ids" widget="mail_followers"/>
+												<field name="activity_ids" widget="mail_activity"/>
+												<field name="message_ids" widget="mail_thread"/>
+										</div>
+									</form>
+							</field>
+				</record>
+
+				<record model="ir.ui.view" id="freight_booking_tree">
+						<field name="name">sahan_logistics.freight_booking.tree</field>
+						<field name="model">sahan_logistics.freight_booking</field>
+						<field name="arch" type="xml">
+								<tree string="Freight Booking">
+										<field name="name" string="Job"/>
+										<field name="shipment_type"/>
+										<field name="shipper_id"/>
+										<field name="partner_id" string="Consignee" />
+										<field name="chargeable_weight"/>
+										<field name="amount"/>
+										<field name="amount_paid"/>
+										<field name="residual"/>
+										<field name="total_bills" string="Job Cost"/>
+										<field name="state"/>
+								</tree>
+						</field>
+				</record>
+				<record model="ir.ui.view" id="freight_booking_search">
+						<field name="name">sahan_logistics.freight_booking.search</field>
+						<field name="model">sahan_logistics.freight_booking</field>
+						<field name="arch" type="xml">
+								<search string="Freight Booking">
+										<field name="name" string="Job"/>
+										<field name="shipment_type"/>
+										<field name="shipper_id"/>
+										<field name="partner_id"/>
+										<field name="port_of_loading_id" string="Port of Loading"/>
+										<field name="port_of_discharge_id" string="Port of Discharge"/>
+										<field name="port_of_delivery_id" string="Port of Delivery"/>
+
+										<group expand="0" string="Group By..." colspan="12" col="10">
+											<filter string="Pendig" name="total_under_1000" domain="[('state', '=', 'pending')]"/>
+											<filter string="Invoiced" name="total_under_1000" domain="[('state', '=', 'invoiced')]"/>
+									</group>
+								</search>
+						</field>
+				 </record>
+
+				<record model="ir.ui.view" id="shipment_form">
+							<field name="name">sahan_logistics.shipment.form</field>
+							<field name="model">sahan_logistics.shipment</field>
+							<field name="arch" type="xml">
+									<form string="Shipment Form">
+												<header>
+														<button string="Close Shipment" type="object" name="close" class="oe_highlight"
+																		confirm="Are you sure you want to Proceed?" attrs="{'invisible': [('state', '=', 'closed')]}"/>
+
+														<!--This will create the statusbar, thanks to the widget. -->
+														<field name="state" widget="statusbar" statusbar_visible="open,closed"/>
+												</header>
+												<sheet>
+														<group>
+																<group>
+																		<field name="name"  attrs="{'readonly':[('state', '=', 'closed')]}"/>
+																		<field name="date"  attrs="{'readonly':[('state', '=', 'closed')]}" />
+																</group>
+																<group>
+																		<field name="company_id"  attrs="{'readonly':[('state', '=', 'closed')]}" />
+																		<field name="analytic_account_id"  readonly="1" />
+																</group>
+														</group>
+
+														<notebook>
+																<page string="Freight">
+																		<field name="freight_booking_line_ids" readonly="1">
+																				<tree>
+																						<field name="name" string="Service"/>
+																						<field name="partner_id" string="Consignee" />
+																						<field name="shipper_id"/>
+																						<field name="shipment_type"/>
+																						<field name="qty" string="Total Qty" />
+																						<field name="actual_weight"/>
+																						<field name="chargeable_weight"/>
+																				</tree>
+																		</field>
+																</page>
+														</notebook>
+
+												</sheet>
+
+											<div class="oe_chatter">
+												<field name="message_follower_ids" widget="mail_followers"/>
+												<field name="activity_ids" widget="mail_activity"/>
+												<field name="message_ids" widget="mail_thread"/>
+										</div>
+									</form>
+							</field>
+				</record>
+
+				<record model="ir.ui.view" id="shipment_tree">
+							<field name="name">sahan_logistics.shipment.tree</field>
+							<field name="model">sahan_logistics.shipment</field>
+							<field name="arch" type="xml">
+									<tree string="Shipment Tree">
+										<field name="name" />
+										<field name="date" />
+										<field name="company_id" />
+										<field name="state" />
+									</tree>
+							</field>
+				</record>
+
+				<record model="ir.ui.view" id="shipment_search">
+							<field name="name">sahan_logistics.shipment.search</field>
+							<field name="model">sahan_logistics.shipment</field>
+							<field name="arch" type="xml">
+									<search string="Shipment Search">
+										<field name="name" />
+										<field name="date" />
+										<field name="company_id" />
+										<field name="state" />
+
+											<group expand="0" string="Group By..." colspan="12" col="10">
+													<filter string="Open" name="total_under_1000" domain="[('state', '=', 'open')]"/>
+													<filter string="Closed" name="total_under_1000" domain="[('state', '=', 'closed')]"/>
+											</group>
+
+									</search>
+							</field>
+				</record>
+
+				<record model="ir.ui.view" id="location_form">
+							<field name="name">sahan_logistics.location.form</field>
+							<field name="model">sahan_logistics.location</field>
+							<field name="arch" type="xml">
+									<form string="Location Form">
+												<sheet>
+														<group>
+																<group>
+																		<field name="name" />
+																</group>
+																<group>
+																		<field name="company_id" readonly="1" />
+																</group>
+														</group>
+												</sheet>
+
+											<div class="oe_chatter">
+												<field name="message_follower_ids" widget="mail_followers"/>
+												<field name="activity_ids" widget="mail_activity"/>
+												<field name="message_ids" widget="mail_thread"/>
+										</div>
+									</form>
+							</field>
+				</record>
+
+				<record model="ir.ui.view" id="carrier_form">
+									<field name="name">sahan_logistics.carrier.form</field>
+									<field name="model">sahan_logistics.carrier</field>
+									<field name="arch" type="xml">
+											<form string="Carrier Form">
+														<sheet>
+																<group>
+																		<group>
+																				<field name="name" />
+																		</group>
+																		<group>
+																				<field name="company_id" readonly="1" />
+																		</group>
+																</group>
+														</sheet>
+
+													<div class="oe_chatter">
+														<field name="message_follower_ids" widget="mail_followers"/>
+														<field name="activity_ids" widget="mail_activity"/>
+														<field name="message_ids" widget="mail_thread"/>
+												</div>
+											</form>
+									</field>
+						</record>
+
+				<record model="ir.ui.view" id="brand_form">
+									<field name="name">sahan_logistics.brand.form</field>
+									<field name="model">sahan_logistics.brand</field>
+									<field name="arch" type="xml">
+											<form string="Brand Form">
+														<sheet>
+																<group>
+																		<group>
+																				<field name="name" />
+																		</group>
+																		<group>
+																				<field name="company_id" readonly="1" />
+																		</group>
+																</group>
+														</sheet>
+
+													<div class="oe_chatter">
+														<field name="message_follower_ids" widget="mail_followers"/>
+														<field name="activity_ids" widget="mail_activity"/>
+														<field name="message_ids" widget="mail_thread"/>
+												</div>
+											</form>
+									</field>
+						</record>
+
+				<record model="ir.ui.view" id="packing_list_form">
+					<field name="name">sahan_logistics.packing_list.form</field>
+					<field name="model">sahan_logistics.packing_list</field>
+					<field name="arch" type="xml">
+							<form string="Packing List Form">
+								<sheet>
+									<div class="oe_title" style="float:left;width:50%;margin-top:20px">
+										<h1>
+											<field name="freight_booking_id" placeholder="Job"/>
+										</h1>
+									</div>
+
+									<group>
+										<group>
+											<field name="waybil" />
+											<field name="name" />
+											<field name="qty" />
+											<field name="length" />
+											<field name="width" />
+											<field name="height" />
+										</group>
+
+										<group>
+											<field name="formula" />
+											<field name="volume_weight" />
+											<field name="actual_weight" />
+											<field name="remarks" />
+											<field name="departed_qty" />
+											<field name="remaining_qty" />
+											<field name="cbm_type" />
+										</group>
+									</group>
+
+<!--									<field name="trip_line_ids"-->
+<!--										   context="{'default_packing_item_id': id}">-->
+<!--										<tree editable="bottom">-->
+<!--											<field name="packing_item_id"/>-->
+<!--											<field name="qty"/>-->
+<!--											<field name="partner_id"/>-->
+<!--											<field name="shipper_id"/>-->
+<!--										</tree>-->
+<!--									</field>-->
+								</sheet>
+
+							</form>
+					</field>
+				</record>
+
+
+				<record model="ir.ui.view" id="packing_list_tree">
+					<field name="name">sahan_logistics.packing_list.tree</field>
+					<field name="model">sahan_logistics.packing_list</field>
+					<field name="arch" type="xml">
+						<tree string="Packing List">
+							<field name="freight_booking_id" placeholder="Job"/>
+							<field name="name" />
+							<field name="qty" />
+							<field name="departed_qty" string="Departed QTY" />
+							<field name="remaining_qty" string="Remaining QTY" />
+							<field name="volume_weight" />
+							<field name="actual_weight" />
+							<field name="cbm_type" />
+						</tree>
+					</field>
+				</record>
+
+				<record model="ir.ui.view" id="packing_list_search">
+					<field name="name">sahan_logistics.packing_list.search</field>
+					<field name="model">sahan_logistics.packing_list</field>
+					<field name="arch" type="xml">
+						<tree string="Packing List">
+							<field name="freight_booking_id" placeholder="Job"/>
+							<field name="name" />
+							<field name="qty" />
+							<field name="departed_qty" />
+							<field name="remaining_qty" />
+							<field name="volume_weight" />
+							<field name="actual_weight" />
+							<field name="cbm_type" />
+						</tree>
+					</field>
+				</record>
+
+				<record model="ir.actions.act_window" id="freight_booking_action">
+						<field name="name">Freight Booking</field>
+						<field name="res_model">sahan_logistics.freight_booking</field>
+						<field name="view_type">form</field>
+						<field name="view_mode">tree,form</field>
+						<field name="help" type="html">
+								<p class="o_view_nocontent_smiling_face">Create the first Freight Charge
+								</p>
+						</field>
+				</record>
+				<record model="ir.actions.act_window" id="consignee_action">
+						<field name="name">Consignee</field>
+						<field name="res_model">res.partner</field>
+						<field name="view_type">form</field>
+						<field name="view_mode">tree,form</field>
+						<field name="view_id" ref="base.view_partner_form"/>
+						<field name="domain">[('consignee','=', True)]</field>
+						<field name="context">{'default_consignee': 1}</field>
+						<field name="help" type="html">
+								<p class="o_view_nocontent_smiling_face">Create Consignee
+								</p>
+						</field>
+				</record>
+
+
+				<record id="consignee_action_tree" model="ir.actions.act_window.view">
+						<field name="view_mode">tree</field>
+						<field name="view_id" ref="base.view_partner_tree" />
+						<field name="act_window_id" ref="consignee_action" />
+				</record>
+
+
+				<record model="ir.actions.act_window" id="agent_action">
+						<field name="name">Agents</field>
+						<field name="res_model">res.partner</field>
+						<field name="view_type">form</field>
+						<field name="view_mode">tree,form</field>
+						<field name="view_id" ref="base.view_partner_form"/>
+						<field name="domain">[('agent','=', True), ('supplier','=', True)]</field>
+						<field name="context">{'default_agent': 1, 'default_supplier': 1}</field>
+						<field name="help" type="html">
+								<p class="o_view_nocontent_smiling_face">Create Agent
+								</p>
+						</field>
+				</record>
+
+				<record id="agent_action_tree" model="ir.actions.act_window.view">
+						<field name="view_mode">tree</field>
+						<field name="view_id" ref="base.view_partner_tree" />
+						<field name="act_window_id" ref="agent_action" />
+				</record>
+
+
+				<record model="ir.actions.act_window" id="shipper_action">
+						<field name="name">Shipper</field>
+						<field name="res_model">res.partner</field>
+						<field name="view_type">form</field>
+						<field name="view_mode">tree,form</field>
+						<field name="domain">[('shipper','=', True)]</field>
+						<field name="context">{'default_shipper': 1}</field>
+						<field name="help" type="html">
+								<p class="o_view_nocontent_smiling_face">Create Shipper
+								</p>
+						</field>
+				</record>
+				<record model="ir.actions.act_window" id="location_action">
+						<field name="name">Location</field>
+						<field name="res_model">sahan_logistics.location</field>
+						<field name="view_type">form</field>
+						<field name="view_mode">tree,form</field>
+						<field name="help" type="html">
+								<p class="o_view_nocontent_smiling_face">Create location
+								</p>
+						</field>
+				</record>
+
+				<record model="ir.actions.act_window" id="shipment_action">
+						<field name="name">Shipment</field>
+						<field name="res_model">sahan_logistics.shipment</field>
+						<field name="view_type">form</field>
+						<field name="view_mode">tree,form</field>
+						<field name="view_id" ref="shipment_form"/>
+						<field name="help" type="html">
+								<p class="o_view_nocontent_smiling_face">Create the first Freight Charge
+								</p>
+						</field>
+				</record>
+
+
+				<record id="shipment_action_tree" model="ir.actions.act_window.view">
+						<field name="view_mode">tree</field>
+						<field name="view_id" ref="shipment_tree" />
+						<field name="act_window_id" ref="shipment_action" />
+				</record>
+
+
+		<record model="ir.actions.act_window" id="services_action">
+						<field name="name">Services</field>
+						<field name="res_model">product.product</field>
+						<field name="view_type">form</field>
+						<field name="view_mode">tree,form</field>
+			<field name="domain">[('type','=', 'service')]</field>
+						<field name="context">{'default_type': 'service'}</field>
+						<field name="view_id" ref="product.product_normal_form_view"/>
+						<field name="help" type="html">
+								<p class="o_view_nocontent_smiling_face">Create service
+								</p>
+						</field>
+				</record>
+
+		<record id="service_action_tree" model="ir.actions.act_window.view">
+						<field name="view_mode">tree</field>
+						<field name="view_id" ref="account.product_product_view_tree" />
+						<field name="act_window_id" ref="services_action" />
+				</record>
+
+
+				<record model="ir.actions.act_window" id="carrier_action">
+						<field name="name">Carrier</field>
+						<field name="res_model">sahan_logistics.carrier</field>
+						<field name="view_type">form</field>
+						<field name="view_mode">tree,form</field>
+						<field name="help" type="html">
+								<p class="o_view_nocontent_smiling_face">Create Carrier
+								</p>
+						</field>
+				</record>
+
+				<record model="ir.actions.act_window" id="inventory_action">
+						<field name="name">Inventory</field>
+						<field name="res_model">sahan_logistics.packing_list</field>
+						<field name="domain">[('remaining_qty','>', 0)]</field>
+						<field name="view_type">form</field>
+						<field name="view_mode">tree,form</field>
+						<field name="help" type="html">
+								<p class="o_view_nocontent_smiling_face">Create Inventory Item
+								</p>
+						</field>
+				</record>
+
+				<record id="inventory_action_tree" model="ir.actions.act_window.view">
+					<field name="view_mode">tree</field>
+					<field name="view_id" ref="packing_list_tree" />
+					<field name="act_window_id" ref="inventory_action" />
+				</record>
+
+
+
+				<menuitem id="shardi_logistics_dubai_root"
+									name="Logistics"
+									web_icon="sahan_logistics,static/description/icon.png"
+					groups="group_sahan_logistics_manager,group_sahan_logistics_user"
+						/>
+				<menuitem
+					id="freight_menu"
+					name="Freight Booking"
+					parent="shardi_logistics_dubai_root"
+					action="freight_booking_action"
+					groups="group_sahan_logistics_manager,group_sahan_logistics_user"
+					sequence="1"
+			/>
+					<!-- groups="group_sahan_logistics_manager,group_sahan_logistics_user" -->
+
+
+				<menuitem
+					id="freight_menu_payments"
+					name="Payments"
+					parent="shardi_logistics_dubai_root"
+					groups="group_sahan_logistics_manager"
+					sequence="5"
+
+					/>
+
+				<menuitem
+					id="freight_menu_reports"
+					name="Reporting"
+					parent="shardi_logistics_dubai_root"
+					groups="group_sahan_logistics_manager"
+					sequence="7"
+						/>
+
+				<menuitem
+					id="freight_menu_customer_payments"
+					name="Customer Payments"
+					parent="freight_menu_payments"
+					groups="account.group_account_user,account.group_account_manager,account.group_account_invoice"
+					action="account.action_account_payments"
+					 />
+
+				<menuitem
+					id="freight_menu_settings"
+					name="Settings"
+					parent="shardi_logistics_dubai_root"
+					groups="group_sahan_logistics_manager"
+					sequence="10"
+
+					/>
+				<menuitem
+					id="freight_menu_consignee"
+					name="Consignee"
+					parent="freight_menu_settings"
+					sequence="1"
+					action="consignee_action"
+						/>
+				<menuitem
+					id="freight_menu_shipper"
+					name="Shipper"
+					parent="freight_menu_settings"
+					sequence="2"
+					action="shipper_action"
+						/>
+
+
+<!--				 <menuitem-->
+<!--						id="freight_menu_shipment"-->
+<!--						name="Shipment"-->
+<!--						parent="freight_menu_settings"-->
+<!--						sequence="3"-->
+<!--						action="shipment_action"-->
+<!--						/>-->
+
+				 <menuitem
+						id="freight_menu_vendors"
+						name="Vendors"
+						parent="freight_menu_settings"
+						sequence="4"
+						action="base.action_partner_supplier_form"
+						/>
+
+
+				<menuitem
+						id="freight_menu_services"
+						name="Services"
+						parent="freight_menu_settings"
+						sequence="5"
+						action="services_action"
+						/>
+
+
+<!--				<menuitem-->
+<!--						id="freight_menu_agent"-->
+<!--						name="Agents"-->
+<!--						parent="freight_menu_settings"-->
+<!--						sequence="6"-->
+<!--						action="agent_action"-->
+<!--						/>-->
+
+				<menuitem
+						id="freight_menu_inventory"
+						name="Inventory"
+						parent="freight_menu_settings"
+						sequence="6"
+						action="inventory_action"
+						/>
+
+					<menuitem
+						id="freight_menu_location"
+						name="Location"
+						parent="freight_menu_settings"
+						action="location_action"
+						/>
+
+					<menuitem
+						id="freight_menu_carrier"
+						name="Carrier"
+						parent="freight_menu_settings"
+						action="carrier_action"
+						/>
+
+
+
+
+
+</odoo>

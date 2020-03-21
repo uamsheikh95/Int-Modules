@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="paperformat_mgs_account" model="report.paperformat">
+    <field name="name">Custom Landscape Reports</field>
+    <field name="default" eval="True"/>
+    <field name="format">A4</field>
+    <field name="page_height">0</field>
+    <field name="page_width">0</field>
+    <field name="orientation">Landscape</field>
+    <field name="margin_top">20</field>
+    <field name="margin_bottom">15</field>
+    <field name="margin_left">7</field>
+    <field name="margin_right">7</field>
+    <field name="header_line" eval="False"/>
+    <field name="header_spacing">3</field>
+    <field name="dpi">90</field>
+ </record>
+
+     <report
+        id="action_report_ledger_by_item"
+        name="mgs_account.ledger_by_item_wizard_report"
+        model="mgs_account.ledger_by_item_wizard_report"
+        string="Ledger by Item"
+        report_type="qweb-html"
+        paperformat="paperformat_mgs_account"
+    />
+
+    <template id="ledger_by_item_wizard_report">
+      <t t-call="web.html_container">
+           <t t-call="web.internal_layout">
+              <div class="page">
+                  <div class="container" style="font-size:12px;font-family:Arial;">
+                    <h3 class="text-center" style="margin-bottom:0">Ledger By Item</h3>
+                    <p style="font-weight:bold" class="text-center"><span t-esc="date_from"/> - <span t-esc="date_to"/></p>
+
+                    <div class="row">
+                      <table style="width:100%;">
+                        <thead style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
+                          <tr>
+                            <th t-if="group_by != 'date'">Date</th>
+                            <th t-if="group_by != 'partner'">Partner</th>
+                            <th>Journal</th>
+                            <th t-if="group_by == 'journal'">Reference</th>
+                            <th colspan="2" t-if="group_by != 'journal'">Reference</th>
+                            <th t-if="group_by != 'account'">Account</th>
+                            <th>Debit</th>
+                            <th>Credit</th>
+                            <th>Balance</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          <t t-set="tot_all_debit" t-value="0"/>
+                          <t t-set="tot_all_credit" t-value="0"/>
+                          <t t-set="balance" t-value="0"/>
+                          <t t-set="tot_all_balance" t-value="0"/>
+                          <t t-foreach="group" t-as="one_group">
+                            <tr style="border-top:1px solid #dddddd;border-bottom:1px solid #dddddd">
+                              <td>
+                                <p style="font-family:Arial;font-weight:bold;font-size:12px;margin-bottom:0"> - <t t-esc="one_group.name" /></p>
+                              </td>
+                              <td t-if="group_by != 'date'"></td>
+                              <td t-if="group_by != 'partner'"></td>
+                              <td t-if="group_by != 'journal'"></td>
+                              <td></td>
+                              <td></td>
+                              <td t-if="group_by != 'account'"></td>
+                              <td></td>
+                            </tr>
+
+                            <!-- qty & total per date -->
+                            <t t-set="tot_debit" t-value="0"/>
+                            <t t-set="tot_credit" t-value="0"/>
+
+                            <tr t-foreach="moves" t-as="move" style="border-top:1px solid #dddddd;border-bottom:1px solid #dddddd">
+                              <!-- group_by date -->
+                              <t t-if="move.date == one_group.date and group_by == 'date'">
+                                <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
+                                    <td><span t-field="move.partner_id"/></td>
+
+                                    <td>
+                                      <span t-field="move.move_id"/>
+                                    </td>
+
+                                    <td colspan="2"><span t-field="move.name"/></td>
+
+                                    <td>
+                                      <span t-field="move.account_id"/>
+                                    </td>
+
+                                    <td style="text-align:right">
+                                      <span t-field="move.debit"/>
+                                      <t t-set="tot_debit" t-value="tot_debit + move.debit"/>
+                                      <!-- <span t-esc="'{0:,.2f}'.format(price_unit)"/> -->
+                                    </td>
+                                    <!-- tot price -->
+                                    <td style="text-align:right">
+                                      <span t-field="move.credit"/>
+                                      <t t-set="tot_credit" t-value="tot_credit + move.credit"/>
+                                    </td>
+
+                                    <td style="text-align:right">
+                                      <span t-field="move.credit"/>
+                                      <t t-set="balance" t-value="balance + move.debit - move.credit"/>
+                                      <span t-esc="'{0:,.2f}'.format(balance)" />
+                                    </td>
+                                </tr>
+                              </t> <!-- <t t-if="move.date == sort and group_by == 'date'"> -->
+
+                              <!-- group_by journal -->
+                              <t t-if="move.journal_id.id == one_group.id and group_by == 'journal'">
+                                <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
+                                    <td><span t-field="move.date"/></td>
+
+                                    <td><span t-field="move.partner_id"/></td>
+
+                                    <td>
+                                      <span t-field="move.move_id"/>
+                                    </td>
+
+                                    <td>
+                                      <span t-field="move.name"/>
+                                    </td>
+
+                                    <td>
+                                      <span t-field="move.account_id"/>
+                                    </td>
+
+                                    <td style="text-align:right">
+                                      <span t-field="move.debit"/>
+                                      <t t-set="tot_debit" t-value="tot_debit + move.debit"/>
+                                      <!-- <span t-esc="'{0:,.2f}'.format(price_unit)"/> -->
+                                    </td>
+                                    <!-- tot price -->
+                                    <td style="text-align:right">
+                                      <span t-field="move.credit"/>
+                                      <t t-set="tot_credit" t-value="tot_credit + move.credit"/>
+                                    </td>
+
+                                    <td style="text-align:right">
+                                      <span t-field="move.credit"/>
+                                      <t t-set="balance" t-value="balance + move.debit - move.credit"/>
+                                      <span t-esc="'{0:,.2f}'.format(balance)" />
+                                    </td>
+                                </tr>
+                              </t> <!--<t t-if="move.journal_id == one_group and group_by == 'journal'">-->
+
+                              <!-- group_by account -->
+                              <t t-if="move.account_id.id == one_group.id and group_by == 'account'">
+                                <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
+                                    <td><span t-field="move.date"/></td>
+
+                                    <td><span t-field="move.partner_id"/></td>
+
+                                    <td><a  t-attf-href="/web#id={{ move.move_id.id }}&amp;action=243&amp;model=account.move&amp;view_type=form&amp;menu_id=169" target="_blank">
+                                      <span t-field="move.move_id"/></a>
+                                    </td>
+
+                                     <td colspan="2"><span t-field="move.name"/></td>
+
+
+                                    <td style="text-align:right">
+                                      <span t-field="move.debit"/>
+                                      <t t-set="tot_debit" t-value="tot_debit + move.debit"/>
+                                      <!-- <span t-esc="'{0:,.2f}'.format(price_unit)"/> -->
+                                    </td>
+                                    <!-- tot price -->
+                                    <td style="text-align:right">
+                                      <span t-field="move.credit"/>
+                                      <t t-set="tot_credit" t-value="tot_credit + move.credit"/>
+                                    </td>
+
+                                    <td style="text-align:right">
+                                      <span t-field="move.credit"/>
+                                      <t t-set="balance" t-value="balance + move.debit - move.credit"/>
+                                      <span t-esc="'{0:,.2f}'.format(balance)" />
+                                    </td>
+                                </tr>
+                              </t> <!--<t t-if="move.account_id == sort and group_by == 'account'">-->
+
+                              <t t-if="move.partner_id.id == one_group.id and group_by == 'partner'">
+                                <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
+                                    <td><span t-field="move.date"/></td>
+
+                                    <td><a  t-attf-href="/web#id={{ move.move_id.id }}&amp;action=243&amp;model=account.move&amp;view_type=form&amp;menu_id=169" target="_blank">
+                                      <span t-field="move.move_id"/></a>
+                                    </td>
+
+                                     <td colspan="2"><span t-field="move.name"/></td>
+
+                                     <td><span t-field="move.account_id"/></td>
+
+                                    <td style="text-align:right">
+                                      <span t-field="move.debit"/>
+                                      <t t-set="tot_debit" t-value="tot_debit + move.debit"/>
+                                      <!-- <span t-esc="'{0:,.2f}'.format(price_unit)"/> -->
+                                    </td>
+                                    <!-- tot price -->
+                                    <td style="text-align:right">
+                                      <span t-field="move.credit"/>
+                                      <t t-set="tot_credit" t-value="tot_credit + move.credit"/>
+                                    </td>
+
+                                    <td style="text-align:right">
+                                      <span t-field="move.credit"/>
+                                      <t t-set="balance" t-value="balance + move.debit - move.credit"/>
+                                      <span t-esc="'{0:,.2f}'.format(balance)" />
+                                    </td>
+                                </tr>
+                              </t> <!--<t t-if="move.partner_id == sort and group_by == 'partner'">-->
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td t-if="group_by != 'date'"></td>
+                              <td t-if="group_by != 'partner'"></td>
+                              <td t-if="group_by != 'journal'"></td>
+                              <td></td>
+                              <td t-if="group_by != 'account'"></td>
+                              <td style="text-align:right;border-top:1px solid">
+                                <span t-esc="'{0:,.2f}'.format(tot_debit)"/>
+                                <t t-set="tot_all_debit" t-value="tot_all_debit + tot_debit"/>
+                              </td>
+                              <td style="text-align:right;border-top:1px solid">
+                                <span t-esc="'{0:,.2f}'.format(tot_credit)"/>
+                                <t t-set="tot_all_credit" t-value="tot_all_credit + tot_credit"/>
+                              </td>
+
+                              <td style="text-align:right;border-top:1px solid">
+                                <span t-esc="'{0:,.2f}'.format(balance)" />
+                                <t t-set="tot_all_balance" t-value="tot_all_balance + balance"/>
+                              </td>
+                            </tr>
+                          </t> <!--<t t-foreach="group_by"-->
+
+                          <tr>
+                            <td></td>
+                            <td t-if="group_by != 'date'"></td>
+                            <td t-if="group_by != 'partner'"></td>
+                            <td t-if="group_by != 'journal'"></td>
+                            <td></td>
+                            <td t-if="group_by != 'account'"></td>
+
+                            <td style="text-align:right;border-top:1px solid">
+                              <span t-esc="'{0:,.2f}'.format(tot_all_debit)"/>
+                            </td>
+                            <td style="text-align:right;border-top:1px solid">
+                              <span t-esc="'{0:,.2f}'.format(tot_all_credit)"/>
+                            </td>
+
+                            <td style="text-align:right;border-top:1px solid">
+                              <span t-esc="'{0:,.2f}'.format(tot_all_balance)" />
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div> <!--tow-->
+                  </div> <!--container-->
+              </div> <!--page-->
+            </t> <!--web.external_layout-->
+      </t> <!--web.html_container-->
+    </template>
+</odoo>

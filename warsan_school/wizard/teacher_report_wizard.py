@@ -42,23 +42,25 @@ class TeacherWizardReport(models.AbstractModel):
 
         classes = self.env['warsan_school.class'].search([])
 
-        if teacher_id and date_from and date_to:
-            classes = self.env['warsan_school.class'].search([('teacher_id', '=', teacher_id), ('date_start', '>=', date_from),
-                                                              ('date_end', '<=', date_to)])
 
-        if teacher_id and date_from:
-            classes = self.env['warsan_school.class'].search([('teacher_id', '=', teacher_id), ('date_start', '>=', date_from)])
 
-        if teacher_id:
-            classes = self.env['warsan_school.class'].search([('teacher_id', '=', teacher_id)])
+        if date_from:
+            classes = self.env['warsan_school.class'].search([('date_start', '>=', date_from)])
 
         if date_from and date_to:
             classes = self.env['warsan_school.class'].search([('date_start', '>=', date_from),
                                                               ('date_end', '<=', date_to)])
 
-        if date_from:
-            classes = self.env['warsan_school.class'].search([('date_start', '>=', date_from)])
+        if teacher_id:
+            classes = self.env['warsan_school.class'].search([('teacher_id', '=', teacher_id)])
 
+
+        if teacher_id and date_from:
+            classes = self.env['warsan_school.class'].search([('teacher_id', '=', teacher_id), ('date_start', '>=', date_from)])
+
+        if teacher_id and date_from and date_to:
+            classes = self.env['warsan_school.class'].search([('teacher_id', '=', teacher_id), ('date_start', '>=', date_from),
+                                                              ('date_end', '<=', date_to)])
         return {
             'doc_ids': data['ids'],
             'doc_model': data['model'],

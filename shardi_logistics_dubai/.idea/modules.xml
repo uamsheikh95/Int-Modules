@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../../v11/17- Project Invoice Bill/safeway_project_invoice_bill/.idea/project_invoice_bill.iml" filepath="$PROJECT_DIR$/../../v11/17- Project Invoice Bill/safeway_project_invoice_bill/.idea/project_invoice_bill.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/.idea/quickbooks_reports.iml" filepath="$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/.idea/quickbooks_reports.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../sahan_logistics/.idea/shardi_logistics_dubai.iml" filepath="$PROJECT_DIR$/../sahan_logistics/.idea/shardi_logistics_dubai.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/.idea/warsan_school.iml" filepath="$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/.idea/warsan_school.iml" />
+    </modules>
+  </component>
+</project>

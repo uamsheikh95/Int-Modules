@@ -1,0 +1,73 @@
+<odoo>
+    <data>
+        <report
+        id="action_manifest_report"
+        name="sahan_logistics.manifest_report"
+        file="sahan_logistics.manifest_report"
+        model="sahan_logistics.trip"
+        string="Manifest"
+        report_type="qweb-pdf"
+        />
+
+        <template id="manifest_report">
+      <t t-call="web.html_container">
+          <t t-foreach="docs" t-as="doc">
+              <t t-call="web.external_layout">
+                  <div class="page">
+                      <div class="row">
+                        <div class="col-md-12">
+                            <h3 class="text-center">Manifest Report</h3>
+                              <h4>Container: <span t-field="doc.container_no"/></h4>
+                              <hr/>
+                              <!--<div class="table-responsive">-->
+                                <table class="table table-condensed" style="font-size:12px;">
+
+                                  <thead>
+                                        <tr style="background-color:#ff704d">
+                                            <td class="text-left"><strong>No</strong></td>
+                                            <td class="text-left"><strong>Item</strong></td>
+                                            <td class="text-left"><strong>Customer</strong></td>
+                                            <td class="text-left"><strong>pkg qty</strong></td>
+                                            <td class="text-left"><strong>Mobile</strong></td>
+                                            <td class="text-left"><strong>Unit</strong></td>
+                                            <td class="text-center"><strong>Unit of Measure</strong></td>
+                                            <td class="text-center"><strong>Rate</strong></td>
+                                            <td class="text-right"><strong>Total Units</strong></td>
+                                            <td class="text-right"><strong>Total Price</strong></td>
+                                        </tr>
+                                  </thead>
+
+                                  <tbody>
+                                    <t t-foreach="doc.trip_line_ids" t-as="trip">
+                                        <tr>
+                                            <td><span t-esc="trip_index + 1"/></td>
+                                            <td><span t-field="trip.packing_item_id"/></td>
+											<td><span t-field="trip.partner_id.name"/></td>
+                                            <td><span t-field="trip.qty"/></td>
+											<td><span t-field="trip.partner_mobile"/></td>
+											<td><span t-field="trip.volume_weight" string="Unit"/></td>
+											<td><span t-field="trip.uom_id"/></td>
+											<td><span t-field="trip.price_per_cbm" string="Rate"/></td>
+											<td><span t-field="trip.total_cbm"/></td>
+											<td><span t-field="trip.total_per_cbm"/></td>
+                                        </tr>
+
+                                    </t>
+                                  </tbody>
+
+
+
+                                </table>
+                        </div>
+
+                          <!--</div>-->
+
+                      </div>
+                  </div>
+              </t>
+          </t>
+      </t>
+
+    </template>
+    </data>
+</odoo>

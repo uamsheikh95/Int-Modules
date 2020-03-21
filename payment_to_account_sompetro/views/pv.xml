@@ -1,0 +1,118 @@
+<odoo>
+	<data>
+		<report
+				id="action_pv_report"
+				name="payment_to_account.pv"
+				file="payment_to_account.pv"
+				model="account.payment"
+				string="Payment Voucher"
+				report_type="qweb-html"
+				/>
+
+				<template id="pv">
+				<t t-call="web.html_container">
+						<t t-foreach="docs" t-as="doc">
+								<t t-call="web.external_layout">
+										<div class="page" >
+												<div class="">
+													<table class="table table-sm o_main_table table-bordered">
+														<tbody>
+															<tr style="">
+																<td style=""><strong>No.</strong></td><td><span t-field="doc.name"/></td>
+																<td style=""><strong>Date.</strong></td><td><span t-field="doc.payment_date"/></td>
+																<td style=""><strong>Payment Type:</strong></td><td><span t-field="doc.payment_method_id"/></td>
+															</tr>
+														</tbody>
+													</table>
+
+
+												</div>
+
+												<div class="row">
+													<table class="table table-bordered" style="margin-top:20px">
+															<thead>
+																	<tr style="background:#e2e2e2">
+																			<th class="text-center" style="border:1px solid silver;">Payee</th>
+																			<th class="text-center" style="border:1px solid silver;">Description</th>
+																			<th class="text-center" style="border:1px solid silver;">Amount</th>
+																	</tr>
+															</thead>
+
+															<tbody>
+																<t t-foreach="doc.payment_account_ids" t-as="payment">
+																	<tr>
+																		<td style="border:1px solid silver;"><span t-field="payment.partner_id" /></td>
+																		<td style="border:1px solid silver;"><span t-field="payment.name" /></td>
+																		<td style="border:1px solid silver;"><span t-field="payment.amount" /></td>
+																	</tr>
+																</t>
+
+																<tr style="background:#e2e2e2">
+																	<td style="border:1px solid silver;"></td>
+																	<td style="border:1px solid silver;" class="text-right"><strong> Total</strong></td>
+																	<td style="border:1px solid silver;"><span t-field="doc.amount" /></td>
+																</tr>
+															</tbody>
+													</table>
+													<table class="table table-sm o_main_table">
+														<thead>
+														</thead>
+														<tbody>
+
+														</tbody>
+													</table>
+												</div>
+												<hr style="margin-top:400px"></hr>
+
+												<table class="table table-sm o_main_table table-bordered">
+													<tbody>
+															<tr>
+																<td style=""><strong>No.</strong></td><td><span t-field="doc.name"/></td>
+																<td style=""><strong>Date.</strong></td><td><span t-field="doc.payment_date"/></td>
+																<td style=""><strong>Payment Type:</strong></td><td><span t-field="doc.payment_method_id"/></td>
+															</tr>
+													</tbody>
+												</table>
+
+												<div class="row">
+													<table class="table table-bordered" style="margin-top:20px">
+															<thead>
+																	<tr style="background:#e2e2e2">
+																			<th class="text-center" style="border:1px solid silver;">Payee</th>
+																			<th class="text-center" style="border:1px solid silver;">Description</th>
+																			<th class="text-center" style="border:1px solid silver;">Amount</th>
+																	</tr>
+															</thead>
+
+															<tbody>
+																<t t-foreach="doc.payment_account_ids" t-as="payment">
+																	<tr>
+																		<td style="border:1px solid silver;"><span t-field="payment.partner_id" /></td>
+																		<td style="border:1px solid silver;"><span t-field="payment.name" /></td>
+																		<td style="border:1px solid silver;"><span t-field="payment.amount" /></td>
+																	</tr>
+																</t>
+
+																<tr style="background:#e2e2e2">
+																	<td style="border:1px solid silver;"></td>
+																	<td style="border:1px solid silver;" class="text-right"><strong> Total</strong></td>
+																	<td style="border:1px solid silver;"><span t-field="doc.amount" /></td>
+																</tr>
+															</tbody>
+													</table>
+													<table class="table table-sm o_main_table table-bordered">
+														<thead>
+														</thead>
+														<tbody>
+
+														</tbody>
+													</table>
+												</div>
+												<hr></hr>
+										</div>
+								</t>
+						</t>
+				</t>
+			</template>
+	</data>
+</odoo>

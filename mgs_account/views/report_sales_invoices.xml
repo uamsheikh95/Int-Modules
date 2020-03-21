@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <report
+        id="action_sales_invoices_wizard"
+        name="mgs_accounts.sales_invoices_report"
+        model="mgs_accounts.sales_invoices_report"
+        string="Sales Invoices"
+        report_type="qweb-html"
+    />
+
+    <template id="sales_invoices_report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page" >
+
+                    <h3 style="padding=15px;" class="text-center">Sales Invoices</h3>
+
+                    <div class="row">
+                        <table class="table table-bordered" style="font-size: 12px;">
+                            <tbody>
+                                <tr>
+                                    <td><strong>Product</strong></td>
+                                    <td><span t-esc="product_name"/></td>
+                                    <td><strong>From</strong></td>
+                                    <td><span t-esc="date_from"/></td>
+                                    <td><strong>Category</strong></td>
+                                    <td><span t-esc="categ_name"/></td>
+                                </tr>
+
+                                <tr>
+                                    <td><strong>Partner</strong></td>
+                                    <td><span t-esc="partner_name"/></td>
+                                    <td><strong>To</strong></td>
+                                    <td><span t-esc="date_to"/></td>
+                                    <td><strong>Status</strong></td>
+                                    <td><span t-esc="state"/></td>
+                                </tr>
+
+                                <tr>
+                                    <td><strong>User</strong></td>
+                                    <td><span t-esc="user_name"/></td>
+                                    <td><strong>Team</strong></td>
+                                    <td><span t-esc="team_name"/></td>
+                                    <td><strong>Show</strong></td>
+                                    <td><span t-esc="invoice_type"/></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <t t-if="report_type == 'detail'">
+                        <div class="row">
+                            <table class="table table-condensed" style="font-size: 12px;">
+                                <thead>
+                                    <tr>
+                                        <td><strong>Date</strong></td>
+                                        <td><strong>Inv No.</strong></td>
+                                        <td><strong>Partner</strong></td>
+                                        <td><strong>Product</strong></td>
+                                        <td><strong>Amount</strong></td>
+                                        <td><strong>Amount Due</strong></td>
+                                        <td><strong>State</strong></td>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <t t-foreach="invoices" t-as="invoice">
+                                        <tr>
+                                            <td><span t-field="invoice.invoice_id.date_invoice"/></td>
+                                            <td><span t-field="invoice.invoice_id.number"/></td>
+                                            <td><span t-field="invoice.invoice_id.partner_id"/></td>
+                                            <td><span t-field="invoice.invoice_id.partner_id"/></td>
+                                            <td><span t-field="invoice.invoice_id.amount_total"/></td>
+                                            <td><span t-field="invoice.invoice_id.amount_total"/></td>
+                                            <td><span t-field="invoice.invoice_id.state"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+
+                            <t t-if="report_type == 'summary'">
+                                <div class="row mt0 mb4">
+                                    <table class="table table-condensed" style="font-size: 12px;">
+                                        <thead>
+                                            <tr>
+                                                <td><strong>Date</strong></td>
+                                                <td><strong>Inv No.</strong></td>
+                                                <td><strong>Partner</strong></td>
+                                                <td><strong>Amount</strong></td>
+                                                <td><strong>Amount Due</strong></td>
+                                                <td><strong>State</strong></td>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <t t-foreach="invoices" t-as="invoice">
+                                                <tr>
+                                                    <td><span t-field="invoice.date_invoice"/></td>
+                                                    <td><span t-field="invoice.number"/></td>
+                                                    <td><span t-field="invoice.partner_id"/></td>
+                                                    <td><span t-field="invoice.amount_total"/></td>
+                                                    <td><span t-field="invoice.residual"/></td>
+                                                    <td><span t-field="invoice.state"/></td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </t>
+                </div>
+
+            </t>
+        </t>
+    </template>
+</odoo>

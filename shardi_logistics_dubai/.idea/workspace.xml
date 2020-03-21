@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="7e1da586-57c5-43a0-8799-8858bfd2dd4f" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>_compute_total_price</find>
+      <find>invoice_create</find>
+      <find>air</find>
+      <find>volume_weight</find>
+      <find>trip</find>
+      <find>chargeable_weight</find>
+      <find>self.product_id()</find>
+      <find>name = str(self.product_id())</find>
+      <find>result</find>
+      <find>out_invoice</find>
+      <find>val</find>
+      <find>in_refund</find>
+      <find>&lt;field name=&quot;company_id&quot; string=&quot;Company&quot; readonly=&quot;1&quot; /&gt;</find>
+      <find>name = str(self.product_id)</find>
+      <find>(('invoice_type', '=', self.invoice_type))</find>
+      <find># -----USER------</find>
+      <find>self.product_id.categ_id.id</find>
+      <find>style=&quot;padding-top: 0px;padding-bottom: 0px;text-align:right&quot;</find>
+      <find>_compute_report_type</find>
+      <find>invoice_type</find>
+      <find>in_invoice_in_refund</find>
+      <find>out_invoice_out_refund</find>
+      <find>('invoice_type', '=', 'in_invoice'), ('invoice_type', '=', 'in_refund'),</find>
+      <find>'|', ('state', '=', 'open'), ('state', '=', 'paid')</find>
+      <find>To:</find>
+      <find>Open/Paid Status</find>
+      <find>like</find>
+      <find>or</find>
+      <find>=</find>
+      <find>quickbooks_reports</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>invoice_id.amount_total</replace>
+      <replace>shipment_id</replace>
+      <replace>, order='job_date asc'</replace>
+      <replace>&lt;th nowrap=&quot;nowrap&quot;&gt;</replace>
+      <replace>discount_total</replace>
+      <replace>doc</replace>
+      <replace>o.invoice_id</replace>
+      <replace>partner_ref</replace>
+      <replace>group_logistics_manager</replace>
+      <replace>group_sahan_logistics_user</replace>
+      <replace>sahan_logistics</replace>
+      <replace>group_sahan_logistics_manager</replace>
+      <replace>warsan_school.</replace>
+      <replace>school.teacher_wizard</replace>
+      <replace>categ_id</replace>
+      <replace>#name =</replace>
+      <replace>12, 8</replace>
+      <replace>name = str(self.product_id)</replace>
+      <replace>invoice_type</replace>
+      <replace>type</replace>
+      <replace>name = str(self.product_id.name)</replace>
+      <replace>('invoice_type', '=', self.invoice_type)</replace>
+      <replace># -----USER</replace>
+      <replace>self.categ_id.id</replace>
+      <replace>'|', ('invoice_type', '=', 'in_invoice'), ('invoice_type', '=', 'in_refund'),</replace>
+      <replace>'&amp;', ('state', 'like', 'open'), ('state', 'like', 'paid')</replace>
+      <replace>-</replace>
+      <replace>Open/Paid</replace>
+      <replace>=</replace>
+      <replace>category</replace>
+    </replaceStrings>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/views/packing_list.xml" />
+        <option value="$PROJECT_DIR$/views/quotation_report.xml" />
+        <option value="$PROJECT_DIR$/views/shardi_log_dubai.xml" />
+        <option value="$PROJECT_DIR$/views/trip.xml" />
+        <option value="$PROJECT_DIR$/wizard/assign_shipment.py" />
+        <option value="$PROJECT_DIR$/wizard/assign_shipment.xml" />
+        <option value="$PROJECT_DIR$/wizard/depart_selected.py" />
+        <option value="$PROJECT_DIR$/wizard/depart_selected.xml" />
+        <option value="$PROJECT_DIR$/wizard/job_cost_by_detail_wizard.py" />
+        <option value="$PROJECT_DIR$/wizard/job_cost_by_detail_wizard.xml" />
+        <option value="$PROJECT_DIR$/__manifest__.py" />
+        <option value="$PROJECT_DIR$/../sahan_logistics/security/sahan_logistics_sequrity.xml" />
+        <option value="$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/models/res_partner.py" />
+        <option value="$PROJECT_DIR$/views/job_cost_by_detail_wizard_report.xml" />
+        <option value="$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/__manifest__.py" />
+        <option value="$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/wizard/__init__.py" />
+        <option value="$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/__init__.py" />
+        <option value="$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/wizard/teacher_report_wizard.py" />
+        <option value="$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/wizard/teacher_report_wizard.xml" />
+        <option value="$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/models/warsan_school.py" />
+        <option value="$PROJECT_DIR$/../3- Quickbooks Reports/quickbooks_reports/wizard/__init__.py" />
+        <option value="$PROJECT_DIR$/../3- Quickbooks Reports/quickbooks_reports/__manifest__.py" />
+        <option value="$PROJECT_DIR$/../3- Quickbooks Reports/quickbooks_reports/wizard/t.py" />
+        <option value="$PROJECT_DIR$/../sahan_logistics/models/invoice.py" />
+        <option value="$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/views/res_partner.xml" />
+        <option value="$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/views/warsan_school.xml" />
+        <option value="$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/views/teacher_report_wizard.xml" />
+        <option value="$PROJECT_DIR$/../sahan_logistics/views/airway_report.xml" />
+        <option value="$PROJECT_DIR$/../sahan_logistics/views/packing_list.xml" />
+        <option value="$PROJECT_DIR$/../sahan_logistics/security/ir.model.access.csv" />
+        <option value="$PROJECT_DIR$/../sahan_logistics/views/shipment.xml" />
+        <option value="$PROJECT_DIR$/../sahan_logistics/wizard/job_cost_by_detail_wizard.py" />
+        <option value="$PROJECT_DIR$/../sahan_logistics/views/sahan_logistics.xml" />
+        <option value="$PROJECT_DIR$/../sahan_logistics/__manifest__.py" />
+        <option value="$PROJECT_DIR$/../sahan_logistics/views/manifest_report.xml" />
+        <option value="$PROJECT_DIR$/../sahan_logistics/views/trip.xml" />
+        <option value="$PROJECT_DIR$/../sahan_logistics/models/sahan_logistics.py" />
+        <option value="$PROJECT_DIR$/../3- Quickbooks Reports/quickbooks_reports/views/invoice.xml" />
+        <option value="$PROJECT_DIR$/../3- Quickbooks Reports/quickbooks_reports/wizard/filter_invoices.xml" />
+        <option value="$PROJECT_DIR$/../3- Quickbooks Reports/quickbooks_reports/models/invoice.py" />
+        <option value="$PROJECT_DIR$/../3- Quickbooks Reports/quickbooks_reports/wizard/filter_invoices.py" />
+        <option value="$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/wizard/selected_sales_invoices.py" />
+        <option value="$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/views/selected_sales_invoices.xml" />
+        <option value="$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/wizard/filter_invoices.xml" />
+        <option value="$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/wizard/backub" />
+        <option value="$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/wizard/filter_invoices.py" />
+        <option value="$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/models/invoice.py" />
+        <option value="$USER_HOME$/AppData/Local/Temp/fz3temp-3/filter_invoices.py" />
+        <option value="$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/views/invoice.xml" />
+        <option value="$USER_HOME$/AppData/Local/Temp/fz3temp-2/selected_sales_invoices.py" />
+        <option value="$USER_HOME$/AppData/Local/Temp/fz3temp-2/selected_sales_invoices.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-7" />
+    <option name="width" value="697" />
+    <option name="height" value="735" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../3- Quickbooks Reports/quickbooks_reports" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Admin\Documents\usama\projects\v11\18- Warsan School\warsan_school\wizard" />
+      <recent name="C:\Users\Admin\Documents\usama\projects\v11\18- Warsan School\warsan_school\views" />
+      <recent name="C:\Users\Admin\Documents\usama\projects\v11\10- Shardi Logistics\shardi_logistics_dubai\shardi_logistics_dubai\wizard" />
+      <recent name="C:\Users\Admin\Documents\usama\projects\v11\10- Shardi Logistics\shardi_logistics_dubai\shardi_logistics_dubai\views" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7e1da586-57c5-43a0-8799-8858bfd2dd4f" name="Default Changelist" comment="" />
+      <created>1565002931739</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1565002931739</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49918166" visible="true" weight="0.14583333" />
+      <window_info id="Structure" order="1" sideWeight="0.5008183" side_tool="true" weight="0.16741072" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3289689" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.3289689" />
+      <window_info anchor="bottom" id="Python Console" order="10" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17708333" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3289689" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Python Console" order="10" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout-to-restore>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/models/sahan_logistics.py</url>
+          <line>82</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/models/sahan_logistics.py</url>
+          <line>469</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/models/sahan_logistics.py</url>
+          <line>108</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/models/warsan_school.py</url>
+          <line>11</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/models/res_partner.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/wizard/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="35" selection-start-line="2" selection-start-column="35" selection-end-line="2" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/wizard/teacher_report_wizard.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1105">
+          <caret line="65" column="40" selection-start-line="65" selection-start-column="40" selection-end-line="65" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/17- Project Invoice Bill/safeway_project_invoice_bill/wizard/job_cost_by_detail_wizard.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../3- Quickbooks Reports/quickbooks_reports/wizard/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-start-column="2" selection-end-column="30" />
+          <folding>
+            <element signature="e#31#68#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../3- Quickbooks Reports/quickbooks_reports/__manifest__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="325">
+          <caret line="30" column="44" selection-start-line="30" selection-start-column="44" selection-end-line="30" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../3- Quickbooks Reports/quickbooks_reports/wizard/t.py" />
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/models/invoice.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="11" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/models/shardi_log_dubai.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="511" column="4" selection-start-line="511" selection-start-column="4" selection-end-line="514" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/wizard/teacher_report_wizard.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="8" lean-forward="true" selection-start-line="3" selection-start-column="8" selection-end-line="28" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/views/res_partner.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="64" selection-start-line="7" selection-start-column="47" selection-end-line="7" selection-end-column="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/models/warsan_school.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1173">
+          <caret line="70" column="12" selection-start-line="70" selection-start-column="12" selection-end-line="70" selection-end-column="12" />
+          <folding>
+            <element signature="e#25#65#0" expanded="true" />
+            <element signature="e#138#204#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/views/teacher_report_wizard.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="27" column="89" selection-start-line="27" selection-start-column="89" selection-end-line="27" selection-end-column="89" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/18- Warsan School/warsan_school/views/warsan_school.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="258">
+          <caret line="186" selection-start-line="186" selection-end-line="186" />
+          <folding>
+            <element signature="n#record#0;n#odoo#0;n#!!top" />
+            <element signature="n#record#2;n#odoo#0;n#!!top" />
+            <element signature="n#field#2;n#record#2;n#odoo#0;n#!!top" />
+            <element signature="n#record#3;n#odoo#0;n#!!top" />
+            <element signature="n#record#4;n#odoo#0;n#!!top" />
+            <element signature="n#record#5;n#odoo#0;n#!!top" />
+            <element signature="n#menuitem#1;n#odoo#0;n#!!top" />
+            <element signature="n#menuitem#2;n#odoo#0;n#!!top" />
+            <element signature="n#menuitem#3;n#odoo#0;n#!!top" />
+            <element signature="n#menuitem#5;n#odoo#0;n#!!top" />
+            <element signature="n#menuitem#6;n#odoo#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/views/invoice.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/views/invoice_report.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/views/packing_list.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-61">
+          <caret line="41" column="74" selection-start-line="41" selection-start-column="74" selection-end-line="41" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/views/job_cost_report.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/views/shardi_log_dubai.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="127" column="76" selection-start-line="122" selection-start-column="68" selection-end-line="127" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/views/shipment.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="70" column="70" selection-start-line="70" selection-start-column="70" selection-end-line="70" selection-end-column="70" />
+          <folding>
+            <element signature="n#record#1;n#data#0;n#odoo#0;n#!!top" />
+            <element signature="n#record#2;n#data#0;n#odoo#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/views/job_cost_by_detail_wizard_report.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="629">
+          <caret line="60" column="88" selection-start-line="60" selection-start-column="85" selection-end-line="60" selection-end-column="88" />
+          <folding>
+            <element signature="n#table#0;n#div#0;n#t#0;n#t#0;n#template#0;n#data#0;n#odoo#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/wizard/job_cost_by_detail_wizard.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="430">
+          <caret line="112" column="23" selection-start-line="112" selection-start-column="23" selection-end-line="112" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/security/ir.model.access.csv">
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="108" selection-start-line="17" selection-start-column="108" selection-end-line="17" selection-end-column="108" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/views/quotation_report.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="14" column="51" lean-forward="true" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/__manifest__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="44" column="30" selection-start-line="44" selection-start-column="30" selection-end-line="44" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/views/manifest_report.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="45" column="79" selection-start-line="45" selection-start-column="79" selection-end-line="45" selection-end-column="79" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/views/trip.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="50" column="74" selection-start-line="50" selection-start-column="74" selection-end-line="50" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/models/sahan_logistics.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-425">
+          <caret line="681" column="8" selection-start-line="681" selection-start-column="8" selection-end-line="681" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../3- Quickbooks Reports/quickbooks_reports/wizard/filter_invoices.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="395">
+          <caret line="140" column="70" selection-start-line="140" selection-start-column="60" selection-end-line="140" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/1078232989/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="5148" column="27" selection-start-line="5148" selection-start-column="24" selection-end-line="5148" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../3- Quickbooks Reports/quickbooks_reports/models/invoice.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="16" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../3- Quickbooks Reports/quickbooks_reports/wizard/filter_invoices.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="51" selection-start-line="22" selection-start-column="51" selection-end-line="22" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../3- Quickbooks Reports/quickbooks_reports/views/invoice.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="31" column="60" selection-start-line="31" selection-start-column="60" selection-end-line="31" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/wizard/sales_invoices.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-8053" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/wizard/sales_invoices.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="393">
+          <caret line="50" column="8" lean-forward="true" selection-start-line="50" selection-start-column="8" selection-end-line="50" selection-end-column="108" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/__manifest__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-136" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/17- Project Invoice Bill/safeway_project_invoice_bill/models/invoice.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/17- Project Invoice Bill/safeway_project_invoice_bill/views/invoice.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="20" lean-forward="true" selection-start-line="19" selection-start-column="20" selection-end-line="19" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/views/sahan_logistics.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="559" column="16" selection-start-line="559" selection-start-column="16" selection-end-line="563" selection-end-column="25" />
+          <folding>
+            <element signature="e#10#6457#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/wizard/selected_sales_invoices.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="32" column="8" selection-start-line="32" selection-start-column="8" selection-end-line="32" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/views/selected_sales_invoices.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="59" selection-start-line="18" selection-start-column="59" selection-end-line="18" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/wizard/backub" />
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/fz3temp-3/filter_invoices.py" />
+    <entry file="file://$PROJECT_DIR$/../../v11/17- Project Invoice Bill/safeway_project_invoice_bill/models/project.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1649">
+          <caret line="98" column="102" selection-start-line="98" selection-start-column="27" selection-end-line="98" selection-end-column="102" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/wizard/filter_invoices.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="529">
+          <caret line="630" column="65" selection-start-line="630" selection-start-column="65" selection-end-line="630" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/wizard/filter_invoices.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="24" selection-start-line="24" selection-end-line="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/models/invoice.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="62" selection-start-line="19" selection-start-column="62" selection-end-line="19" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../v11/20- Quickbooks Reports/quickbooks_reports/views/invoice.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="46" selection-start-line="23" selection-start-column="46" selection-end-line="23" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/fz3temp-2/selected_sales_invoices.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="816">
+          <caret line="49" column="25" selection-start-line="49" selection-start-column="25" selection-end-line="49" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/fz3temp-2/selected_sales_invoices.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="18" column="57" selection-start-line="18" selection-start-column="57" selection-end-line="18" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sahan_logistics/views/airway_report.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="44" column="34" selection-start-line="23" selection-start-column="28" selection-end-line="44" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
