@@ -98,7 +98,7 @@
 
 
 													<t t-set="printnew" t-value="1"/>
-													<t t-set="prevbal" t-value="balance_forward"/>
+													<t t-set="prevbal" t-value="balance_forward" t-if="balance_forward"/>
 													<t t-set="refe_odd" t-value="all"/>
 
 													<t t-if="data['form']['report_type']=='detail'">
