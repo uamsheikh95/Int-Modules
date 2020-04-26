@@ -1,0 +1,82 @@
+<odoo>
+    <record model="ir.ui.view" id="bulk_statement_wizard_form">
+        <field name="name">Generate Bulk Statements</field>
+        <field name="model">statement.bulk</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Bulk Statements">
+                <group>
+                    <group>
+                        <field name="period_from"/>
+                        <field name="partner_id" domain = "[('customer','=',True)]"/>
+                    </group>
+                    <group>
+                        <field name="period_to"/>
+                        <field name="view_statement"/>
+                    </group>
+                </group>
+
+                <notebook attrs="{'invisible': [('view_statement', '!=', True)]}">
+                  <page string="Statements">
+                    <group>
+          						<group>
+          						</group>
+
+          						<group>
+          							<field name="statement_balance_forward" readonly="1" style="font-weight: bold;" />
+          						</group>
+          					</group>
+
+                    <field name="statement_line_ids" style="text-align: right;" >
+          						<tree default_order='date'>
+          							<field name="date" string="Date" />
+          							<field name="account" string="Acc" />
+          							<field name="journal" string="JRNL" />
+          							<field name="name" string="Description" />
+          							<field name="debit" string="Debit" />
+          							<field name="credit" string="Credit" />
+          							<field name="balance"  />
+          						</tree>
+          					</field>
+
+                    <group>
+          						<group>
+          							<field name="balance_on_date" readonly="1" style="font-weight: bold;" />
+          						</group>
+
+          						<group>
+          							<field name="statement_balance" readonly="1" style="font-weight: bold;" />
+          						</group>
+          					</group>
+
+                  </page>
+                </notebook>
+
+                <footer>
+                    <button name="send_statements" string="Send Statement" type="object" class="oe_highlight"/>
+                    <button name="print_statements" string="Print Statement" type="object" class="oe_highlight"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_bulk_statement_generate" model="ir.actions.act_window">
+      <field name="name">Generate Bulk Statements</field>
+      <field name="res_model">statement.bulk</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="bulk_statement_wizard_form"/>
+			<field name="target">new</field>
+		</record>
+
+
+    <menuitem
+        action="action_bulk_statement_generate"
+        id="menu_bulk_statement_generate"
+        name="Generate Bulk Statements"
+        parent="contacts.menu_contacts"
+        />
+</odoo>

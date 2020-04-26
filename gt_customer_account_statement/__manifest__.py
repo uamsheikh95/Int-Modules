@@ -21,12 +21,12 @@
 
 
 {
-    'name': 'Customer / Supplier statement & customer overdue payment reports',
-    'version': '1.0',
-    'website' : 'https://www.globalteckz.com',
-    'category': 'Accounts',
-    'summary': 'Account Customers statement & Supplier statement & overdue statements',
-    'description': """This module should allow you to print customer statement report from top of customer/supplier list/form view.
+	'name': 'Customer / Supplier statement & customer overdue payment reports',
+	'version': '1.0',
+	'website' : 'https://www.globalteckz.com',
+	'category': 'Accounts',
+	'summary': 'Account Customers statement & Supplier statement & overdue statements',
+	'description': """This module should allow you to print customer statement report from top of customer/supplier list/form view.
 customer statement
 supplier statement
 overdue statement
@@ -41,38 +41,39 @@ outstanding invoice
 customer overdue payments
 invoice
 reminder
-monthly    
-    """,
-    'author': 'Globalteckz',
+monthly
+	""",
+	'author': 'Globalteckz',
 	"price": "35.00",
-    "currency": "EUR",
-    'images': ['static/description/BANNER.png'],
+	"currency": "EUR",
+	'images': ['static/description/BANNER.png'],
 	"live_test_url" : "http://statement12.erpodoo.in:8069",
-    "license" : "Other proprietary",
-    'depends': ['sale_management',
-                'purchase',
-                'account',
-                'stock',
-                'sale_stock',
-                ],
-    'data': [
-        'wizard/account_statements.xml',
-        'report/acc_statemnt_view.xml',
-        'report/email_acc_statement.xml',
-        'report/email_overdue.xml',
-        'report/report_view.xml',
-        'views/partner_view.xml',
-        'views/send_mail_view.xml',
-        'views/account_move_view.xml'
-    ],
-    'qweb' : [
-    ],
-    'demo': [
-    ],
-    'test': [
-    ],
-    'installable': True,
-    'auto_install': False,
-    'application': True,
+	"license" : "Other proprietary",
+	'depends': ['sale_management',
+				'purchase',
+				'account',
+				'stock',
+				'sale_stock',
+				],
+	'data': [
+		'wizard/account_statements.xml',
+		'wizard/send_bulk_statement.xml',
+		'report/acc_statemnt_view.xml',
+		'report/email_acc_statement.xml',
+		'report/email_overdue.xml',
+		'report/report_view.xml',
+		'views/partner_view.xml',
+		'views/send_mail_view.xml',
+		'views/account_move_view.xml',
+		'views/ir.model.access.csv',
+	],
+	'qweb' : [
+	],
+	'demo': [
+	],
+	'test': [
+	],
+	'installable': True,
+	'auto_install': False,
+	'application': True,
 }
-
