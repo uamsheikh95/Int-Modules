@@ -1,38 +1,40 @@
 # -*- coding: utf-8 -*-
+# Part of BrowseInfo. See LICENSE file for full copyright and licensing details.
+
 {
-    'name': "Professional Report Templates",
-
-    'summary': """
-        Easily Customizable Report Template for Quotation/SO/Sales, Invoice, Picking/Delivery Order,RFQ/PO/Purchases
-        """,
-
-    'description': """
-        Customizable fancy reports for odoo users.
-    """,
-
-    'author': "Meisour LLC",
-    'website': "http://www.meisour.com",
-
-    # Categories can be used to filter modules in modules listing
-    # Check https://github.com/odoo/odoo/blob/13.0/odoo/addons/base/data/ir_module_category_data.xml
-    # for the full list
-    'category': 'Tools',
+    'name': 'Odoo Professional Report Templates',
     'version': '13.0.0.0',
-
-    # any module necessary for this one to work correctly
+    'summary': 'Easily Customizable Report Template for Quotation/SO/Sales, Invoice, Picking/Delivery Order,RFQ/PO/Purchases',
+    'category': 'Tools',
+    'description': """
+		Customize report, customize pdf report, customize template report, Customize Sales Order report,Customize Purchase Order report, Customize invoice report, Customize delivery Order report, Accounting Reports, Easy reports, Flexible report,Fancy Report template.
+		
+    """,
+    'license':'OPL-1',
+    'author': 'BrowseInfo',
+    'live_test_url':'https://youtu.be/_aihFWW4a5E',
+    'website': 'http://www.browseinfo.in',
     'depends': ['base', 'account', 'sale', 'purchase', 'stock', 'sale_stock', 'base_vat','sale_management','purchase_stock'],
-
-    # always loaded
     'data': [
-        'views/res_company.xml',
-        "delivery_report/modern_report_deliveryslip.xml",
-        "invoice_report/report_invoice_modern.xml",
-        "purchase_report/modern_report_purchaseorder.xml",
-        "purchase_report/modern_report_purchasequotation.xml",
-        "sale_report/modern_report_saleorder.xml",
-    ],
-    # only loaded in demonstration mode
+
+        "views/res_company.xml",
+
+        "invoice_report/fency_report_account.xml",
+        "invoice_report/fency_report_invoice.xml",
+
+
+        "delivery_report/fency_report_deliveryslip.xml",
+
+        "purchase_report/fency_report_purchaseorder.xml",
+        "purchase_report/fency_report_purchasequotation.xml",
+
+
+        "sale_report/fency_report_saleorder.xml",
+
+             ],
     'demo': [],
+    'test': [],
     'installable': True,
     'auto_install': False,
+    "images":['static/description/Banner.png'],
 }

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+<template id="fency_report_purchasequotation_document">
+<t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id"></t>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"></t>
+            </t>
+
+    <t t-call="web.html_container"/>
+    <t t-call="web.external_layout">
+        <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
+        <div class="page" style="position: relative">
+            <div class="oe_structure"/>
+            <div style="height:35px" />
+
+            <div style="background-color: #3498DB; width: 40%; text-align: center; padding-top: 4px; height: 50px;position: absolute; top: 10px; left: 20px">
+                <h2>
+
+                    <span>
+                        <font color="#fff">Request For Quatation</font>
+                    </span>
+
+                </h2>
+          </div>
+
+          <div style="padding: 10px; background: #f9f9f9; border-bottom: 2px solid #3498db; border-top: 2px solid #3498db; width: 100%; margin: auto;" class="row">
+            <div class="col-6 pull-left">
+                <h5 style="margin-top: 22px;margin-bottom: 1px">
+                  <strong style="color: #3498DB">Vendor Info: </strong>
+                </h5>
+                  <span style="color:gray !important;" t-field="o.partner_id"/>
+                  <br/>
+                  <strong style="color:gray !important;" t-if="o.partner_id.street or o.partner_id.street2">Addr: </strong><span style="color:gray !important;" t-field="o.partner_id.street"  t-if="o.partner_id.street"/>
+                  <br t-if="o.partner_id.street" />
+
+                  <span style="color:gray !important;" t-field="o.partner_id.street2"/>
+                  <br  t-if="o.partner_id.street2" />
+                  <strong style="color:gray !important;"  t-if="o.partner_id.mobile">Mobile: </strong><span style="color:gray !important;" t-field="o.partner_id.mobile"/><strong style="color:gray !important;"  t-if="o.partner_id.phone"> | Phone: </strong><span style="color:gray !important;" t-field="o.partner_id.phone" t-if="o.partner_id.phone" />
+                  <br t-if="o.partner_id.phone or o.partner_id.mobile" />
+                  <strong style="color:gray !important;" t-if="o.partner_id.email">Email: </strong><span style="color:gray !important;" t-field="o.partner_id.email"  t-if="o.partner_id.email" />
+                  <br t-if="o.partner_id.email"  />
+            </div>
+
+              <div class="col-6 pull-right">
+                  <table style="width: 100%; border: 2px solid #3498DB;">
+                    <tr style="height: 32px">
+                        <td style="padding-left: 8px;background-color:#3498DB !important;color:#FFF !important;"><strong>Quotation No: </strong></td>
+                        <td class="text-right" style="padding-right: 8px;background-color:#3498DB !important;color:#FFF !important;">
+                          <strong><span t-field="o.name" style="font-weight: bold"/></strong>
+                        </td>
+                    </tr>
+
+                      <tr style="height: 32px" t-if="o.date_order">
+                          <td style="padding-left: 8px;"><strong>Quotation Date: </strong></td>
+                          <td class="text-right" style="padding-right: 8px;">
+                              <p t-field="o.date_order"/>
+                          </td>
+                      </tr>
+
+
+                  </table>
+              </div>
+          </div>
+
+          <div style="margin-top: 10px"/>
+
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th style="background-color:#3498DB !important;color:#FFF !important;">No.</th>
+                        <th style="background-color:#3498DB !important;color:#FFF !important;">Description</th>
+                        <th style="background-color:#3498DB !important;color:#FFF !important;" class="text-center">Expected Date</th>
+                        <th style="background-color:#3498DB !important;color:#FFF !important;" class="text-right">Qty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="line_no" t-value="0"/>
+                    <tr t-foreach="o.order_line" t-as="order_line">
+                        <t t-set="line_no" t-value="line_no + 1"/>
+                        <td>
+                            <span t-esc="line_no"/>
+                        </td>
+                        <td>
+                            <span t-field="order_line.name"/>
+                        </td>
+                        <td class="text-center">
+                            <span t-field="order_line.date_planned"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="order_line.product_qty"/>
+                            <span t-field="order_line.product_uom" groups="product.group_uom"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+            <div style=" background-color: #3498DB; color:#fff !important; font:15px lucida-console,sans-serif !important; ">
+            <p t-if="o.notes">
+            <strong><span>Note:</span> </strong> <span t-field="o.notes" />
+            </p>
+            </div>
+
+            <div class="oe_structure"/>
+        </div>
+    </t>
+</template>
+
+<template id="report_purchasequotation" inherit_id="purchase.report_purchasequotation">
+   <xpath expr="//t[@t-call='purchase.report_purchasequotation_document']" position="replace">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <!-- <t t-if="o.company_id.purchase_template == 'classic'">
+                <t t-call="odoo_external_reports.classic_report_purchasequotation_document" t-lang="o.partner_id.lang"/>
+            </t> -->
+            <!-- <t t-if="o.company_id.purchase_template == 'modern'">
+                <t t-call="odoo_external_reports.modern_report_purchasequotation_document" t-lang="o.partner_id.lang"/>
+            </t>
+            <t t-if="o.company_id.purchase_template == 'odoo_standard'">
+                <t t-call="odoo_external_reports.odoo_std_report_purchasequotation_document" t-lang="o.partner_id.lang"/>
+            </t> -->
+            <t t-if="o.company_id.purchase_template == 'fency'">
+                <t t-call="odoo_external_reports.fency_report_purchasequotation_document" t-lang="o.partner_id.lang"/>
+            </t>
+        </t>
+    </t>
+</xpath>
+</template>
+
+</data>
+</odoo>
