@@ -1,0 +1,91 @@
+<odoo>
+  <record id="project_task_form_inherit" model="ir.ui.view">
+      <field name="name">project.task.form1</field>
+      <field name="model">project.task</field>
+      <field name="inherit_id" ref="project.view_task_form2" />
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+             <!-- CUSTOMIZATIONS -->
+             <xpath expr="//field[@name='date_deadline']" position="replace">
+               <field name="user_id" class="o_task_user_field" options="{&quot;no_open&quot;: True}" required="1"/>
+             </xpath>
+
+             <xpath expr="//field[@name='user_id']" position="replace">
+               <field name="start_time" />
+               <field name="task_type" required="1" />
+               <field name="is_passed_deadline" groups="meisour_project.group_meisour_project_manager" />
+               <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+             </xpath>
+
+             <xpath expr="//field[@name='user_id']" position="after">
+               <field name="datetime_deadline" />
+               <field name="completed_date"  />
+
+             </xpath>
+
+             <xpath expr="//field[@name='tag_ids']" position="replace">
+               <field name="passed_deadline_time" attrs="{'invisible':[('is_passed_deadline', '=', False)]}" groups="meisour_project.group_meisour_project_manager" />
+             </xpath>
+      </field>
+  </record>
+
+  <record id="project_task_tree_inherit" model="ir.ui.view">
+      <field name="name">project.task.tree</field>
+      <field name="model">project.task</field>
+      <field name="inherit_id" ref="project.view_task_tree2" />
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+             <!-- CUSTOMIZATIONS -->
+             <xpath expr="//field[@name='user_id']" position="after">
+               <field name="datetime_deadline" />
+               <field name="passed_deadline_time" sum="passed_deadline_time" groups="meisour_project.group_meisour_project_manager" />
+             </xpath>
+      </field>
+  </record>
+<!--
+  <record id="view_project_task_inherit" model="ir.ui.view">
+      <field name="name">project.task.add.task_type</field>
+      <field name="model">project.task</field>
+      <field name="inherit_id" ref="project.view_task_search_form" />
+      <field name="mode">primary</field>
+      <field name="arch" type="xml">
+        <xpath expr="//filter[@name='message_needaction']" position="after">
+            <filter string="Technical"
+                domain="[('task_type','=','technical')]"/>
+
+            <filter string="Support"
+                domain="[('task_type','=','support')]"/>
+
+            <filter string="Trainning"
+                domain="[('task_type','=','trainning')]"/>
+        </xpath>
+      </field>
+  </record> -->
+
+
+  <record id="inherit_view_project_task" model="ir.ui.view">
+    <field name="name">add_task_type_to_project_task</field>
+    <field name="model">project.task</field>
+    <field name="type">search</field>
+    <field name="inherit_id" ref="project.view_task_search_form" />
+    <field name="arch" type="xml">
+
+         <xpath expr="//filter[@name='my_tasks']" position="after">
+
+            <filter string="Technical" name="technical" domain="[('task_type', '=', 'technical')]"/>
+            <filter string="Support" name="support" domain="[('task_type', '=', 'support')]"/>
+            <filter string="Trainning" name="technical" domain="[('task_type', '=', 'trainning')]"/>
+
+             <!-- <filter string="Technical"
+                 domain="[('task_type','=','technical')]"/>
+
+             <filter string="Support"
+                 domain="[('task_type','=','support')]"/>
+
+             <filter string="Trainning"
+                 domain="[('task_type','=','trainning')]"/> -->
+         </xpath>
+        </field>
+    </record>
+
+</odoo>
