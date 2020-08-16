@@ -27,7 +27,15 @@
         # 'security/ir.model.access.csv',
         'views/views.xml',
         'views/templates.xml',
+<<<<<<< 12.0:manage_checks/__manifest__.py
         'views/account.xml'
+=======
+        'views/task.xml',
+        'views/report_task_summary.xml',
+        'views/report_task_detail.xml',
+        'wizard/task_summary.xml',
+        'wizard/task_detail.xml',
+>>>>>>> local:meisour_project/__manifest__.py
     ],
     # only loaded in demonstration mode
     'demo': [

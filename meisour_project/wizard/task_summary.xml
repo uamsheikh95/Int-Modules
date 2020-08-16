@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<record id="task_summary_wizard_form" model="ir.ui.view">
+			<field name="name">meisour_project.task_summary_wizard.form</field>
+			<field name="model">meisour_project.task_summary_wizard</field>
+			<field name="arch" type="xml">
+				 <form>
+					<sheet>
+						<group>
+							<group>
+								<field name="date_from" string = "From" required="1" />
+                <field name="report_by" widget="radio"/>
+
+							</group>
+							<group>
+								<field name="date_to" string="To" required="1" />
+                <field name="user_id" string="User" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" attrs="{'invisible': [('report_by', '=', 'customer')]}"  />
+								<field name="partner_id" string="Partner" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" attrs="{'invisible': [('report_by', '=', 'employee')]}"  />
+							</group>
+						</group>
+					</sheet>
+
+				<footer>
+					<button name="confirm" string="View" type="object" class="oe_highlight"/>
+					<button string="Cancel" special="cancel"/>
+				</footer>
+
+				 </form>
+			</field>
+		</record>
+
+    <record id="action_task_summary_wizard_form" model="ir.actions.act_window">
+			<field name="name">Generate Task Summary Report</field>
+			<field name="res_model">meisour_project.task_summary_wizard</field>
+			<field name="type">ir.actions.act_window</field>
+			<!-- <field name="view_type">form</field> -->
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="task_summary_wizard_form"/>
+			<field name="target">new</field>
+		</record>
+
+
+		<menuitem id="menu_task_summary_wizard" name="Task Summary Report" parent="project.menu_project_report" action="action_task_summary_wizard_form" sequence="1" />
+</odoo>

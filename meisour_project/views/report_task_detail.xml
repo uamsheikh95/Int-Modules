@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <report
+     id="action_task_detail_report"
+     name="meisour_project.task_detail_wizard_report"
+     model="meisour_project.task_detail_wizard_report"
+     string="Tasks Detail Report"
+     report_type="qweb-html"
+ />
+ <!--  paperformat="paperformat_custom" -->
+
+
+    <template id="task_detail_wizard_report">
+        <t t-call="web.html_container">
+             <t t-call="web.internal_layout" t-lang="en_US">
+                <div class="page">
+                    <div class="container" style="font-size:12px;font-family:Arial;margin-top:1px;">
+                      <!-- <div class="text-center" style="margin-top:4px;font-size: 18px; font-weight: bold;">Tasks detail Report</div> -->
+                        <h2 class="text-center">Tasks Detail Report</h2>
+
+                      <div id="informations" class="row mt2 mb2">
+
+        								<div class="col-auto mw-100 mb-2" t-if="date_from" name="invoice_date" style="width: 33.3%; float: left;">
+        									<strong>Date from:</strong>
+        									<p class="m-0" t-esc="date_from"/>
+        								</div>
+        								<div class="col-auto mw-100 mb-2" t-if="date_to" name="due_date" style="width: 33.3%; float: left;">
+        									<strong>Date to:</strong>
+        									<p class="m-0" t-esc="date_to"/>
+        								</div>
+
+                        <div class="col-auto mw-100 mb-2" t-if="report_by" name="due_date" style="width: 33.4%; float: left;">
+        									<strong>Report By:</strong>
+        									<p class="m-0" t-esc="report_by"/>
+        								</div>
+        							</div>
+
+                      <div class="row">
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th colspan="2" nowrap="nowrap">Task Description</th>
+                              <th nowrap="nowrap" t-if="report_by == 'employee'">Partner</th>
+                              <th nowrap="nowrap">From Time</th>
+                              <th nowrap="nowrap">To Time</th>
+                              <th nowrap="nowrap">Completed Tkme</th>
+                              <th nowrap="nowrap">Is Passed Deadline</th>
+                              <th nowrap="nowrap">Hours Taken</th>
+                              <th nowrap="nowrap" t-if="report_by == 'customer'">Assinged to</th>
+
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                                <t t-set="total_hours" t-value="0"/>
+                                <t t-set="total_minutes" t-value="0"/>
+                                <tr t-foreach="lines(date_from, date_to, partner_id, user_id)" t-as="line">
+                                  <td colspan="2"><span t-esc="line['name']"/></td>
+                                  <td t-if="report_by == 'employee'"><span t-esc="line['partner_name']"/></td>
+                                  <td><span t-esc="line['start_time']"/></td>
+                                  <td><span t-esc="line['datetime_deadline']"/></td>
+                                  <td><span t-esc="line['completed_date']"/></td>
+                                  <td></td><!--<span t-esc="line['is_passed_deadline']"/>-->
+
+                                  <t t-set="hours_taken" t-value="get_hours_taken(line['start_time'], line['completed_date'])" />
+                                  <t t-set="minutes_taken" t-value="get_minutes_taken(line['start_time'], line['completed_date'])" />
+
+                                  <td>
+                                    <!-- <span t-esc="hours_taken"/> -->
+                                    <span t-esc="'{0:,.2f}'.format(hours_taken)"/>
+                                  </td>
+                                  <t t-set="total_hours" t-value="total_hours + hours_taken"/>
+
+
+
+
+                                  <td t-if="report_by == 'customer'"><span t-esc="line['user_name']"/></td>
+
+                                </tr>
+
+
+
+                              <tr>
+                                <td colspan="5"></td>
+                                <td t-if="report_by == 'employee'"></td>
+                                <td><strong>Total Hours Taken</strong></td>
+                                <td style="font-weight: bold;font-size: 13px;color: red"><span t-esc="'{0:,.2f}'.format(total_hours)"/></td>
+                                <td t-if="report_by == 'customer'"></td>
+                              </tr>
+                          </tbody>
+                        </table>
+                      </div> <!--tow-->
+
+
+                    </div> <!--container-->
+                </div> <!--page-->
+              </t> <!--web.external_layout-->
+        </t> <!--web.html_container-->
+    </template>
+</odoo>

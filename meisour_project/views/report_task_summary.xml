@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <report
+     id="action_task_summary_report"
+     name="meisour_project.task_summary_wizard_report"
+     model="meisour_project.task_summary_wizard_report"
+     string="Tasks Summary Report"
+     report_type="qweb-html"
+ />
+ <!--  paperformat="paperformat_custom" -->
+
+
+    <template id="task_summary_wizard_report">
+        <t t-call="web.html_container">
+             <t t-call="web.internal_layout" t-lang="en_US">
+                <div class="page">
+                    <div class="container" style="font-size:12px;font-family:Arial;margin-top:1px;">
+                      <!-- <div class="text-center" style="margin-top:4px;font-size: 18px; font-weight: bold;">Tasks Summary Report</div> -->
+                        <h2 class="text-center">Tasks Summary Report</h2>
+
+                      <div id="informations" class="row mt2 mb2">
+
+        								<div class="col-auto mw-100 mb-2" t-if="date_from" name="invoice_date" style="width: 33.3%; float: left;">
+        									<strong>Date from:</strong>
+        									<p class="m-0" t-esc="date_from"/>
+        								</div>
+        								<div class="col-auto mw-100 mb-2" t-if="date_to" name="due_date" style="width: 33.3%; float: left;">
+        									<strong>Date to:</strong>
+        									<p class="m-0" t-esc="date_to"/>
+        								</div>
+
+                        <div class="col-auto mw-100 mb-2" t-if="report_by" name="due_date" style="width: 33.4%; float: left;">
+        									<strong>Report By:</strong>
+        									<p class="m-0" t-esc="report_by"/>
+        								</div>
+        							</div>
+
+                      <div class="row">
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th nowrap="nowrap" t-if="report_by == 'employee'">Employee Name</th>
+                              <th nowrap="nowrap" t-if="report_by == 'customer'">Client Name</th>
+                              <th nowrap="nowrap">Total Tasks</th>
+                              <th nowrap="nowrap">Total Hours</th>
+                            </tr>
+                          </thead>
+
+                          <tbody>
+
+
+                              <t t-foreach="group_by" t-as="group">
+
+                                <t t-set="tot_hours" t-value="0"/>
+                                <t t-set="tot_tasks" t-value="0"/>
+
+
+                                <t t-foreach="lines(date_from, date_to, report_by, group.id)" t-as="line">
+                                  <t t-set="tot_tasks" t-value="tot_tasks + 1"/>
+                                  <t t-set="tot_hours" t-value="tot_hours + get_hours_taken(line['start_time'], line['completed_date'])"/>
+
+                                </t>
+                                <!-- <td><span t-esc="group.name"/></td>
+                                <td>
+                                   <span t-esc="get_total_tasks(date_from, date_to, report_by, group.id )" />
+                                  <t t-set="tot_tasks" t-value="tot_tasks + get_total_tasks(date_from, date_to, report_by, group.id)"/>
+                                </td>
+                                <td>
+                                  <t t-set="total_hours" t-value="0"/> -->
+                                  <!-- <t t-set="total_hours" t-value="get_total_hours(date_from, date_to, report_by, group.id)" /> -->
+                                  <!-- <span t-esc="total_hours" />
+                                  <t t-set="tot_hours" t-value="tot_hours + total_hours"/>
+                                </td> -->
+
+
+                                <tr>
+                                  <td><span t-esc="group.name" /></td>
+                                  <td style="font-weight: bold;border-top:1px solid"><span t-esc="tot_tasks"/></td>
+                                  <td style="font-weight: bold;border-t"><span t-esc="'{0:,.2f}'.format(tot_hours)"/></td>
+                                </tr>
+
+                              </t> <!-- <t t-foreach="group_by" t-as="group"> -->
+
+
+                          </tbody>
+                        </table>
+                      </div> <!--tow-->
+
+
+                    </div> <!--container-->
+                </div> <!--page-->
+              </t> <!--web.external_layout-->
+        </t> <!--web.html_container-->
+    </template>
+</odoo>
