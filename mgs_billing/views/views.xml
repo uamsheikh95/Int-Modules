@@ -1,0 +1,60 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="mgs_billing.list">
+      <field name="name">mgs_billing list</field>
+      <field name="model">mgs_billing.mgs_billing</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="mgs_billing.action_window">
+      <field name="name">mgs_billing window</field>
+      <field name="res_model">mgs_billing.mgs_billing</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="mgs_billing.action_server">
+      <field name="name">mgs_billing server</field>
+      <field name="model_id" ref="model_mgs_billing_mgs_billing"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="mgs_billing" id="mgs_billing.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="mgs_billing.menu_1" parent="mgs_billing.menu_root"/>
+    <menuitem name="Menu 2" id="mgs_billing.menu_2" parent="mgs_billing.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="mgs_billing.menu_1_list" parent="mgs_billing.menu_1"
+              action="mgs_billing.action_window"/>
+    <menuitem name="Server to list" id="mgs_billing" parent="mgs_billing.menu_2"
+              action="mgs_billing.action_server"/>
+-->
+  </data>
+</odoo>
