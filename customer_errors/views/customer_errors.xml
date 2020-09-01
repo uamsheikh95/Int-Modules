@@ -1,0 +1,295 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="customer_errors_form">
+      <field name="name">customer_errors.error.form</field>
+      <field name="model">customer_errors.error</field>
+      <field name="arch" type="xml">
+        <form>
+          <div class="oe_title" style="float:left;width:50%;margin-top:20px">
+  						<h1>
+  								<field name="name" required="1" string="Title" />
+  						</h1>
+  						<div name="options_active">
+  								<div>
+  										<label for="category_id" class="oe_inline" string="Error Category :"/>
+  										<field name="category_id" class="oe_inline oe_input_align" required="1" />
+  								</div>
+  						</div>
+  				</div>
+
+          <group>
+            <group>
+              <field name="username_id" required="1" />
+            </group>
+
+            <group>
+              <field name="user_company_id" required="1" />
+            </group>
+          </group>
+
+          <group>
+            <field name="description" widget="html" />
+          </group>
+
+        </form>
+      </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="customer_errors_tree">
+      <field name="name">customer_errors.error.tree</field>
+      <field name="model">customer_errors.error</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" />
+          <field name="category_id" />
+          <field name="username_id" />
+          <field name="user_company_id" />
+        </tree>
+      </field>
+    </record>
+  <!-- </data> -->
+
+  <!-- Company -->
+  <record model="ir.ui.view" id="customer_errors_form">
+    <field name="name">customer_errors.company.form</field>
+    <field name="model">customer_errors.company</field>
+    <field name="arch" type="xml">
+      <form>
+        <div class="oe_title" style="float:left;width:50%;margin-top:20px">
+            <h1>
+                <field name="name" required="1" string="Title" />
+            </h1>
+        </div>
+
+        <notebook>
+          <page string="Users">
+            <field name="company_user_ids" readonly="1">
+              <tree>
+                <field name="name" />
+              </tree>
+            </field>
+          </page>
+        </notebook>
+      </form>
+    </field>
+  </record>
+
+
+  <record model="ir.ui.view" id="company_tree">
+    <field name="name">customer_errors.company.tree</field>
+    <field name="model">customer_errors.company</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name" />
+        <!-- <field name="user_company_id" /> -->
+      </tree>
+    </field>
+  </record>
+
+  <!-- User -->
+  <record model="ir.ui.view" id="user_form">
+    <field name="name">customer_errors.user.form</field>
+    <field name="model">customer_errors.user</field>
+    <field name="arch" type="xml">
+      <form>
+        <group>
+          <group>
+              <field name="name" required="1" string="Name" />
+          </group>
+
+          <group>
+            <field name="user_company_id" required="1" string="Company" />
+          </group>
+        </group>
+      </form>
+    </field>
+  </record>
+
+
+  <record model="ir.ui.view" id="user_tree">
+    <field name="name">customer_errors.user.tree</field>
+    <field name="model">customer_errors.user</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name" />
+        <field name="user_company_id" />
+      </tree>
+    </field>
+  </record>
+<!--
+  <record model="ir.ui.view" id="company_tree">
+    <field name="name">company_errors.company.tree</field>
+    <field name="model">company_errors.company</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name" />
+        <field name="user_company_id" />
+      </tree>
+    </field>
+  </record> -->
+
+  <!-- Category -->
+  <record model="ir.ui.view" id="category_form">
+    <field name="name">customer_errors.category.form</field>
+    <field name="model">customer_errors.categ</field>
+    <field name="arch" type="xml">
+      <form>
+          <group>
+              <field name="name" required="1" string="Name" />
+          </group>
+
+      </form>
+    </field>
+  </record>
+
+
+  <record model="ir.ui.view" id="category_tree">
+    <field name="name">customer_errors.category.tree</field>
+    <field name="model">customer_errors.categ</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name" />
+      </tree>
+    </field>
+  </record>
+
+  <!-- Actions -->
+  <record model="ir.actions.act_window" id="error_action">
+						<field name="name">Errors Action</field>
+						<field name="res_model">customer_errors.error</field>
+						<field name="view_type">form</field>
+						<field name="view_mode">tree,form</field>
+						<field name="view_id" ref="customer_errors_form"/>
+						<field name="domain"></field>
+						<field name="context"></field>
+						<field name="help" type="html">
+								<p class="o_view_nocontent_smiling_face">Create an Error
+								</p>
+						</field>
+				</record>
+
+
+				<record id="error_action_tree" model="ir.actions.act_window.view">
+						<field name="view_mode">tree</field>
+						<field name="view_id" ref="customer_errors_tree" />
+						<field name="act_window_id" ref="error_action" />
+				</record>
+
+        <record model="ir.actions.act_window" id="company_action">
+                  <field name="name">Company Action</field>
+                  <field name="res_model">customer_errors.company</field>
+                  <field name="view_type">form</field>
+                  <field name="view_mode">tree,form</field>
+                  <field name="view_id" ref="customer_errors_form"/>
+                  <field name="domain"></field>
+                  <field name="context"></field>
+                  <field name="help" type="html">
+                      <p class="o_view_nocontent_smiling_face">Create a Company
+                      </p>
+                  </field>
+              </record>
+
+
+              <record id="company_action_tree" model="ir.actions.act_window.view">
+                  <field name="view_mode">tree</field>
+                  <field name="view_id" ref="company_tree" />
+                  <field name="act_window_id" ref="company_action" />
+              </record>
+
+              <record model="ir.actions.act_window" id="user_action">
+                        <field name="name">User Action</field>
+                        <field name="res_model">customer_errors.user</field>
+                        <field name="view_type">form</field>
+                        <field name="view_mode">tree,form</field>
+                        <field name="view_id" ref="user_form"/>
+                        <field name="domain"></field>
+                        <field name="context"></field>
+                        <field name="help" type="html">
+                            <p class="o_view_nocontent_smiling_face">Create a User
+                            </p>
+                        </field>
+                    </record>
+
+
+                    <record id="user_action_tree" model="ir.actions.act_window.view">
+                        <field name="view_mode">tree</field>
+                        <field name="view_id" ref="user_tree" />
+                        <field name="act_window_id" ref="user_action" />
+                    </record>
+
+                    <record model="ir.actions.act_window" id="categ_action">
+                              <field name="name">Category Action</field>
+                              <field name="res_model">customer_errors.categ</field>
+                              <field name="view_type">form</field>
+                              <field name="view_mode">tree,form</field>
+                              <field name="view_id" ref="category_form"/>
+                              <field name="domain"></field>
+                              <field name="context"></field>
+                              <field name="help" type="html">
+                                  <p class="o_view_nocontent_smiling_face">Create a Category
+                                  </p>
+                              </field>
+                          </record>
+
+
+                          <record id="user_action_tree" model="ir.actions.act_window.view">
+                              <field name="view_mode">tree</field>
+                              <field name="view_id" ref="category_tree" />
+                              <field name="act_window_id" ref="categ_action" />
+                          </record>
+
+          <menuitem id="customer_errors_root"
+								name="Error"
+								web_icon="customer_errors,static/description/icon.png"
+                sequence="20"
+					/>
+
+
+          <menuitem
+  					id="errors_menu"
+  					name="Errors"
+  					parent="customer_errors_root"
+            action="error_action"
+  					sequence="1"
+					/>
+
+          <menuitem
+  					id="user_companies"
+  					name="User and Companies"
+  					parent="customer_errors_root"
+  					sequence="5"
+					/>
+
+          <menuitem
+  					id="user_menu"
+  					name="Users"
+  					parent="user_companies"
+            action="user_action"
+  					sequence="1"
+					/>
+
+          <menuitem
+  					id="company_menu"
+  					name="Companies"
+  					parent="user_companies"
+            action="company_action"
+  					sequence="5"
+					/>
+
+          <menuitem
+  					id="configuration_menu"
+  					name="Configuration"
+  					parent="customer_errors_root"
+  					sequence="10"
+					/>
+
+          <menuitem
+  					id="category_menu"
+  					name="Categories"
+  					parent="configuration_menu"
+            action="categ_action"
+  					sequence="1"
+					/>
+        </data>
+</odoo>

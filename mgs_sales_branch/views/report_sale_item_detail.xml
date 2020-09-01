@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+ <report
+    id="action_sales_by_item_detail"
+    name="mgs_sales_branch.sales_by_item_detail_report"
+    model="mgs_sales_branch.sales_by_item_detail_report"
+    string="Sales by Item Detail"
+    report_type="qweb-html"
+    paperformat="paperformat_custom"
+/>
+ <!--  paperformat="paperformat_custom" -->
+
+
+    <template id="sales_by_item_detail_report">
+        <t t-call="web.html_container">
+          <t t-foreach="docs" t-as="doc">
+             <t t-call="web.internal_layout" t-lang="en_US">
+                <div class="page">
+                    <div class="container" style="font-size:12px;font-family:Arial;margin-top:1px;">
+                      <div class="text-center" style="margin-top:4px;font-size: 18px; font-weight: bold;">Sales by Item Detail</div>
+
+                      <div id="informations" class="row mt2 mb2">
+
+        								<div class="col-auto mw-100 mb-2" t-if="date_from" name="invoice_date" style="width: 20%; float: left;">
+        									<strong>Date from:</strong>
+        									<p class="m-0" t-esc="date_from"/>
+        								</div>
+        								<div class="col-auto mw-100 mb-2" t-if="date_to" name="due_date" style="width: 20%; float: left;">
+        									<strong>Date to:</strong>
+        									<p class="m-0" t-esc="date_to"/>
+        								</div>
+
+                        <div class="col-auto mw-100 mb-2" t-if="product_id" name="due_date" style="width: 20%; float: left;">
+        									<strong>Product:</strong>
+        									<p class="m-0" t-esc="product_name"/>
+        								</div>
+
+                        <div class="col-auto mw-100 mb-2" t-if="date_to" name="due_date" style="width: 20%; float: left;" groups="base.group_multi_company">
+        									<strong>Company:</strong>
+        									<p class="m-0" t-esc="company_name"/>
+        								</div>
+
+                        <!-- <div class="col-auto mw-100 mb-2" name="due_date" style="width: 20%; float: left;" groups="odoo_multi_branch.group_multi_branches">
+        									<strong>Branch:</strong>
+        									<p class="m-0" t-esc="company_branch_name"/>
+        								</div> -->
+        							</div>
+
+                      <div class="row">
+                        <table style="width:100%;">
+                          <thead style="border-bottom:1px solid #dadadadd;border-top:1px solid #dddddd">
+                            <tr style="background-color: #F2F4F4;">
+                              <th nowrap="nowrap"></th>
+                              <th t-if="categ_id" nowrap="nowrap"></th>
+                              <th nowrap="nowrap">Date</th>
+                              <th nowrap="nowrap">Order</th>
+                              <!-- <th nowrap="nowrap">Memo</th> -->
+                              <th colspan="2" nowrap="nowrap">Partner</th>
+                              <th style="text-align:center" nowrap="nowrap">Ordered Qty</th>
+                              <th style="text-align:center" nowrap="nowrap">Delivered Qty</th>
+                              <th style="text-align:center" nowrap="nowrap">Invoiced Qty</th>
+                              <th style="text-align:right" nowrap="nowrap">Sales Price</th>
+                              <th style="text-align:right" nowrap="nowrap">Amount</th>
+                              <th style="text-align:center" nowrap="nowrap">Invoice Status</th>
+                              <!-- <th>Total</th> -->
+                            </tr>
+                          </thead>
+
+                          <tbody>
+
+                            <!-- <t t-set="total_price_unit" t-value="0"/> -->
+
+                            <t t-if="categ_id">
+                              <t t-set="total_all_qty" t-value="0"/>
+                              <t t-set="total_all_invoiced_qty" t-value="0"/>
+                              <t t-set="total_all_delivered_qty" t-value="0"/>
+                              <!-- <t t-set="total_all_price_unit" t-value="0"/> -->
+
+                              <t t-set="total_balance" t-value="0"/>
+
+                              <tr t-foreach="categ_list" t-as="category">
+                                <tr style="border-bottom:1px solid #696767;border-top:1px solid #696767">
+                                  <td colspan="11"><span t-esc="category.name"/></td>
+                                </tr>
+
+                                <t t-foreach="get_products_by_category(date_from, date_to, company_id, category, company_branch_ids)" t-as="product">
+
+                                  <t t-set="total_qty" t-value="0"/>
+                                  <t t-set="total_invoiced_qty" t-value="0"/>
+                                  <t t-set="total_delivered_qty" t-value="0"/>
+                                  <t t-set="balance" t-value="0"/>
+
+                                  <tr style="border-bottom:1px solid #696767;border-top:1px solid #696767">
+                                    <td></td><td colspan="10"><p style="font-weight: bold; margin-bottom: 0; font-size: 12px;"><span t-if="product.product_tmpl_id.default_code">[<span t-esc="product.product_tmpl_id.default_code"/>]</span> <span t-esc="product.name"/></p></td>
+                                  </tr>
+
+                                  <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd" t-foreach="lines(date_from, date_to, company_id, product.id, company_branch_ids)" t-as="line">
+                                    <td></td>
+                                    <td></td>
+                                      <td nowrap="nowrap"><span t-esc="line['date']"/></td>
+                                      <td><span t-esc="line['order_id']"/></td>
+                                      <td colspan="2"><span t-esc="line['partner_name']"/></td>
+                                      <td style="text-align:center"><span t-esc="line['product_uom_qty']"/></td> <t t-set="total_qty" t-value="total_qty + line['product_uom_qty']"/>
+                                      <td style="text-align:center"><span t-esc="line['qty_delivered']"/></td> <t t-set="total_delivered_qty" t-value="total_delivered_qty + line['qty_delivered']"/>
+                                      <td style="text-align:center"><span t-esc="line['qty_invoiced']"/></td> <t t-set="total_invoiced_qty" t-value="total_invoiced_qty + line['qty_invoiced']"/>
+
+                                      <td style="text-align:right">
+                                        <t t-set="price_unit" t-value="0" />
+                                        <t t-set="price_unit" t-value="line['price_total'] / line['product_uom_qty']" t-if="line['product_uom_qty'] and line['price_total']" />
+                                          <span t-esc="'{0:,.2f}'.format(price_unit)"/>
+                                          <!-- <t t-set="total_price_unit" t-value="total_price_unit + price_unit"/>
+                                          <t t-set="price_unit" t-value="0"/> -->
+                                             </td>
+                                      <td style="text-align:right"><span t-esc="'{0:,.2f}'.format(line['price_total'])"/></td>
+                                      <t t-set="balance" t-value="balance + line['price_total']"/>
+                                      <td style="padding-left:20px"><span t-esc="line['invoice_status']"/></td>
+                                  </tr>
+
+                                  <tr style="border-top:1px solid #dddddd;border-top: 1px solid black">
+                                    <td></td>
+                                    <td colspan="4"><p style="font-weight:bold;margin-bottom:0;">Total <span t-esc="product.name" />  : </p></td>
+
+                                    <td style="text-align:center;font-weight:bold;border-top: 1px solid black">
+                                      <span t-esc="'{0:,.2f}'.format(total_qty)" />
+                                      <t t-set="total_all_qty" t-value="total_all_qty + total_qty"/>
+                                    </td>
+
+                                    <td style="text-align:center;font-weight:bold;border-top: 1px solid black">
+                                      <span t-esc="'{0:,.2f}'.format(total_delivered_qty)" />
+                                      <t t-set="total_all_delivered_qty" t-value="total_all_delivered_qty + total_delivered_qty"/>
+                                    </td>
+
+                                    <td style="text-align:center;font-weight:bold;border-top: 1px solid black">
+                                      <span t-esc="'{0:,.2f}'.format(total_invoiced_qty)" />
+                                      <t t-set="total_all_invoiced_qty" t-value="total_all_invoiced_qty + total_invoiced_qty"/>
+                                    </td>
+
+                                    <td style="text-align:right;font-weight:bold">
+                                      <!-- <span t-esc="'{0:,.2f}'.format(total_price_unit)" />
+                                      <t t-set="total_all_price_unit" t-value="total_all_price_unit + total_price_unit"/>
+                                      <t t-set="total_price_unit" t-value="0"/> -->
+                                    </td>
+
+
+                                    <td style="text-align:right;font-weight:bold;border-top: 1px solid black">
+                                      <span t-esc="'{0:,.2f}'.format(balance)" />
+                                      <t t-set="total_balance" t-value="total_balance + balance"/>
+                                      <t t-set="balance" t-value="0"/>
+                                    </td>
+
+                                    <td></td>
+                                  </tr>
+
+                                  <tr style="height: 20px">
+                                    <td></td>
+                                  </tr>
+                              </t>
+                            </tr>
+
+                            <tr style="border-bottom:1px solid #000000;border-top:1px solid #dddddd;background-color: #F2F4F4;">
+                                  <td colspan="5"><p style="font-weight:bold;margin-bottom:0;">Total All Balances  : </p></td>
+
+                                  <td style="text-align:center;font-weight:bold;border-top: 2px solid black">
+                                    <span t-esc="'{0:,.2f}'.format(total_all_qty)" />
+                                  </td>
+
+                                  <td style="text-align:center;font-weight:bold;border-top: 2px solid black">
+                                    <span t-esc="'{0:,.2f}'.format(total_all_delivered_qty)" />
+                                  </td>
+
+                                  <td style="text-align:center;font-weight:bold;border-top: 2px solid black">
+                                    <span t-esc="'{0:,.2f}'.format(total_all_invoiced_qty)" />
+                                  </td>
+                                  <!-- <td></td> -->
+                                  <!-- <td></td> -->
+                                  <td style="text-align:right;font-weight:bold">
+                                    <!-- <span t-esc="'{0:,.2f}'.format(total_all_price_unit)" /> -->
+                                  </td>
+
+
+                                  <td style="text-align:right;font-weight:bold;border-top: 2px solid black">
+                                    <span t-esc="'{0:,.2f}'.format(total_balance)" />
+                                  </td>
+                                  <td></td>
+                                </tr>
+                            </t>  <!-- CATEG ID IF IT'S TRUE -->
+
+                            <t t-if="not categ_id">
+                              <t t-set="total_all_qty" t-value="0"/>
+                              <t t-set="total_all_invoiced_qty" t-value="0"/>
+                              <t t-set="total_all_delivered_qty" t-value="0"/>
+                              <!-- <t t-set="total_all_price_unit" t-value="0"/> -->
+
+                              <t t-set="total_balance" t-value="0"/>
+
+                              <t t-foreach="product_list" t-as="product">
+
+                                <t t-set="total_qty" t-value="0"/>
+                                <t t-set="total_invoiced_qty" t-value="0"/>
+                                <t t-set="total_delivered_qty" t-value="0"/>
+                                <t t-set="balance" t-value="0"/>
+
+                                <tr style="border-bottom:1px solid #696767;border-top:1px solid #696767">
+                                  <td colspan="11"><p style="font-weight: bold; margin-bottom: 0; font-size: 12px;"><span t-if="product.product_tmpl_id.default_code">[<span t-esc="product.product_tmpl_id.default_code"/>]</span> <span t-esc="product.name"/></p></td>
+                                </tr>
+
+                                <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd" t-foreach="lines(date_from, date_to, company_id, product.id, company_branch_ids)" t-as="line">
+                                  <td></td>
+                                    <td nowrap="nowrap"><span t-esc="line['date']"/></td>
+                                    <td><span t-esc="line['order_id']"/></td>
+                                    <td colspan="2"><span t-esc="line['partner_name']"/></td>
+                                    <td style="text-align:center"><span t-esc="line['product_uom_qty']"/></td> <t t-set="total_qty" t-value="total_qty + line['product_uom_qty']"/>
+                                    <td style="text-align:center"><span t-esc="line['qty_delivered']"/></td> <t t-set="total_delivered_qty" t-value="total_delivered_qty + line['qty_delivered']"/>
+                                    <td style="text-align:center"><span t-esc="line['qty_invoiced']"/></td> <t t-set="total_invoiced_qty" t-value="total_invoiced_qty + line['qty_invoiced']"/>
+
+                                    <td style="text-align:right">
+                                      <t t-set="price_unit" t-value="0" />
+                                      <t t-set="price_unit" t-value="line['price_total'] / line['product_uom_qty']" t-if="line['product_uom_qty'] and line['price_total']" />
+                                        <span t-esc="'{0:,.2f}'.format(price_unit)"/>
+                                        <!-- <t t-set="total_price_unit" t-value="total_price_unit + price_unit"/>
+                                        <t t-set="price_unit" t-value="0"/> -->
+                                           </td>
+                                    <td style="text-align:right"><span t-esc="'{0:,.2f}'.format(line['price_total'])"/></td>
+                                    <t t-set="balance" t-value="balance + line['price_total']"/>
+                                    <td style="padding-left:20px"><span t-esc="line['invoice_status']"/></td>
+                                </tr>
+
+                                <tr style="border-top:1px solid #dddddd;border-top: 1px solid black">
+                                  <td colspan="5"><p style="font-weight:bold;margin-bottom:0;">Total <span t-esc="product.name" />  : </p></td>
+
+                                  <td style="text-align:center;font-weight:bold;border-top: 1px solid black">
+                                    <span t-esc="'{0:,.2f}'.format(total_qty)" />
+                                    <t t-set="total_all_qty" t-value="total_all_qty + total_qty"/>
+                                  </td>
+
+                                  <td style="text-align:center;font-weight:bold;border-top: 1px solid black">
+                                    <span t-esc="'{0:,.2f}'.format(total_delivered_qty)" />
+                                    <t t-set="total_all_delivered_qty" t-value="total_all_delivered_qty + total_delivered_qty"/>
+                                  </td>
+
+                                  <td style="text-align:center;font-weight:bold;border-top: 1px solid black">
+                                    <span t-esc="'{0:,.2f}'.format(total_invoiced_qty)" />
+                                    <t t-set="total_all_invoiced_qty" t-value="total_all_invoiced_qty + total_invoiced_qty"/>
+                                  </td>
+
+                                  <td style="text-align:right;font-weight:bold">
+                                    <!-- <span t-esc="'{0:,.2f}'.format(total_price_unit)" />
+                                    <t t-set="total_all_price_unit" t-value="total_all_price_unit + total_price_unit"/>
+                                    <t t-set="total_price_unit" t-value="0"/> -->
+                                  </td>
+
+
+                                  <td style="text-align:right;font-weight:bold;border-top: 1px solid black">
+                                    <span t-esc="'{0:,.2f}'.format(balance)" />
+                                    <t t-set="total_balance" t-value="total_balance + balance"/>
+                                    <t t-set="balance" t-value="0"/>
+                                  </td>
+
+                                  <td></td>
+                                </tr>
+
+                                <tr style="height: 20px">
+                                  <td></td>
+                                </tr>
+                            </t>
+                            <tr style="border-bottom:1px solid #000000;border-top:1px solid #dddddd;background-color: #F2F4F4;">
+                                  <td colspan="5"><p style="font-weight:bold;margin-bottom:0;">Total All Balances  : </p></td>
+
+                                  <td style="text-align:center;font-weight:bold;border-top: 2px solid black">
+                                    <span t-esc="'{0:,.2f}'.format(total_all_qty)" />
+                                  </td>
+
+                                  <td style="text-align:center;font-weight:bold;border-top: 2px solid black">
+                                    <span t-esc="'{0:,.2f}'.format(total_all_delivered_qty)" />
+                                  </td>
+
+                                  <td style="text-align:center;font-weight:bold;border-top: 2px solid black">
+                                    <span t-esc="'{0:,.2f}'.format(total_all_invoiced_qty)" />
+                                  </td>
+                                  <!-- <td></td> -->
+                                  <!-- <td></td> -->
+                                  <td style="text-align:right;font-weight:bold">
+                                    <!-- <span t-esc="'{0:,.2f}'.format(total_all_price_unit)" /> -->
+                                  </td>
+
+
+                                  <td style="text-align:right;font-weight:bold;border-top: 2px solid black">
+                                    <span t-esc="'{0:,.2f}'.format(total_balance)" />
+                                  </td>
+                                  <td></td>
+                                </tr>
+                            </t>
+
+                          </tbody>
+                        </table>
+                      </div> <!--tow-->
+
+
+                    </div> <!--container-->
+                </div> <!--page-->
+              </t> <!--web.external_layout-->
+            </t>
+        </t> <!--web.html_container-->
+    </template>
+</odoo>

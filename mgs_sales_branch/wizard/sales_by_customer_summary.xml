@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<record id="sales_by_cust_summary_form" model="ir.ui.view">
+			<field name="name">mgs_sales_branch.sales_by_cust_summary.form</field>
+			<field name="model">mgs_sales_branch.sales_by_cust_summary</field>
+			<field name="arch" type="xml">
+			   <form>
+					<sheet>
+						<group>
+							<group>
+								<field name="date_from" string = "From" required="1" />
+								<field name="partner_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" domain="[('company_branch_id','in',company_branch_ids)]" />
+								<field name='company_branch_ids' groups="odoo_multi_branch.group_multi_branches" widget="many2many_tags" options="{'no_create': True}"/>
+
+							</group>
+
+
+							<group>
+								<field name="date_to" string="To" required="1" />
+								<field name="company_id" groups="base.group_multi_company" />
+							</group>
+						</group>
+					</sheet>
+
+				<footer>
+					<button name="confirm" string="View" type="object" class="oe_highlight"/>
+					<button string="Cancel" special="cancel"/>
+				</footer>
+
+			   </form>
+			</field>
+		</record>
+
+
+
+		<record id="action_sales_by_cust_summary_form" model="ir.actions.act_window">
+			<field name="name">Generate Sales by Customer Summary</field>
+			<field name="res_model">mgs_sales_branch.sales_by_cust_summary</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="sales_by_cust_summary_form"/>
+			<field name="target">new</field>
+		</record>
+
+
+
+    <menuitem id="menu_mgs_sales_branch_summmary_report" name="Sales by Customer Summary" parent="menu_mgs_sales_branch_report" action="action_sales_by_cust_summary_form" sequence="5" />
+
+</odoo>

@@ -7,6 +7,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from odoo import models, api
+from odoo.http import request
 
 
 class DashBoard(models.Model):
@@ -19,7 +20,7 @@ class DashBoard(models.Model):
     @api.model
     def get_income_this_year(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         month_list = []
         for i in range(11, -1, -1):
@@ -116,7 +117,7 @@ class DashBoard(models.Model):
     @api.model
     def get_income_last_year(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         month_list = []
         for i in range(11, -1, -1):
@@ -213,7 +214,7 @@ class DashBoard(models.Model):
     @api.model
     def get_income_last_month(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
         day_list = []
         now = datetime.now()
         day = \
@@ -316,7 +317,7 @@ class DashBoard(models.Model):
     @api.model
     def get_income_this_month(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         states_arg = ""
         if post != ('posted',):
@@ -416,7 +417,7 @@ class DashBoard(models.Model):
     @api.model
     def get_latebills(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         states_arg = ""
         if post != ('posted',):
@@ -465,7 +466,7 @@ class DashBoard(models.Model):
     @api.model
     def get_overdues(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         states_arg = ""
         if post != ('posted',):
@@ -516,7 +517,7 @@ class DashBoard(models.Model):
         else:
             states_arg = """ state = 'posted'"""
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
         if post[1] == 'this_month':
             self._cr.execute((''' 
                                select to_char(account_move.date, 'Month') as month, res_partner.name as due_partner, account_move.partner_id as parent,
@@ -566,7 +567,7 @@ class DashBoard(models.Model):
 
     @api.model
     def get_latebillss(self, *post):
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         partners = self.env['res.partner'].search([('active', '=', True)])
 
@@ -627,7 +628,7 @@ class DashBoard(models.Model):
     def get_top_10_customers_month(self, *post):
         record_invoice = {}
         record_refund = {}
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         states_arg = ""
         if post[0] != 'posted':
@@ -638,6 +639,7 @@ class DashBoard(models.Model):
             self._cr.execute((''' select res_partner.name as customers, account_move.commercial_partner_id as parent, 
                                     sum(account_move.amount_total) as amount from account_move, res_partner
                                     where account_move.commercial_partner_id = res_partner.id
+                                    AND account_move.company_id = %s 
                                     AND account_move.type = 'out_invoice' 
                                     AND %s   
                                     AND Extract(month FROM account_move.invoice_date_due) = Extract(month FROM DATE(NOW()))
@@ -645,13 +647,14 @@ class DashBoard(models.Model):
                                     group by parent, customers
                                     order by amount desc 
                                     limit 10
-                                    ''') % (states_arg))
+                                    ''') % (company_id, states_arg))
 
             record_invoice = self._cr.dictfetchall()
 
             self._cr.execute((''' select res_partner.name as customers, account_move.commercial_partner_id as parent, 
                                     sum(account_move.amount_total) as amount from account_move, res_partner
                                     where account_move.commercial_partner_id = res_partner.id
+                                    AND account_move.company_id = %s
                                     AND account_move.type = 'out_refund' 
                                     AND %s      
                                     AND Extract(month FROM account_move.invoice_date_due) = Extract(month FROM DATE(NOW()))
@@ -659,7 +662,7 @@ class DashBoard(models.Model):
                                     group by parent, customers
                                     order by amount desc 
                                     limit 10
-                                    ''') % (states_arg))
+                                    ''') % (company_id, states_arg))
 
             record_refund = self._cr.dictfetchall()
         else:
@@ -667,6 +670,7 @@ class DashBoard(models.Model):
             self._cr.execute((''' select res_partner.name as customers, account_move.commercial_partner_id as parent, 
                                             sum(account_move.amount_total) as amount from account_move, res_partner
                                             where account_move.commercial_partner_id = res_partner.id
+                                            AND account_move.company_id = %s
                                             AND account_move.type = 'out_invoice' 
                                             AND %s            
                                             AND Extract(month FROM account_move.invoice_date_due) = ''' + str(
@@ -674,13 +678,14 @@ class DashBoard(models.Model):
                                             group by parent, customers
                                             order by amount desc 
                                             limit 10
-                                            ''') % (states_arg))
+                                            ''') % (company_id, states_arg))
 
             record_invoice = self._cr.dictfetchall()
 
             self._cr.execute((''' select res_partner.name as customers, account_move.commercial_partner_id as parent, 
                                             sum(account_move.amount_total) as amount from account_move, res_partner
                                             where account_move.commercial_partner_id = res_partner.id
+                                            AND account_move.company_id = %s 
                                             AND account_move.type = 'out_refund' 
                                             AND %s       
                                             AND Extract(month FROM account_move.invoice_date_due) = ''' + str(
@@ -688,7 +693,7 @@ class DashBoard(models.Model):
                                             group by parent, customers
                                             order by amount desc 
                                             limit 10
-                                            ''') % (states_arg))
+                                            ''') % (company_id, states_arg))
 
             record_refund = self._cr.dictfetchall()
 
@@ -712,7 +717,7 @@ class DashBoard(models.Model):
     @api.model
     def get_total_invoice(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         states_arg = ""
         if post != ('posted',):
@@ -750,7 +755,7 @@ class DashBoard(models.Model):
     @api.model
     def get_total_invoice_current_year(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         states_arg = ""
         if post != ('posted',):
@@ -839,7 +844,7 @@ class DashBoard(models.Model):
     @api.model
     def get_total_invoice_current_month(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         states_arg = ""
         if post != ('posted',):
@@ -927,12 +932,13 @@ class DashBoard(models.Model):
         paid_supplier_refund_current_month = [item['supplier_refund_paid'] for item in
                                               result_paid_supplier_refund_current_month]
 
-        return customer_invoice_current_month, credit_note_current_month, supplier_invoice_current_month, refund_current_month, paid_customer_invoice_current_month, paid_supplier_invoice_current_month, paid_customer_credit_current_month, paid_supplier_refund_current_month
+        currency = self.get_currency()
+        return customer_invoice_current_month, credit_note_current_month, supplier_invoice_current_month, refund_current_month, paid_customer_invoice_current_month, paid_supplier_invoice_current_month, paid_customer_credit_current_month, paid_supplier_refund_current_month, currency
 
     @api.model
     def get_total_invoice_this_month(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         states_arg = ""
         if post != ('posted',):
@@ -980,7 +986,7 @@ class DashBoard(models.Model):
     @api.model
     def get_total_invoice_this_year(self):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         self._cr.execute(''' select sum(amount_total) from account_move where type = 'out_invoice'
                             AND Extract(YEAR FROM account_move.date) = Extract(YEAR FROM DATE(NOW())) AND
@@ -1006,7 +1012,7 @@ class DashBoard(models.Model):
     @api.model
     def unreconcile_items_this_month(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         states_arg = ""
         if post != ('posted',):
@@ -1053,7 +1059,7 @@ class DashBoard(models.Model):
     @api.model
     def unreconcile_items_this_year(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         states_arg = ""
         if post != ('posted',):
@@ -1102,7 +1108,7 @@ class DashBoard(models.Model):
     @api.model
     def month_income_this_month(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         states_arg = ""
         if post != ('posted',):
@@ -1124,7 +1130,7 @@ class DashBoard(models.Model):
     @api.model
     def profit_income_this_month(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         states_arg = ""
         if post != ('posted',):
@@ -1158,11 +1164,19 @@ class DashBoard(models.Model):
 
         return profit
 
+    def get_current_company_value(self):
+        current_company = request.httprequest.cookies.get('cids')
+        if current_company:
+            company_id = int(current_company[0])
+        else:
+            company_id = self.env.company.id
+        if company_id not in self.env.user.company_ids.ids:
+            company_id = self.env.company.id
+        return company_id
+
     @api.model
     def profit_income_this_year(self, *post):
-
-        company_id = self.env.company.id
-
+        company_id = self.get_current_company_value()
         states_arg = ""
         if post != ('posted',):
             states_arg = """ parent_state in ('posted', 'draft')"""
@@ -1220,7 +1234,7 @@ class DashBoard(models.Model):
     @api.model
     def month_income_this_year(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         states_arg = ""
         if post != ('posted',):
@@ -1254,9 +1268,14 @@ class DashBoard(models.Model):
 
     @api.model
     def get_currency(self):
-        default = self.env.ref('base.main_company').currency_id
-        default = default.symbol
-        return default
+        current_company = self.env['res.company'].browse(self.get_current_company_value())
+        default = current_company.currency_id or self.env.ref('base.main_company').currency_id
+        lang = self.env.user.lang
+        if not lang:
+            lang = 'en_US'
+        lang = lang.replace("_", '-')
+        currency = {'position': default.position, 'symbol': default.symbol, 'language': lang}
+        return currency
 
     # function to get total expense
 
@@ -1276,7 +1295,7 @@ class DashBoard(models.Model):
     @api.model
     def month_expense_this_month(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         states_arg = ""
         if post != ('posted',):
@@ -1302,7 +1321,7 @@ class DashBoard(models.Model):
     @api.model
     def month_expense_this_year(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         states_arg = ""
         if post != ('posted',):
@@ -1326,7 +1345,7 @@ class DashBoard(models.Model):
     @api.model
     def bank_balance(self, *post):
 
-        company_id = self.env.company.id
+        company_id = self.get_current_company_value()
 
         states_arg = ""
         if post != ('posted',):

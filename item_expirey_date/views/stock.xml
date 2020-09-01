@@ -1,0 +1,28 @@
+<odoo>
+  <data>
+
+    <!-- <record id="view_stock_production_lot_form_inherit" model="ir.ui.view">
+        <field name="name">stock.production.lot.form.inherit</field>
+        <field name="model">stock.production.lot</field>
+        <field name="inherit_id" ref="product_expiry.view_move_form_expiry"/>
+        <field name="arch" type="xml">
+        		<xpath expr="//field[@name='removal_date']" position="after">
+        		    <field name="is_about_to_expire"/>
+        		</xpath>
+        </field>
+    </record>
+
+    <record id="ir_cron_check_expiry" model="ir.cron">
+        <field name="name">Lots: Check lot expireation date</field>
+        <field name="model_id" ref="model_stock_production_lot"/>
+        <field name="state">code</field>
+        <field name="code">model.check_expiry()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">minute</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="active" eval="Trues"/>
+    </record> -->
+
+  </data>
+</odoo>

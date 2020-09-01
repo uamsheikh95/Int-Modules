@@ -1,0 +1,30 @@
+<odoo>
+  <record id="res_partner_zone_Add" model="ir.ui.view">
+        <field name="name">res.partner.zone_id</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+               <!-- <xpath expr="//div[@class='o_address_format']/field[@name='city']" position="replace">
+                 <field name="city" placeholder="Zone" required="1" class="o_address_city" invisible="1" />
+                 <field name="zone_id" placeholder="Zone" required="1"  />
+               </xpath> -->
+
+               <xpath expr="//field[@name='email']" position="after">
+                 <field name="zone_id"  />
+               </xpath>
+        </field>
+    </record>
+
+    <record id="res_partner_zone_Add" model="ir.ui.view">
+          <field name="name">res.partner.zone</field>
+          <field name="model">res.partner</field>
+          <field name="inherit_id" ref="base.view_partner_tree" />
+          <field name="type">tree</field>
+          <field name="arch" type="xml">
+                 <xpath expr="//field[@name='email']" position="after">
+                   <field name="zone_id"  />
+                 </xpath>
+          </field>
+      </record>
+</odoo>
