@@ -251,9 +251,9 @@ class MeterReading(models.Model):
     #
     #     return action
 
-class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
-
-    default_product_id = fields.Many2one('product.product', string='Product', default_model='mgs_billing.meter_reading')
-    default_journal_id = fields.Many2one('account.journal', string='Default Invoice Journal', default_model='mgs_billing.meter_reading')
-    default_price_per_meter = fields.Float(string='Product', default_model='mgs_billing.meter_reading')
+# class ResConfigSettings(models.TransientModel):
+#     _inherit = 'res.config.settings'
+#
+#     default_product_id = fields.Many2one('product.product', string='Product', default_model='mgs_billing.meter_reading')
+#     default_journal_id = fields.Many2one('account.journal', string='Default Invoice Journal', default_model='mgs_billing.meter_reading')
+#     default_price_per_meter = fields.Float(string='Product', default_model='mgs_billing.meter_reading')

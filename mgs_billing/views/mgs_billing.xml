@@ -274,88 +274,57 @@
   </field>
 </record>
 
-   <record id="billing_settings_view" model="ir.ui.view">
-    <field name="name">Billing Configuration</field>
-    <field name="model">res.config.settings</field>
-    <field name="inherit_id" ref="base.res_config_settings_view_form" />
-    <field name="arch" type="xml">
-      <xpath expr="//div[hasclass('settings')]" position="inside">
-          <div class="app_settings_block" data-string="Billing" string="Billing" data-key="billing" groups="mgs_billing.group_mgs_billing_user">
+ <!-- <record id="billing_settings_view" model="ir.ui.view">
+  <field name="name">Billing Configuration</field>
+  <field name="model">res.config.settings</field>
+  <field name="inherit_id" ref="base.res_config_settings_view_form" />
+  <field name="arch" type="xml">
+    <xpath expr="//div[hasclass('settings')]" position="inside">
+        <div class="app_settings_block" data-string="Billing" string="Billing" data-key="billing" groups="mgs_billing.group_mgs_billing_user">
 
-            <h2>General Settings</h2>
-            <div class="col-12 col-lg-6 o_setting_box">
-                <div class="o_setting_right_pane">
+          <h2>General Settings</h2>
+          <div class="col-12 col-lg-6 o_setting_box">
+              <div class="o_setting_right_pane">
 
-                    <!-- <span class="o_form_label">Global Defaults</span> -->
-                    <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." aria-label="Values set here are company-specific." groups="base.group_multi_company" role="img"/>
-                    <!-- <div class="text-muted">
-                        MGS Billing defaults.
-                    </div> -->
-                    <div class="content-group">
-                        <div class="row mt16">
-                            <label string="Product/Service" for="default_product_id" class="col-lg-3 o_light_label"/>
-                            <field name="default_product_id" />
-                        </div>
-                    </div>
-                </div>
-            </div>
+                  <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." aria-label="Values set here are company-specific." groups="base.group_multi_company" role="img"/>
 
-            <div class="col-12 col-lg-6 o_setting_box">
-                <div class="o_setting_left_pane">
-                    <div class="content-group">
-                        <div class="row mt16">
-                            <label string="Default Price Per Meter" for="default_price_per_meter" class="col-lg-3 o_light_label"/>
-                            <field name="default_price_per_meter" style="width: 30%"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-lg-6 o_setting_box">
-                <div class="o_setting_left_pane">
-                    <div class="content-group">
-                        <div class="row mt16">
-                            <label string="Default Invoice Journal" for="default_journal_id" class="col-lg-3 o_light_label"/>
-                            <field name="default_journal_id"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
+                  <div class="content-group">
+                      <div class="row mt16">
+                          <label string="Product/Service" for="default_product_id" class="col-lg-3 o_light_label"/>
+                          <field name="default_product_id" />
+                      </div>
+                  </div>
+              </div>
           </div>
-      </xpath>
-    </field>
-  </record>
 
-  <!-- <div class="row mt16 o_settings_container">
-    <div class="col-xs-12 col-md-6 o_setting_box">
-        <div class="o_setting_right_pane">
-            <label for="default_journal_id"/>
-            <div class="text-muted">
-                Select default Invoicing item for transactions
-            </div>
-            <div class="content-group">
-                <div class="mt16">
-                    <field name="default_product_id" class="o_light_label"  options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"/>
-                </div>
-            </div>
-        </div>
-    </div>
+          <div class="col-12 col-lg-6 o_setting_box">
+              <div class="o_setting_left_pane">
+                  <div class="content-group">
+                      <div class="row mt16">
+                          <label string="Default Price Per Meter" for="default_price_per_meter" class="col-lg-3 o_light_label"/>
+                          <field name="default_price_per_meter" style="width: 30%"/>
+                      </div>
+                  </div>
+              </div>
+          </div>
 
-    <div class="col-xs-12 col-md-6 o_setting_box">
-        <div class="o_setting_right_pane">
-            <label for="default_journal_id"/>
-            <div class="text-muted">
-                Select default price per meter
-            </div>
-            <div class="content-group">
-                <div class="mt16">
-                    <field name="default_price_per_meter" class="o_light_label"  />
-                </div>
-            </div>
+          <div class="col-12 col-lg-6 o_setting_box">
+              <div class="o_setting_left_pane">
+                  <div class="content-group">
+                      <div class="row mt16">
+                          <label string="Default Invoice Journal" for="default_journal_id" class="col-lg-3 o_light_label"/>
+                          <field name="default_journal_id"/>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+
         </div>
-    </div> -->
+    </xpath>
+  </field>
+</record> -->
+
 
 
   <record id="partner_billing_form" model="ir.ui.view">
@@ -481,13 +450,13 @@
       </field>
   </record>
 
-  <record id="billing_settings_view_action" model="ir.actions.act_window">
+  <!-- <record id="billing_settings_view_action" model="ir.actions.act_window">
       <field name="name">Billing Configuration</field>
       <field name="res_model">res.config.settings</field>
       <field name="view_id" ref="billing_settings_view"/>
       <field name="view_mode">form</field>
       <field name="target">inline</field>
-  </record>
+  </record> -->
 
 
   <menuitem id="mgs_billing_root"
@@ -563,13 +532,13 @@
     parent="mgs_billing_root"
     sequence="5"
       />
-  <menuitem
+  <!-- <menuitem
     id="billing_settings_view_menu"
     name="Settings"
     parent="billing_configuration_menu"
     action="billing_settings_view_action"
     sequence="1"
-      />
+      /> -->
 
 
   <menuitem
@@ -577,7 +546,7 @@
     name="Zones"
     parent="billing_configuration_menu"
     action="zone_action"
-    sequence="2"
+    sequence="1"
       />
 
 
