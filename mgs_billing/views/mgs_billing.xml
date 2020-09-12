@@ -6,20 +6,34 @@
         <form string="Meter Reading Form">
           <header>
 
-              <field name="move_id" invisible="1"/>
 							<button string="Create Invoice"
-                 type="object" name="action_invoice_create" class="oe_highlight" attrs="{'invisible': [('invoiced', '=', True)]}" />
+                 type="object" name="action_invoice_create" class="oe_highlight" attrs="{'invisible': ['|', ('invoice_is_set', '=', True), ('state', '!=', 'draft')]}" />
 
              <button string="Print Invoice"
-                type="object" name="action_invoice_print" class="oe_highlight" attrs="{'invisible': [('move_id', '=', False)]}" />
+                type="object" name="action_invoice_print" attrs="{'invisible': [('move_id', '=', False)]}" />
 
-            <button string="Post"
-               type="object" name="action_invoice_post" class="oe_highlight" invisible="1" />
+
 
             <button string="Send by Email"
-               type="object" name="action_invoice_send_by_email" class="oe_highlight" attrs="{'invisible': [('move_id', '=', False)]}" />
+               type="object" name="action_invoice_send_by_email" attrs="{'invisible': [('move_id', '=', False)]}" />
+
+           <button string="Cancel"
+              type="object" name="action_invoice_cancel" groups="mgs_billing.group_mgs_billing_admin" attrs="{'invisible': [('state', '=', 'cancel')]}" />
+
+          <button string="Reset to Draft"
+             type="object" name="action_invoice_reset_draft" groups="mgs_billing.group_mgs_billing_admin" attrs="{'invisible': [('state', '!=', 'cancel')]}" />
+
+           <button string="Post"
+              type="object" class="oe_highlight" name="action_meter_post" groups="mgs_billing.group_mgs_billing_admin" attrs="{'invisible': ['|', ('invoice_is_set', '=', False), ('state', '!=', 'draft')]}" />
+               <field name="state" widget="statusbar" statusbar_visible="draft,invoiced"/>
 					</header>
             <sheet>
+
+              <div class="oe_title" style="float:left;width:50%;margin-top:20px">
+      						<h1>
+      								<field name="name" string="Name" />
+      						</h1>
+      				</div>
 
               <div class="oe_button_box">
         				<button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-money" attrs="{'invisible': [('move_id', '=', False)]}">
@@ -29,22 +43,22 @@
 
                 <group>
                   <group>
-                      <field name="date"/>
-                      <field name="property_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"/>
-                      <field name="company_id" groups="base.group_multi_company" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" />
-                      <!-- <field name="debug" /> -->
+                      <field name="date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                      <field name="property_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                      <field name="company_id" groups="base.group_multi_company" attrs="{'readonly':[('state', '!=', 'draft')]}" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" />
 
-                      <field name="invoiced" invisible="1"/>
-                      <field name="move_id" invisible="1"/>
-                      <field name="partner_id" invisible="1" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"/>
-                      <field name="journal_id" invisible="1" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"/>
+
+                      <field name="move_id" invisible="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                      <field name="partner_id" invisible="1" attrs="{'readonly':[('state', '!=', 'draft')]}" string="Current Tenant" options="{'no_quick_create': True}"/>
+                      <field name="meter_reader_id" invisible="0" attrs="{'readonly':[('state', '!=', 'draft')]}" options="{'no_quick_create': True}"/>
+                      <field name="invoice_is_set" invisible="1" />
                   </group>
 
                   <group>
-                      <field name="current_reading" widget="char"/>
-                      <field name="last_reading" attrs="{'invisible': [('property_id', '=', False)]}"/>
-                      <field name="difference"/>
-                      <field name="price_per_meter"/>
+                      <field name="current_reading" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                      <field name="last_reading" attrs="{'invisible': [('property_id', '=', False)], 'readonly':[('state', '!=', 'draft')]}"/>
+                      <field name="difference" attrs="{'invisible': [('property_id', '=', False), ('current_reading', '=', False)], 'readonly':[('state', '!=', 'draft')]}"/>
+                      <field name="price_per_meter" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
 
                   </group>
                 </group>
@@ -69,19 +83,19 @@
    <field name="name">mgs_billing.meter_reading.tree</field>
    <field name="model">mgs_billing.meter_reading</field>
    <field name="arch" type="xml">
-     <tree  default_order='id desc' string="Meter Reading Tree" decoration-info="invoiced == False" decoration-success="invoiced == False">
+     <tree  default_order='id desc' string="Meter Reading Tree" decoration-info="state == 'draft'" decoration-success="state == 'invoiced'" decoration-danger="state == 'cancel'">
        <field name="date"/>
        <field name="property_id"/>
        <field name="current_reading"/>
        <field name="last_reading"/>
        <field name="difference" sum="difference"/>
-       <field name="invoiced" invisible="1"/>
        <field name="price_per_meter"/>
        <field name="company_id" groups="base.group_multi_company" />
        <field name="total" sum="total"/>
        <field name="total_invoiced" sum="total_invoiced"/>
        <field name="residual" sum="residual"/>
        <field name="amount_paid" sum="amount_paid"/>
+       <field name="state" />
      </tree>
    </field>
 </record>
@@ -93,11 +107,12 @@
     <search string="Meter Reading search">
       <field name="property_id"/>
       <filter string="Today" name="today" domain="[('date', '=', datetime.datetime.now())]"/>
-      <filter string="Not Invoiced" domain="[('invoiced', '=', False)]" name="not_invoiced"></filter>
-      <filter string="Invoiced" domain="[('invoiced', '=', True)]" name="invoiced"></filter>
+      <filter string="Not Invoiced" domain="[('move_id', '=', False)]" name="not_invoiced"></filter>
+      <filter string="Invoiced" domain="[('state', '=', 'invoiced')]" name="invoiced"></filter>
       <group expand="0" string="Group By">
         <filter string="Prperty" name="property" context="{'group_by': 'property_id'}"></filter>
         <filter string="Date" name="date" context="{'group_by': 'date'}"></filter>
+        <filter string="State" name="state" context="{'group_by': 'state'}"></filter>
       </group>
     </search>
   </field>
@@ -112,19 +127,20 @@
 
               <div class="oe_title" style="float:left;width:50%;margin-top:20px">
       						<h1>
-      								<field name="name" string="Name" />
+      								<field name="name" string="Name" placeholder="Property Name" />
       						</h1>
       				</div>
 
                 <group>
                   <group>
-                      <field name="partner_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"/>
+                      <field name="partner_id" context="{'default_is_owner': 1}" options="{'no_quick_create': True}"/>
                       <field name="zone_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"/>
                       <field name="property_type"/>
                       <field name="company_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" groups="base.group_multi_company" />
                   </group>
 
                   <group>
+                      <field name="product_id" string="Pricing Plan" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"/>
                       <field name="phone"/>
                       <field name="wmd_serial_no"/>
                       <field name="opening_meter"/>
@@ -192,7 +208,7 @@
         <sheet>
           <group>
             <group>
-              <field name="partner_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"/>
+              <field name="partner_id" context="{'default_is_tenant': 1}" options="{'no_quick_create': True}"/>
               <field name="current"/>
             </group>
 
@@ -251,6 +267,7 @@
           </group>
 
           <group>
+            <field name="partner_id" context="{'default_meter_reader': 1}" string="Meter Reader" options="{'no_quick_create': True}"/>
             <field name="company_id" groups="base.group_multi_company" />
           </group>
         </group>
@@ -270,6 +287,7 @@
   <field name="arch" type="xml">
     <tree string="House Tenant Form">
           <field name="name" string="Zone Name"/>
+          <field name="partner_id" string="Meter Reader"/>
     </tree>
   </field>
 </record>
@@ -343,6 +361,7 @@
                 <group>
                   <group>
                     <field name="is_owner" string="Is a Owner"/>
+                    <field name="meter_reader" string="Is a Meter Reader"/>
                   </group>
 
                   <group>
@@ -374,7 +393,7 @@
   <record model="ir.actions.act_window" id="not_invoiced_meter_reading_action">
 			<field name="name">Not Invoiced Meter Readings</field>
 			<field name="res_model">mgs_billing.meter_reading</field>
-      <field name="domain">[('invoiced','=', False)]</field>
+      <field name="domain">[('state','=', 'draft')]</field>
 			<field name="view_mode">tree,form</field>
 			<field name="help" type="html">
 					<p class="o_view_nocontent_smiling_face">Create the first Meter Reading
@@ -430,6 +449,25 @@
 		<field name="act_window_id" ref="tenant_action" />
 	</record>
 
+  <record model="ir.actions.act_window" id="meter_reader_action">
+			<field name="name">Meter Readers</field>
+			<field name="res_model">res.partner</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="partner_billing_form"/>
+			<field name="domain">[('meter_reader','=', True)]</field>
+			<field name="context">{'default_meter_reader': 1}</field>
+			<field name="help" type="html">
+					<p class="o_view_nocontent_smiling_face">Create Meter Reader
+					</p>
+			</field>
+	</record>
+
+  <record id="billing_meter_reader_action_tree" model="ir.actions.act_window.view">
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="base.view_partner_tree" />
+		<field name="act_window_id" ref="meter_reader_action" />
+	</record>
+
   <record model="ir.actions.act_window" id="house_tenant_action">
       <field name="name">House Tenats</field>
       <field name="res_model">mgs_billing.house_tenant</field>
@@ -461,13 +499,14 @@
 
   <menuitem id="mgs_billing_root"
               name="Billing"
-              groups="group_mgs_billing_user"
+              groups="group_mgs_billing_admin,group_mgs_billing_user"
               web_icon="mgs_billing,static/description/icon.png"/>
   <menuitem
     id="meters_menu"
     name="Meters"
     parent="mgs_billing_root"
     sequence="1"
+    groups="group_mgs_billing_admin,group_mgs_billing_user"
       />
 
       <menuitem
@@ -476,6 +515,7 @@
         parent="meters_menu"
         action="meter_reading_action"
         sequence="1"
+        groups="group_mgs_billing_admin,group_mgs_billing_user"
           />
 
 
@@ -485,6 +525,7 @@
         parent="meters_menu"
         action="not_invoiced_meter_reading_action"
         sequence="2"
+        groups="group_mgs_billing_admin,group_mgs_billing_user"
           />
 
   <menuitem
@@ -492,15 +533,26 @@
     name="Partners"
     parent="mgs_billing_root"
     sequence="2"
+    groups="group_mgs_billing_admin,group_mgs_billing_user"
 			/>
 
-      <menuitem
-        id="owners_menu"
-        name="Owners"
-        parent="partner_menu"
-        action="owner_action"
-        sequence="1"
-          />
+    <menuitem
+      id="meter_reader_menu"
+      name="Meter Readers"
+      parent="partner_menu"
+      action="meter_reader_action"
+      sequence="1"
+      groups="group_mgs_billing_admin,group_mgs_billing_user"
+        />
+
+    <menuitem
+      id="owners_menu"
+      name="Owners"
+      parent="partner_menu"
+      action="owner_action"
+      sequence="2"
+      groups="group_mgs_billing_admin,group_mgs_billing_user"
+        />
 
       <menuitem
         id="tenant_menu"
@@ -508,6 +560,16 @@
         parent="partner_menu"
         action="tenant_action"
         sequence="3"
+        groups="group_mgs_billing_admin,group_mgs_billing_user"
+          />
+
+      <menuitem
+        id="payments_menu"
+        name="Payments"
+        parent="partner_menu"
+        action="account.action_account_payments"
+        sequence="4"
+        groups="group_mgs_billing_admin,group_mgs_billing_user"
           />
 
     <menuitem
@@ -516,6 +578,7 @@
       parent="mgs_billing_root"
       action="property_action"
       sequence="3"
+      groups="group_mgs_billing_admin,group_mgs_billing_user"
         />
   <menuitem
     id="house_tenant_menu"
@@ -523,6 +586,7 @@
     parent="mgs_billing_root"
     action="house_tenant_action"
     sequence="4"
+    groups="group_mgs_billing_admin,group_mgs_billing_user"
       />
 
 
@@ -531,6 +595,7 @@
     name="Configuration"
     parent="mgs_billing_root"
     sequence="5"
+    groups="group_mgs_billing_admin,group_mgs_billing_user"
       />
   <!-- <menuitem
     id="billing_settings_view_menu"
@@ -542,11 +607,19 @@
 
 
   <menuitem
+    id="pricing_plans_menu"
+    name="Pricing Plans"
+    parent="billing_configuration_menu"
+    action="account.product_product_action_sellable"
+    sequence="1"
+      />
+
+  <menuitem
     id="zone_menu"
     name="Zones"
     parent="billing_configuration_menu"
     action="zone_action"
-    sequence="1"
+    sequence="2"
       />
 
 

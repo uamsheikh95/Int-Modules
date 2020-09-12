@@ -20,9 +20,37 @@
         </record>
       </data>
 
-      <data noupdate="0">
+      <data noupdate="1">
         <record id="base.default_user" model="res.users">
             <field name="groups_id" eval="[(4,ref('mgs_billing.group_mgs_billing_user'))]"/>
+        </record>
+
+        <record id="mgs_billing_zone" model="ir.rule">
+            <field name="name">Zone Entry</field>
+            <field name="model_id" ref="model_mgs_billing_zone"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="mgs_billing_property" model="ir.rule">
+            <field name="name">Property Entry</field>
+            <field name="model_id" ref="model_mgs_billing_property"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="mgs_billing_ht" model="ir.rule">
+            <field name="name">House Tenant Entry</field>
+            <field name="model_id" ref="model_mgs_billing_house_tenant"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="mgs_billing_mr" model="ir.rule">
+            <field name="name">Meter Reading Entry</field>
+            <field name="model_id" ref="model_mgs_billing_meter_reading"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
         </record>
       </data>
 </odoo>

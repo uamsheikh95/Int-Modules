@@ -15,10 +15,24 @@ class StudentConfirm(models.TransientModel):
         context = dict(self._context or {})
         active_ids = context.get('active_ids', []) or []
 
+        invoice_ids = []
         for record in self.env['mgs_billing.meter_reading'].browse(active_ids):
-            if not record.move_id and not record.invoiced:
+            if not record.move_id:
                 record.action_invoice_create()
+                invoice_ids.append(record.move_id.id)
 
             if self.validate_invoices:
-                record.action_invoice_post()
-        return {'type': 'ir.actions.act_window_close'}
+                record.move_id.action_post()
+
+        if invoice_ids:
+            return {
+                'name': 'Generated Invoices',
+                'view_mode': 'tree',
+                'type': 'ir.actions.act_window',
+                'view_id': self.env.ref('account.view_invoice_tree').id,
+                'res_model': 'account.move',
+                'domain': [('id', 'in', invoice_ids)],
+                'target': 'current',
+            }
+        else:
+            return {'type': 'ir.actions.act_window_close'}

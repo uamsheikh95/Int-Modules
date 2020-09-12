@@ -11,6 +11,7 @@ class Partner(models.Model):
 
     is_owner = fields.Boolean(string="Owner")
     is_tenant = fields.Boolean(string="Tenant")
+    meter_reader = fields.Boolean(string="Meter Reader")
     zone_id = fields.Many2one('mgs_billing.zone', string='Zone')
 
 class Zone(models.Model):
@@ -19,6 +20,7 @@ class Zone(models.Model):
     _description = 'Billing Zone'
 
     name = fields.Char(string="Zone Name", required=True)
+    partner_id = fields.Many2one('res.partner', string='Meter Reader', domain=[('meter_reader', '=', True)], required=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env['res.company']._company_default_get())
 
     def unlink(self):
@@ -36,6 +38,7 @@ class Property(models.Model):
     partner_id = fields.Many2one('res.partner', string='Owner', domain=[('is_owner', '=', True)], required=True)
     property_type = fields.Char(string="Property Type")
     zone_id = fields.Many2one('mgs_billing.zone', string='Zone', required=True)
+    product_id = fields.Many2one('product.product', 'Pricing Plan', required=True)
     wmd_serial_no = fields.Char(string="WMD Serial No")
     opening_meter = fields.Integer(string="Opening Meter", required=True)
     house_tenant_ids = fields.One2many('mgs_billing.house_tenant', 'property_id')
@@ -57,7 +60,7 @@ class HouseTenant(models.Model):
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env['res.company']._company_default_get())
 
     @api.constrains('current')
-    def check_current_year(self):
+    def check_current_tanent(self):
         check_tenat = self.search([('current', '=', True), ('property_id', '=', self.property_id.id)])
         if len(check_tenat.ids) >= 2:
             raise ValidationError('''Error! You cannot set two current tenant for a perticular property!''')
@@ -71,16 +74,15 @@ class MeterReading(models.Model):
     _inherit = ['mail.thread']
     _rec_name = 'property_id'
 
-    date = fields.Date(string='Date', default=datetime.today())
+    name = fields.Char(string='Number', readonly=True, copy=False, default='New')
+    date = fields.Date(string='Date', default=datetime.today() , track_visibility='onchange')
     current_reading = fields.Integer(string="Current Reading", required=True)
     last_reading = fields.Integer(string="Last Reading", readonly=True, compute="_compute_last_reading")
     difference = fields.Integer(string='Difference', compute='_compute_difference')
     price_per_meter = fields.Float(string='Price Per Meter', required=True)
     total = fields.Monetary(string='Total', compute='_compute_total')
-    property_id = fields.Many2one('mgs_billing.property', string='Property', required=True)
+    property_id = fields.Many2one('mgs_billing.property', string='Property', required=True , track_visibility='onchange')
     move_id = fields.Many2one('account.move', string='Invoice')
-    invoiced = fields.Boolean(string='Invoiced', default=False)
-    product_id = fields.Many2one('product.product', string="Product")
     partner_id = fields.Many2one('res.partner', string="Partner")
     journal_id = fields.Many2one('account.journal', string='Journal')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env['res.company']._company_default_get())
@@ -91,12 +93,32 @@ class MeterReading(models.Model):
     total_invoiced = fields.Monetary(string="Total Invoiced", related='move_id.amount_total')
     residual = fields.Monetary(string="Amount Due", related='move_id.amount_residual')
     amount_paid = fields.Monetary(string='Amount Paid', compute='_compute_amount_paid')
+    state = fields.Selection([('draft', 'Not Invoiced'),('invoiced', 'Invoiced'), ('cancel', 'Cancelled')], default='draft')
+    meter_reader_id = fields.Many2one('res.partner', string='Meter Reader', domain=[('meter_reader', '=', True)], required=True)
+    invoice_is_set = fields.Boolean(compute='_check_if_the_invoice_is_created')
 
+    @api.model
+    def create(self, vals):
+        vals['name'] = self.env['ir.sequence'].next_by_code('mgs_billing.meter_reading')
+        result = super(MeterReading, self).create(vals)
+        return result
+
+    @api.depends('move_id')
+    def _check_if_the_invoice_is_created(self):
+        if self.move_id:
+            self.invoice_is_set = True
+        else:
+            self.invoice_is_set = False
     # debug = fields.Char('Debug')
+
+    @api.constrains('current_reading', 'last_reading')
+    def check_current_reading(self):
+        if self.current_reading < self.last_reading:
+            raise ValidationError('''Error! Current Reading should be greater than Last Reading!''')
 
     def unlink(self):
         for r in self:
-            if r.move_id or r.invoiced:
+            if r.move_id or r.state == 'invoiced':
                 raise UserError("You cannot delete an entry which has been posted once.")
 
 
@@ -104,26 +126,20 @@ class MeterReading(models.Model):
     def _compute_last_reading(self):
         for r in self:
             r.last_reading = 0
-            domain = []
 
-            if r.property_id:
-                domain.append(('property_id', '=', r.property_id.id))
+            if r.date and r.property_id:
+                domain = [('date', '<=', r.date), ('property_id', '=', r.property_id.id)]
 
-            if r.date:
-                domain.append(('date', '<=', r.date))
+                if r._origin.id:
+                    domain.append(('id', '<', r._origin.id))
 
-            if r._origin.id:
-                domain.append(('id', '<', r._origin.id))
-
-            last_reading = self.search(domain, order="id desc", limit=1)
+                last_reading = self.search(domain, order="id desc", limit=1)
 
 
-            if last_reading:
-                r.last_reading = last_reading.current_reading
-                r.debug = 'True'
-            elif not last_reading:
-                r.last_reading = r.property_id.opening_meter
-                r.debug = 'False'
+                if last_reading:
+                    r.last_reading = last_reading.current_reading
+                elif not last_reading:
+                    r.last_reading = r.property_id.opening_meter
 
     @api.depends('move_id')
     def _compute_amount_paid(self):
@@ -131,15 +147,16 @@ class MeterReading(models.Model):
             r.amount_paid = 0
             if r.move_id.amount_total or r.move_id.amount_residual:
                 r.amount_paid = r.move_id.amount_total - r.move_id.amount_residual
-            # if r.total_invoiced or r.residual:
-            #     r.amount_paid = r.total_invoiced - r.residual
+
 
     @api.onchange('property_id')
-    def _check_if_there_current_tenant_and_get_partner(self):
+    def _onchage_property_id(self):
         for r in self:
             if r.property_id:
                 # ASSING A PARTNER
                 r.partner_id = self.env['mgs_billing.house_tenant'].search([('current', '=', True), ('property_id', '=', r.property_id.id)]).partner_id.id
+                r.price_per_meter = r.property_id.product_id.lst_price
+                r.meter_reader_id = r.property_id.zone_id.partner_id.id
 
                 # CHECK IF A TENANT EXIST FOR SELECTED PROPERTY
                 has_current_tenant = False
@@ -155,7 +172,9 @@ class MeterReading(models.Model):
     @api.depends('current_reading', 'last_reading')
     def _compute_difference(self):
         for r in self:
-            r.difference = r.current_reading - r.last_reading
+            r.difference = 0
+            if r.current_reading and r.last_reading:
+                r.difference = r.current_reading - r.last_reading
 
     @api.depends('difference', 'price_per_meter')
     def _compute_total(self):
@@ -167,29 +186,43 @@ class MeterReading(models.Model):
         invoice_line = self.env['account.move.line']
 
         for r in self:
+            journal_domain = [
+                    ('type', '=', 'sale'),
+                    ('company_id', '=', r.company_id.id),
+                    # ('currency_id', '=', r.currency_id.id),
+                    # ('name', 'ilike', 'Customer Invoices')
+             ]
+            default_journal_id = self.env['account.journal'].search(journal_domain, order="id asc", limit=1)
+
             partner_id = r.partner_id
             company_id = r.company_id.id
             currency_id = self.env.user.company_id.currency_id.id
             user_id = self.env.user.id
-            origin = str(r.date) + "/" + r.partner_id.name + "/" + str(r.difference) + "@" + str(r.price_per_meter)
-            journal_id = r.journal_id.id,
+            origin = self.name
+
+            journal_id = default_journal_id
+
             date = r.date
             price_per_meter = r.price_per_meter
-            product_id = r.product_id
+            product_id = r.property_id.product_id
             difference = r.difference
-            account_id = (r.product_id.property_account_income_id or r.product_id.categ_id.property_account_income_categ_id).id
+            account_id = (r.property_id.product_id.property_account_income_id or r.property_id.product_id.categ_id.property_account_income_categ_id).id
+            property_id = r.property_id.id
+            meter_reader_id = r.meter_reader_id.id
 
             inserted_invoice = invoice.create({
                 'partner_id': partner_id.id,
-                'name': origin,
+                # 'name': origin,
                 'invoice_date': date,
-                'journal_id':journal_id, #journal_id,
+                'journal_id':journal_id.id, #journal_id,
                 'company_id': company_id,
                 'user_id': user_id,
                 'currency_id': currency_id,
                 'type': 'out_invoice',
                 'invoice_origin': origin,
                 'narration': origin,
+                'meter_reader_id': meter_reader_id,
+                'property_id': property_id,
                 'invoice_line_ids': [(0, 0, {
                     'product_id': product_id.id,
                     'name': product_id.name,
@@ -202,7 +235,7 @@ class MeterReading(models.Model):
             })
 
             self.write({
-                'invoiced': True,
+                'state': 'invoiced',
                 'move_id': inserted_invoice.id
             })
 
@@ -221,10 +254,6 @@ class MeterReading(models.Model):
         if self.move_id:
             self.move_id.action_invoice_sent()
 
-    def action_invoice_post(self):
-        if self.move_id and self.move_id.state == 'draft':
-            self.move_id.action_post()
-
 
     def action_view_invoice(self):
         invoices = self.mapped('move_id')
@@ -238,19 +267,20 @@ class MeterReading(models.Model):
             action = {'type': 'ir.actions.act_window_close'}
         return action
 
-    # def action_view_invoice(self):
-    #     invoices = self.mapped('move_id')
-    #     action = self.env.ref('account.action_move_out_invoice_type').read()[0]
-    #     if len(invoices) > 1:
-    #         action['domain'] = [('id', 'in', invoices.ids)]
-    #     elif len(invoices) == 1:
-    #         form_view = [(self.env.ref('account.view_move_form').id, 'form')]
-    #
-    #     else:
-    #         action = {'type': 'ir.actions.act_window_close'}
-    #
-    #     return action
+    def action_invoice_cancel(self):
+        if self.move_id and self.state in ('draft', 'invoiced'):
+            self.move_id.button_cancel()
+            self.state = 'cancel'
+        elif not self.move_id and self.state in ('draft', 'invoiced'):
+            self.state = 'cancel'
 
+    def action_invoice_reset_draft(self):
+        self.move_id.button_draft()
+        self.state = 'draft'
+
+    def action_meter_post(self):
+        self.move_id.action_post()
+        self.state = 'invoiced'
 # class ResConfigSettings(models.TransientModel):
 #     _inherit = 'res.config.settings'
 #

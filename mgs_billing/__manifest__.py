@@ -26,8 +26,12 @@
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
+        'data/billing_data.xml',
+        'views/report_template.xml',
         'views/mgs_billing.xml',
         'views/templates.xml',
+        'views/invoice_a5.xml',
+        'views/account.xml',
         'wizard/bulk_invoice_create.xml',
     ],
     # only loaded in demonstration mode
