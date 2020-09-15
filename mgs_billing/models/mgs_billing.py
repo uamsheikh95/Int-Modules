@@ -21,6 +21,7 @@ class Zone(models.Model):
 
     name = fields.Char(string="Zone Name", required=True)
     partner_id = fields.Many2one('res.partner', string='Meter Reader', domain=[('meter_reader', '=', True)], required=True)
+    code = fields.Char(string='Zone Code', required=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env['res.company']._company_default_get())
 
     def unlink(self):

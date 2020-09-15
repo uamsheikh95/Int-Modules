@@ -264,10 +264,11 @@
         <group>
           <group>
             <field name="name" string="Zone Name"/>
+            <field name="partner_id" context="{'default_meter_reader': 1}" string="Meter Reader" options="{'no_quick_create': True}"/>
           </group>
 
           <group>
-            <field name="partner_id" context="{'default_meter_reader': 1}" string="Meter Reader" options="{'no_quick_create': True}"/>
+            <field name="code" string="Zone Code" />
             <field name="company_id" groups="base.group_multi_company" />
           </group>
         </group>
