@@ -5,9 +5,14 @@
       <field name="inherit_id" ref="account.view_move_form" />
       <field name="type">form</field>
       <field name="arch" type="xml">
+<<<<<<< 12.0
+=======
+
+>>>>>>> local
              <xpath expr="//field[@name='invoice_origin']" position="after">
                <field name="property_id" attrs="{'readonly': [('state', 'in', ('posted', 'cancel'))]}"  />
                <field name="meter_reader_id" attrs="{'readonly': [('state', 'in', ('posted', 'cancel'))]}"  />
+               <field name="house_tenant_id" attrs="{'readonly': [('state', 'in', ('posted', 'cancel'))]}"  />
              </xpath>
       </field>
   </record>

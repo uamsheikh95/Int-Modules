@@ -1,0 +1,647 @@
+ <odoo>
+  <record model="ir.ui.view" id="meter_rading_form_view">
+    <field name="name">mgs_billing.meter_reading.form</field>
+    <field name="model">mgs_billing.meter_reading</field>
+    <field name="arch" type="xml">
+        <form string="Meter Reading Form">
+          <header>
+
+							<button string="Create Invoice"
+                 type="object" name="action_invoice_create" class="oe_highlight" attrs="{'invisible': ['|', ('invoice_is_set', '=', True), ('state', '!=', 'draft')]}" />
+
+             <button string="Print Invoice"
+                type="object" name="action_invoice_print" attrs="{'invisible': [('move_id', '=', False)]}" />
+
+
+
+            <button string="Send by Email"
+               type="object" name="action_invoice_send_by_email" attrs="{'invisible': [('move_id', '=', False)]}" />
+
+           <button string="Cancel"
+              type="object" name="action_invoice_cancel" groups="mgs_billing.group_mgs_billing_admin" attrs="{'invisible': [('state', '=', 'cancel')]}" />
+
+          <button string="Reset to Draft"
+             type="object" name="action_invoice_reset_draft" groups="mgs_billing.group_mgs_billing_admin" attrs="{'invisible': [('state', '!=', 'cancel')]}" />
+
+           <button string="Post"
+              type="object" class="oe_highlight" name="action_meter_post" groups="mgs_billing.group_mgs_billing_admin" attrs="{'invisible': ['|', ('invoice_is_set', '=', False), ('state', '!=', 'draft')]}" />
+               <field name="state" widget="statusbar" statusbar_visible="draft,invoiced"/>
+					</header>
+            <sheet>
+
+              <div class="oe_title" style="float:left;width:50%;margin-top:20px">
+      						<h1>
+      								<field name="name" string="Name" />
+      						</h1>
+      				</div>
+
+              <div class="oe_button_box">
+        				<button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-money" attrs="{'invisible': [('move_id', '=', False)]}">
+        					Invoice
+        				</button>
+        			</div>
+
+                <group>
+                  <group>
+                      <field name="date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                      <field name="property_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                      <field name="company_id" groups="base.group_multi_company" attrs="{'readonly':[('state', '!=', 'draft')]}" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" />
+
+
+                      <field name="move_id" invisible="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                      <field name="partner_id" invisible="1" attrs="{'readonly':[('state', '!=', 'draft')]}" string="Current Tenant"/>
+                      <field name="meter_reader_id" invisible="0" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                      <field name="invoice_is_set" invisible="1" />
+                      <field name="house_tenant_id" invisible="0"/>
+                  </group>
+
+                  <group>
+                      <field name="current_reading" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                      <field name="last_reading" attrs="{'invisible': [('property_id', '=', False)], 'readonly':[('state', '!=', 'draft')]}"/>
+                      <field name="difference" attrs="{'invisible': [('property_id', '=', False), ('current_reading', '=', False)], 'readonly':[('state', '!=', 'draft')]}"/>
+                      <field name="price_per_meter" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+
+                  </group>
+                </group>
+
+                <group class="oe_subtotal_footer oe_right">
+										<div class="oe_subtotal_footer_separator oe_inline">
+												<label for="total" style="font-size: 18px; font-weight: bold;"/>
+										</div>
+										<field name="total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary"/>
+								</group>
+            </sheet>
+
+            <div class="oe_chatter">
+              <field name="message_follower_ids" widget="mail_followers"/>
+              <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+    </field>
+ </record>
+
+ <record model="ir.ui.view" id="meter_rading_tree_view">
+   <field name="name">mgs_billing.meter_reading.tree</field>
+   <field name="model">mgs_billing.meter_reading</field>
+   <field name="arch" type="xml">
+     <tree  default_order='id desc' string="Meter Reading Tree" decoration-info="state == 'draft'" decoration-success="state == 'invoiced'" decoration-danger="state == 'cancel'">
+       <field name="date"/>
+       <field name="property_id"/>
+       <field name="current_reading"/>
+       <field name="last_reading"/>
+       <field name="difference" sum="difference"/>
+       <field name="price_per_meter"/>
+       <field name="company_id" groups="base.group_multi_company" />
+       <field name="total" sum="total"/>
+       <field name="total_invoiced" sum="total_invoiced"/>
+       <field name="residual" sum="residual"/>
+       <field name="amount_paid" sum="amount_paid"/>
+       <field name="state" />
+     </tree>
+   </field>
+</record>
+
+<record model="ir.ui.view" id="meter_rading_search_view">
+  <field name="name">mgs_billing.meter_reading.search</field>
+  <field name="model">mgs_billing.meter_reading</field>
+  <field name="arch" type="xml">
+    <search string="Meter Reading search">
+      <field name="property_id"/>
+      <filter string="Today" name="today" domain="[('date', '=', datetime.datetime.now())]"/>
+      <filter string="Not Invoiced" domain="[('move_id', '=', False)]" name="not_invoiced"></filter>
+      <filter string="Invoiced" domain="[('state', '=', 'invoiced')]" name="invoiced"></filter>
+      <group expand="0" string="Group By">
+        <filter string="Prperty" name="property" context="{'group_by': 'property_id'}"></filter>
+        <filter string="Date" name="date" context="{'group_by': 'date'}"></filter>
+        <filter string="State" name="state" context="{'group_by': 'state'}"></filter>
+      </group>
+    </search>
+  </field>
+</record>
+
+  <record model="ir.ui.view" id="property_form_view">
+    <field name="name">mgs_billing.property.form</field>
+    <field name="model">mgs_billing.property</field>
+    <field name="arch" type="xml">
+        <form string="Property Form">
+            <sheet>
+
+              <div class="oe_button_box" position="inside">
+                <button type="object"  name="action_invoice_create" class="oe_stat_button" icon="fa-pencil-square-o">
+                    <field name="invoice_count" widget="statinfo" string="Invoices" />
+                    <field name='invoice_ids' invisible="1"/>
+                </button>
+              </div>
+
+              <div class="oe_title" style="float:left;width:50%;margin-top:20px">
+      						<h1>
+      								<field name="name" string="Name" readonly="1" placeholder="Property Name" />
+      						</h1>
+      				</div>
+
+                <group>
+                  <group>
+                      <field name="partner_id" context="{'default_is_owner': 1}"/>
+                      <field name="zone_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"/>
+                      <field name="property_type"/>
+                      <field name="company_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" groups="base.group_multi_company" />
+                      <field name="zone_code" string="Zone Code" invisible="1" />
+                  </group>
+
+                  <group>
+                      <field name="product_id" string="Pricing Plan" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"/>
+                      <field name="phone"/>
+                      <field name="wmd_serial_no"/>
+                      <field name="opening_meter"/>
+                  </group>
+                </group>
+
+                <notebook>
+  								<page string="Tenants">
+  										<field name="house_tenant_ids" context="{'default_prperty_id': id}">
+  												<tree editable="bottom">
+  														<field name="partner_id"/>
+  														<field name="current"/>
+                              <field name="company_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" groups="base.group_multi_company" />
+  												</tree>
+  										</field>
+
+  								</page>
+                </notebook>
+            </sheet>
+
+            <div class="oe_chatter">
+              <field name="message_follower_ids" widget="mail_followers"/>
+              <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="property_tree_view">
+   <field name="name">mgs_billing.property.tree</field>
+   <field name="model">mgs_billing.property</field>
+   <field name="arch" type="xml">
+     <tree string="Property Tree">
+       <field name="name"/>
+       <field name="partner_id"/>
+       <field name="phone"/>
+       <field name="property_type"/>
+       <field name="zone_id"/>
+       <field name="wmd_serial_no"/>
+       <field name="opening_meter"/>
+     </tree>
+   </field>
+  </record>
+
+  <record model="ir.ui.view" id="property_search_view">
+    <field name="name">mgs_billing.property.search</field>
+    <field name="model">mgs_billing.property</field>
+    <field name="arch" type="xml">
+      <search string="Property search">
+        <field name="name"/>
+        <field name="partner_id"/>
+        <group expand="0" string="Group By">
+          <filter string="Owner" name="property" context="{'group_by': 'partner_id'}"></filter>
+          <filter string="Zone" name="date" context="{'group_by': 'zone_id'}"></filter>
+        </group>
+      </search>
+    </field>
+  </record>
+
+
+  <record model="ir.ui.view" id="house_tenant_form_view">
+    <field name="name">mgs_billing.House Tenant.form</field>
+    <field name="model">mgs_billing.house_tenant</field>
+    <field name="arch" type="xml">
+      <form string="House Tenant Form">
+        <sheet>
+
+          <div class="oe_button_box" position="inside">
+            <button type="object"  name="action_invoice_create" class="oe_stat_button" icon="fa-pencil-square-o">
+                <field name="invoice_count" widget="statinfo" string="Invoices" />
+                <field name='invoice_ids' invisible="1"/>
+            </button>
+          </div>
+
+          <group>
+            <group>
+              <field name="partner_id" context="{'default_is_tenant': 1}"/>
+              <field name="current"/>
+            </group>
+
+            <group>
+              <field name="property_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"/>
+              <field name="company_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" groups="base.group_multi_company" />
+            </group>
+          </group>
+
+        </sheet>
+
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers"/>
+          <field name="message_ids" widget="mail_thread"/>
+      </div>
+      </form>
+    </field>
+</record>
+
+<record model="ir.ui.view" id="house_tenant_tree_view">
+   <field name="name">mgs_billing.House Tenant.tree</field>
+   <field name="model">mgs_billing.house_tenant</field>
+   <field name="arch" type="xml">
+     <tree string="House Tenant Tree">
+       <field name="partner_id"/>
+       <field name="current"/>
+       <field name="property_id"/>
+     </tree>
+   </field>
+</record>
+
+<record model="ir.ui.view" id="house_tenant_search_view">
+  <field name="name">mgs_billing.House Tenant.search</field>
+  <field name="model">mgs_billing.house_tenant</field>
+  <field name="arch" type="xml">
+    <search string="House Tenant search">
+      <field name="partner_id" string="Tenant"/>
+      <filter string="Current Tenants" domain="[('current', '=', True)]" name="current"></filter>
+      <group expand="0" string="Group By">
+        <filter string="Property" name="property" context="{'group_by': 'property_id'}"></filter>
+        <filter string="Tenant" name="tenant" context="{'group_by': 'partner_id'}"></filter>
+      </group>
+    </search>
+  </field>
+</record>
+
+
+<record model="ir.ui.view" id="zone_form_view">
+  <field name="name">mgs_billing.zone.form</field>
+  <field name="model">mgs_billing.zone</field>
+  <field name="arch" type="xml">
+    <form string="House Tenant Form">
+      <sheet>
+        <group>
+          <group>
+            <field name="name" string="Zone Name"/>
+            <field name="partner_id" context="{'default_meter_reader': 1}" string="Meter Reader"/>
+          </group>
+
+          <group>
+            <field name="code" string="Zone Code" />
+            <field name="company_id" groups="base.group_multi_company" />
+          </group>
+        </group>
+      </sheet>
+
+      <div class="oe_chatter">
+        <field name="message_follower_ids" widget="mail_followers"/>
+        <field name="message_ids" widget="mail_thread"/>
+    </div>
+      </form>
+  </field>
+</record>
+
+<record model="ir.ui.view" id="zone_tenant_tree_view">
+  <field name="name">mgs_billing.zone.tree</field>
+  <field name="model">mgs_billing.zone</field>
+  <field name="arch" type="xml">
+    <tree string="House Tenant Form">
+          <field name="name" string="Zone Name"/>
+          <field name="partner_id" string="Meter Reader"/>
+    </tree>
+  </field>
+</record>
+
+ <!-- <record id="billing_settings_view" model="ir.ui.view">
+  <field name="name">Billing Configuration</field>
+  <field name="model">res.config.settings</field>
+  <field name="inherit_id" ref="base.res_config_settings_view_form" />
+  <field name="arch" type="xml">
+    <xpath expr="//div[hasclass('settings')]" position="inside">
+        <div class="app_settings_block" data-string="Billing" string="Billing" data-key="billing" groups="mgs_billing.group_mgs_billing_user">
+
+          <h2>General Settings</h2>
+          <div class="col-12 col-lg-6 o_setting_box">
+              <div class="o_setting_right_pane">
+
+                  <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." aria-label="Values set here are company-specific." groups="base.group_multi_company" role="img"/>
+
+                  <div class="content-group">
+                      <div class="row mt16">
+                          <label string="Product/Service" for="default_product_id" class="col-lg-3 o_light_label"/>
+                          <field name="default_product_id" />
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="col-12 col-lg-6 o_setting_box">
+              <div class="o_setting_left_pane">
+                  <div class="content-group">
+                      <div class="row mt16">
+                          <label string="Default Price Per Meter" for="default_price_per_meter" class="col-lg-3 o_light_label"/>
+                          <field name="default_price_per_meter" style="width: 30%"/>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="col-12 col-lg-6 o_setting_box">
+              <div class="o_setting_left_pane">
+                  <div class="content-group">
+                      <div class="row mt16">
+                          <label string="Default Invoice Journal" for="default_journal_id" class="col-lg-3 o_light_label"/>
+                          <field name="default_journal_id"/>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+
+        </div>
+    </xpath>
+  </field>
+</record> -->
+
+
+
+  <record id="partner_billing_form" model="ir.ui.view">
+      <field name="name">res.partner.billing</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_form"/>
+      <field name="arch" type="xml">
+
+         <xpath expr="//div[@class='o_address_format']/field[@name='city']" position="replace">
+            <field name="city" placeholder="Zone" required="0" class="o_address_city" invisible="1" />
+            <field name="zone_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}" placeholder="Zone" required="0" class="o_address_city" />
+          </xpath>
+
+          <xpath expr="//page[1]" position="before">
+              <page string="Billing">
+                <group>
+                  <group>
+                    <field name="is_owner" string="Is a Owner"/>
+                    <field name="meter_reader" string="Is a Meter Reader"/>
+                  </group>
+
+                  <group>
+                    <field name="is_tenant" string="Is a Tenant"/>
+                  </group>
+                </group>
+              </page>
+          </xpath>
+      </field>
+  </record>
+
+
+  <record model="ir.actions.act_window" id="meter_reading_action">
+			<field name="name">Meter Reading</field>
+			<field name="res_model">mgs_billing.meter_reading</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+					<p class="o_view_nocontent_smiling_face">Create the first Meter Reading
+					</p>
+			</field>
+	</record>
+
+  <record id="meter_reading_action_tree" model="ir.actions.act_window.view">
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="meter_rading_tree_view" />
+		<field name="act_window_id" ref="meter_reading_action" />
+	</record>
+
+  <record model="ir.actions.act_window" id="not_invoiced_meter_reading_action">
+			<field name="name">Not Invoiced Meter Readings</field>
+			<field name="res_model">mgs_billing.meter_reading</field>
+      <field name="domain">[('state','=', 'draft')]</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+					<p class="o_view_nocontent_smiling_face">Create the first Meter Reading
+					</p>
+			</field>
+	</record>
+
+  <record model="ir.actions.act_window" id="property_action">
+			<field name="name">Properties</field>
+			<field name="res_model">mgs_billing.property</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+					<p class="o_view_nocontent_smiling_face">Create the first Property
+					</p>
+			</field>
+	</record>
+
+  <record model="ir.actions.act_window" id="owner_action">
+			<field name="name">Owners</field>
+			<field name="res_model">res.partner</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="partner_billing_form"/>
+			<field name="domain">[('is_owner','=', True)]</field>
+			<field name="context">{'default_is_owner': 1}</field>
+			<field name="help" type="html">
+					<p class="o_view_nocontent_smiling_face">Create Property Owner
+					</p>
+			</field>
+	</record>
+
+  <record id="billing_owner_action_tree" model="ir.actions.act_window.view">
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="base.view_partner_tree" />
+		<field name="act_window_id" ref="owner_action" />
+	</record>
+
+  <record model="ir.actions.act_window" id="tenant_action">
+			<field name="name">Tenants</field>
+			<field name="res_model">res.partner</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="partner_billing_form"/>
+			<field name="domain">[('is_tenant','=', True)]</field>
+			<field name="context">{'default_is_tenant': 1}</field>
+			<field name="help" type="html">
+					<p class="o_view_nocontent_smiling_face">Create Tenant
+					</p>
+			</field>
+	</record>
+
+  <record id="billing_tenant_action_tree" model="ir.actions.act_window.view">
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="base.view_partner_tree" />
+		<field name="act_window_id" ref="tenant_action" />
+	</record>
+
+  <record model="ir.actions.act_window" id="meter_reader_action">
+			<field name="name">Meter Readers</field>
+			<field name="res_model">res.partner</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="partner_billing_form"/>
+			<field name="domain">[('meter_reader','=', True)]</field>
+			<field name="context">{'default_meter_reader': 1}</field>
+			<field name="help" type="html">
+					<p class="o_view_nocontent_smiling_face">Create Meter Reader
+					</p>
+			</field>
+	</record>
+
+  <record id="billing_meter_reader_action_tree" model="ir.actions.act_window.view">
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="base.view_partner_tree" />
+		<field name="act_window_id" ref="meter_reader_action" />
+	</record>
+
+  <record model="ir.actions.act_window" id="house_tenant_action">
+      <field name="name">House Tenats</field>
+      <field name="res_model">mgs_billing.house_tenant</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">Create the first House Tenant
+          </p>
+      </field>
+  </record>
+
+  <record model="ir.actions.act_window" id="zone_action">
+      <field name="name">Zones</field>
+      <field name="res_model">mgs_billing.zone</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">Create the first Zone
+          </p>
+      </field>
+  </record>
+
+  <!-- <record id="billing_settings_view_action" model="ir.actions.act_window">
+      <field name="name">Billing Configuration</field>
+      <field name="res_model">res.config.settings</field>
+      <field name="view_id" ref="billing_settings_view"/>
+      <field name="view_mode">form</field>
+      <field name="target">inline</field>
+  </record> -->
+
+
+  <menuitem id="mgs_billing_root"
+              name="Billing"
+              groups="group_mgs_billing_admin,group_mgs_billing_user"
+              web_icon="mgs_billing,static/description/icon.png"/>
+  <menuitem
+    id="meters_menu"
+    name="Meters"
+    parent="mgs_billing_root"
+    sequence="1"
+    groups="group_mgs_billing_admin,group_mgs_billing_user"
+      />
+
+      <menuitem
+        id="all_meters_menu"
+        name="All"
+        parent="meters_menu"
+        action="meter_reading_action"
+        sequence="1"
+        groups="group_mgs_billing_admin,group_mgs_billing_user"
+          />
+
+
+      <menuitem
+        id="not_invoiced_meter_reading_menu"
+        name="Not Invoiced"
+        parent="meters_menu"
+        action="not_invoiced_meter_reading_action"
+        sequence="2"
+        groups="group_mgs_billing_admin,group_mgs_billing_user"
+          />
+
+  <menuitem
+    id="partner_menu"
+    name="Partners"
+    parent="mgs_billing_root"
+    sequence="2"
+    groups="group_mgs_billing_admin,group_mgs_billing_user"
+			/>
+
+    <menuitem
+      id="meter_reader_menu"
+      name="Meter Readers"
+      parent="partner_menu"
+      action="meter_reader_action"
+      sequence="1"
+      groups="group_mgs_billing_admin,group_mgs_billing_user"
+        />
+
+    <menuitem
+      id="owners_menu"
+      name="Owners"
+      parent="partner_menu"
+      action="owner_action"
+      sequence="2"
+      groups="group_mgs_billing_admin,group_mgs_billing_user"
+        />
+
+      <menuitem
+        id="tenant_menu"
+        name="Tenants"
+        parent="partner_menu"
+        action="tenant_action"
+        sequence="3"
+        groups="group_mgs_billing_admin,group_mgs_billing_user"
+          />
+
+      <menuitem
+        id="payments_menu"
+        name="Payments"
+        parent="partner_menu"
+        action="account.action_account_payments"
+        sequence="4"
+        groups="group_mgs_billing_admin,group_mgs_billing_user"
+          />
+
+    <menuitem
+      id="property_menu"
+      name="Properties"
+      parent="mgs_billing_root"
+      action="property_action"
+      sequence="3"
+      groups="group_mgs_billing_admin,group_mgs_billing_user"
+        />
+  <menuitem
+    id="house_tenant_menu"
+    name="House Tenant"
+    parent="mgs_billing_root"
+    action="house_tenant_action"
+    sequence="4"
+    groups="group_mgs_billing_admin,group_mgs_billing_user"
+      />
+
+
+  <menuitem
+    id="billing_configuration_menu"
+    name="Configuration"
+    parent="mgs_billing_root"
+    sequence="5"
+    groups="group_mgs_billing_admin,group_mgs_billing_user"
+      />
+  <!-- <menuitem
+    id="billing_settings_view_menu"
+    name="Settings"
+    parent="billing_configuration_menu"
+    action="billing_settings_view_action"
+    sequence="1"
+      /> -->
+
+
+  <menuitem
+    id="pricing_plans_menu"
+    name="Pricing Plans"
+    parent="billing_configuration_menu"
+    action="account.product_product_action_sellable"
+    sequence="1"
+      />
+
+  <menuitem
+    id="zone_menu"
+    name="Zones"
+    parent="billing_configuration_menu"
+    action="zone_action"
+    sequence="2"
+      />
+
+
+
+</odoo>

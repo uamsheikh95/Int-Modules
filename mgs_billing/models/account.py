@@ -8,6 +8,7 @@ class AccountMove(models.Model):
 
     property_id = fields.Many2one('mgs_billing.property', string='Property', required=False , track_visibility='onchange')
     meter_reader_id = fields.Many2one('res.partner', string='Meter Reader', domain=[('meter_reader', '=', True)], required=False)
+    house_tenant_id = fields.Many2one('mgs_billing.house_tenant', string='House Tenant')
 
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
