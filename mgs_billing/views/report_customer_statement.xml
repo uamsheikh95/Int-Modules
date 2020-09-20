@@ -1,0 +1,162 @@
+<odoo>
+  <report
+     id="action_report_customer_statement_report"
+     name="mgs_billing.customer_statement_report"
+     model="mgs_billing.customer_statement_report"
+     string="Customer Statement"
+     report_type="qweb-html"
+  />
+
+  <template id="customer_statement_report">
+   <t t-call="web.html_container">
+        <t t-call="web.internal_layout">
+           <div class="page">
+               <div class="container" style="font-size:12px;font-family:Arial;">
+                 <h3 class="text-center" style="margin-bottom:0">Customer Statement</h3>
+                 <p style="font-weight:bold" class="text-center"><span t-esc="date_from"/> - <span t-esc="date_to"/></p>
+
+                 <div class="row col">
+                         <div class="col-6">
+                     <strong>Tenant Name:</strong>
+                     <p style="font-weigh:bold;font-size:20px" t-esc="partner_name"/>
+                     </div>
+
+                     <div class="col-3">
+                         <t t-if="date_from"><strong>Date from :</strong> <span t-esc="date_from"/><br/></t>
+                         <t t-if="date_to"><strong>Date to :</strong> <span t-esc="date_to"/></t>
+                     </div>
+                     <div class="col-3">
+                         <strong>Property:</strong>
+                         <p t-esc="property_name"/>
+                     </div>
+                 </div>
+
+                 <table class="table table-condensed mt32">
+                     <thead>
+                       <tr style="background-color:#D6EAF8">
+                         <th>Date</th>
+                         <th>Acc</th>
+                         <th>Reference</th>
+                         <th>Description</th>
+                         <th class="text-right">Total Invoiced</th>
+                         <th class="text-right">Total Paid</th>
+                         <th class="text-right">Amount Due</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       <t t-if="date_from">
+                         <t t-set="balance_forward" t-value="sum_open_balance(partner_id, property_id, date_from)"/>
+                         <t t-set="current_balance" t-value="sum_partner(partner_id, property_id, date_from, date_to)"/>
+                         <!-- <t t-set="balance_forward" t-value="0"/>
+                         <t t-set="current_balance" t-value="0"/> -->
+                         <t t-set="total_balance" t-value="balance_forward+current_balance"/>
+                       </t>
+
+                       <tr t-if="date_from" style="color:red;font-style:italic">
+                           <td colspan="4">
+                            <strong>Balance Forward</strong>
+                           </td>
+                           <td class="text-right">
+
+                           </td>
+                           <td class="text-right">
+
+                           </td>
+                           <td class="text-right">
+
+                               <strong t-esc="'{0:,.2f}'.format(balance_forward)" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                           </td>
+                       </tr>
+
+                       <t t-set="prevbal" t-value="0"/>
+
+                       <tr t-foreach="lines(partner_id, property_id, date_from, date_to)" t-as="line" style="font-weight:bold">
+
+                         <t t-set="trdate" t-value="line['date']"/>
+                         <t t-set="ref_memo" t-value="line['displayed_name']"/>
+                         <t t-set="groupline" t-value="line['move_name']"/>
+                         <t t-set="tdr" t-value="0"/>
+                         <t t-set="tcred" t-value="0"/>
+                         <t t-set="wcurr" t-value="0"/>
+                         <t t-if="line_even">
+                           <t t-set="refe_even" t-value="line['move_name']"/>
+                         </t>
+                         <t t-if="line_odd">
+                           <t t-set="refe_odd" t-value="line['move_name']"/>
+                         </t>
+                         <t t-if="refe_odd==refe_even">
+                           <t t-set="printnew" t-value="0"/>
+                         </t>
+                         <t t-if="not refe_odd==refe_even">
+                           <t t-set="printnew" t-value="1"/>
+                         </t>
+
+                         <t t-if="printnew==1">
+                           <tr t-foreach="lines(partner_id, property_id, date_from, date_to)" t-as="intline">
+                             <t t-if="groupline==intline['move_name']">
+                               <t t-set="tdr" t-value="tdr + intline['debit']"/>
+                               <t t-set="tcred" t-value="tcred + intline['credit']"/>
+                               <t t-set="wcurr" t-value="wcurr + intline['amount_currency']"/>
+                             </t>
+                           </tr>
+
+                           <t t-set="prevbal" t-value="prevbal+tdr-tcred"/>
+
+                           <td nowrap='nowrap'>
+                               <span t-esc="line['date']"/>
+                           </td>
+
+                           <td nowrap='nowrap'>
+                               <span t-esc="line['a_code']"/>
+                           </td>
+
+                           <td nowrap='nowrap'>
+                               <span t-esc="groupline"/> 
+                           </td>
+
+                           <td colospan="3" nowrap='nowrap'>
+                               <span t-esc="line['displayed_name']"/>
+
+                           </td>
+                           <td class="text-right" nowrap='nowrap'>
+                               <span t-esc="'{0:,.2f}'.format(line['amount_total'])" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                           </td>
+                           <td class="text-right" nowrap='nowrap'>
+                               <span t-esc="'{0:,.2f}'.format(line['amount_residual'])" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                           </td>
+                           <td class="text-right" nowrap='nowrap'>
+                               <span t-esc="'{0:,.2f}'.format(line['amount_paid'])" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                           </td>
+                           <!-- <td nowrap='nowrap'>
+                               <span t-esc="'{0:,.2f}'.format(line['amount_currency'])" /> <span t-esc="line['currency_code']" />
+                           </td> -->
+
+                         </t>
+                       </tr>
+
+                       <tr style="color:#D5D8DC;border-top:1px solid black">
+                         <td class="text-right" colspan="4">
+                           <strong>Balance on Date</strong>
+                         </td>
+                         <td class="text-right">
+                           <!-- <strong t-esc="'{0:,.2f}'.format(sum_partner(partner_id, property_id, date_from, date_to))" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                        --> </td>
+                         <td class="text-right">
+                           <!-- <strong t-esc="'{0:,.2f}'.format(sum_partner(partner_id, property_id, date_from, date_to))" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/> -->
+                         </td>
+                         <td class="text-right">
+                           <strong t-esc="'{0:,.2f}'.format(current_balance)" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                         </td>
+                       </tr>
+
+                     </tbody>
+                 </table>
+
+
+               </div> <!--container-->
+           </div> <!--page-->
+         </t> <!--web.external_layout-->
+   </t> <!--web.html_container-->
+  </template>
+
+</odoo>

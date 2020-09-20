@@ -1,0 +1,31 @@
+<odoo>
+		<record id="mgs_billing_bulk_inv_view" model="ir.ui.view">
+            <field name="name">meter_reading_bulk_inv.form</field>
+            <field name="model">mgs_billing.meter_reading_bulk_inv</field>
+            <field name="arch" type="xml">
+                <form string="Generate Bulk Invoices">
+                    <group>
+                      <group>
+                        <field name="validate_invoices" string="Post Invoice" />
+                      </group>
+
+                      <group>
+                      </group>
+                    </group>
+                    <footer>
+                        <button string="Generate" name="action_confirm_generating_bulk_invoices" type="object" default_focus="1" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+				<act_window id="action_mgs_billing_bulk_inv"
+		        name="Generate Invoice(s)"
+		        res_model="mgs_billing.meter_reading_bulk_inv"
+		        binding_model="mgs_billing.meter_reading"
+		        view_id="mgs_billing.mgs_billing_bulk_inv_view"
+		        view_mode="form" target="new"
+						groups="group_mgs_billing_user" />
+				/>
+</odoo>

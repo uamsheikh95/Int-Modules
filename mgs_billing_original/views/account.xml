@@ -1,0 +1,86 @@
+<odoo>
+  <record id="invoice_billing" model="ir.ui.view">
+      <field name="name">account.move.billing.form</field>
+      <field name="model">account.move</field>
+      <field name="inherit_id" ref="account.view_move_form" />
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+            <xpath expr="//header" position="after">
+              <button string="Add Payment"
+                 type="object" name="add_payment"/>
+            </xpath>
+             <xpath expr="//field[@name='partner_id']" position="after">
+               <field name="property_id" attrs="{'readonly': [('state', 'in', ('posted', 'cancel'))]}"  />
+               <field name="meter_reader_id" attrs="{'readonly': [('state', 'in', ('posted', 'cancel'))]}"  />
+             </xpath>
+      </field>
+  </record>
+
+  <record id="invoice_billing_tree" model="ir.ui.view">
+      <field name="name">account.move.billing.tree</field>
+      <field name="model">account.move</field>
+      <field name="inherit_id" ref="account.view_invoice_tree" />
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+             <xpath expr="//field[@name='partner_id']" position="after">
+               <field name="property_id"   />
+               <field name="meter_reader_id"   />
+             </xpath>
+      </field>
+  </record>
+
+  <record id="payment_outstanding_inv" model="ir.ui.view">
+      <field name="name">account.payment.outstanding.tree</field>
+      <field name="model">account.payment</field>
+      <field name="inherit_id" ref="account.view_account_payment_form" />
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+             <xpath expr="//sheet" position="inside">
+               <notebook>
+                 <page string="Outstanding Invoices" attrs="{'invisible': [('partner_id', '=', False)]}">
+                   <group>
+                     <group>
+                       <field name="reconcile_by" widget="radio" />
+                     </group>
+                     <group>
+                     </group>
+                   </group>
+                   <field name="outstanding_invoice_ids" readonly="1" >
+                     <tree>
+                       <field name = "name" string="Number" />
+                       <field name = "invoice_date" />
+                       <field name = "meter_reader_id" />
+                       <field name = "invoice_origin" />
+                       <field name = "amount_total_signed" />
+                       <field name = "amount_residual_signed" />
+                       <field name = "state" invisible="1" />
+                     </tree>
+                   </field>
+                 </page>
+               </notebook>
+             </xpath>
+      </field>
+  </record>
+
+
+  <record id="invoice_filter_search" model="ir.ui.view">
+      <field name="name">ACCOUNT MOVE SEARCH VIEW INHERIT</field>
+      <field name="model">account.move</field>
+      <field name="type">search</field>
+      <field name="inherit_id" ref="account.view_account_invoice_filter" />
+      <field name="arch" type="xml">
+           <xpath expr="//filter[@name='draft']" position="before">
+              <filter string="Today" name="today" domain="[('invoice_date', '=', datetime.datetime.now())]"/>
+           </xpath>
+
+           <xpath expr="//filter[@name='invoice_date']" position="before">
+             <!-- <filter string='Zone' domain="[]" context="{'group_by' : 'zone_id'}"/> -->
+             <filter string="Property" name="zone" context="{'group_by': 'property_id'}"/>
+             <filter string="Meter Reader" name="zone" context="{'group_by': 'meter_reader_id'}"/>
+           </xpath>
+      </field>
+  </record>
+
+
+
+</odoo>
