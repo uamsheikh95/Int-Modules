@@ -32,7 +32,9 @@
         'views/templates.xml',
         'views/invoice_a5.xml',
         'views/account.xml',
+        'views/report_customer_statement.xml',
         'wizard/bulk_invoice_create.xml',
+        'wizard/customer_statement.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

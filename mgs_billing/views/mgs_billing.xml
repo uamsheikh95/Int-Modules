@@ -1,4 +1,4 @@
- <odoo>
+<odoo>
   <record model="ir.ui.view" id="meter_rading_form_view">
     <field name="name">mgs_billing.meter_reading.form</field>
     <field name="model">mgs_billing.meter_reading</field>
@@ -293,30 +293,26 @@
   </field>
 </record>
 
- <!-- <record id="billing_settings_view" model="ir.ui.view">
+ <record id="billing_settings_view" model="ir.ui.view">
   <field name="name">Billing Configuration</field>
   <field name="model">res.config.settings</field>
   <field name="inherit_id" ref="base.res_config_settings_view_form" />
   <field name="arch" type="xml">
     <xpath expr="//div[hasclass('settings')]" position="inside">
         <div class="app_settings_block" data-string="Billing" string="Billing" data-key="billing" groups="mgs_billing.group_mgs_billing_user">
-
           <h2>General Settings</h2>
           <div class="col-12 col-lg-6 o_setting_box">
               <div class="o_setting_right_pane">
-
                   <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." aria-label="Values set here are company-specific." groups="base.group_multi_company" role="img"/>
-
                   <div class="content-group">
                       <div class="row mt16">
-                          <label string="Product/Service" for="default_product_id" class="col-lg-3 o_light_label"/>
-                          <field name="default_product_id" />
+                          <label string="Terms and Conditions" for="default_terms_conditions" class="col-lg-3 o_light_label"/>
+                          <field name="default_terms_conditions" widget="html" />
                       </div>
                   </div>
               </div>
           </div>
-
-          <div class="col-12 col-lg-6 o_setting_box">
+          <!-- <div class="col-12 col-lg-6 o_setting_box">
               <div class="o_setting_left_pane">
                   <div class="content-group">
                       <div class="row mt16">
@@ -325,9 +321,8 @@
                       </div>
                   </div>
               </div>
-          </div>
-
-          <div class="col-12 col-lg-6 o_setting_box">
+          </div> -->
+          <!-- <div class="col-12 col-lg-6 o_setting_box">
               <div class="o_setting_left_pane">
                   <div class="content-group">
                       <div class="row mt16">
@@ -336,13 +331,11 @@
                       </div>
                   </div>
               </div>
-          </div>
-
-
+          </div> -->
         </div>
     </xpath>
   </field>
-</record> -->
+</record>
 
 
 
@@ -489,13 +482,13 @@
       </field>
   </record>
 
-  <!-- <record id="billing_settings_view_action" model="ir.actions.act_window">
+  <record id="billing_settings_view_action" model="ir.actions.act_window">
       <field name="name">Billing Configuration</field>
       <field name="res_model">res.config.settings</field>
       <field name="view_id" ref="billing_settings_view"/>
       <field name="view_mode">form</field>
       <field name="target">inline</field>
-  </record> -->
+  </record>
 
 
   <menuitem id="mgs_billing_root"
@@ -590,21 +583,29 @@
     groups="group_mgs_billing_admin,group_mgs_billing_user"
       />
 
+  <menuitem
+    id="reporting_menu"
+    name="Reporting"
+    parent="mgs_billing_root"
+    sequence="5"
+    groups="group_mgs_billing_admin,group_mgs_billing_user"
+      />
+
 
   <menuitem
     id="billing_configuration_menu"
     name="Configuration"
     parent="mgs_billing_root"
-    sequence="5"
+    sequence="6"
     groups="group_mgs_billing_admin,group_mgs_billing_user"
       />
-  <!-- <menuitem
+  <menuitem
     id="billing_settings_view_menu"
     name="Settings"
     parent="billing_configuration_menu"
     action="billing_settings_view_action"
     sequence="1"
-      /> -->
+      />
 
 
   <menuitem
@@ -612,7 +613,7 @@
     name="Pricing Plans"
     parent="billing_configuration_menu"
     action="account.product_product_action_sellable"
-    sequence="1"
+    sequence="2"
       />
 
   <menuitem
@@ -620,7 +621,7 @@
     name="Zones"
     parent="billing_configuration_menu"
     action="zone_action"
-    sequence="2"
+    sequence="3"
       />
 
 

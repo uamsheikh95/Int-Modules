@@ -7,11 +7,7 @@ class AccountMove(models.Model):
     property_id = fields.Many2one('mgs_billing.property', string='Property', required=False , track_visibility='onchange')
     meter_reader_id = fields.Many2one('res.partner', string='Meter Reader', domain=[('meter_reader', '=', True)], required=False)
 
-    def _get_previous_amount(self, property_id, partner_id):
-        amount_due = 0
-        for r in self.env['account.move'].search([('property_id', '=', property_id), ('partner_id', '=', partner_id)]):
-            amount_due = amount_due + r.amount_residual
-        return amount_due
+    
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
     _description = 'Outstanding Invoices on Payment'

@@ -97,6 +97,7 @@ class MeterReading(models.Model):
     state = fields.Selection([('draft', 'Not Invoiced'),('invoiced', 'Invoiced'), ('cancel', 'Cancelled')], default='draft')
     meter_reader_id = fields.Many2one('res.partner', string='Meter Reader', domain=[('meter_reader', '=', True)], required=True)
     invoice_is_set = fields.Boolean(compute='_check_if_the_invoice_is_created')
+    terms_conditions = fields.Text('Terms & Conditions')
 
     @api.model
     def create(self, vals):
@@ -282,9 +283,17 @@ class MeterReading(models.Model):
     def action_meter_post(self):
         self.move_id.action_post()
         self.state = 'invoiced'
-# class ResConfigSettings(models.TransientModel):
-#     _inherit = 'res.config.settings'
-#
-#     default_product_id = fields.Many2one('product.product', string='Product', default_model='mgs_billing.meter_reading')
+
+    def _get_previous_amount(self, property_id, partner_id, date):
+        amount_due = 0
+        for r in self.env['account.move'].search([('property_id', '=', property_id), ('partner_id', '=', partner_id), ('date', '<', date)]):
+            amount_due = amount_due + r.amount_residual
+        return amount_due
+
+class ResConfigSettings(models.TransientModel):
+    _inherit = 'res.config.settings'
+
+    default_terms_conditions = fields.Text('Terms & Conditions', default_model='mgs_billing.meter_reading')
+    # default_product_id = fields.Many2one('product.product', string='Product', default_model='mgs_billing.meter_reading')
 #     default_journal_id = fields.Many2one('account.journal', string='Default Invoice Journal', default_model='mgs_billing.meter_reading')
 #     default_price_per_meter = fields.Float(string='Product', default_model='mgs_billing.meter_reading')

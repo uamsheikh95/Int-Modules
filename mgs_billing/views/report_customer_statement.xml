@@ -52,7 +52,7 @@
                          <t t-set="total_balance" t-value="balance_forward+current_balance"/>
                        </t>
 
-                       <tr t-if="date_from" style="color:red;font-style:italic">
+                       <!-- <tr t-if="date_from" style="color:red;font-style:italic">
                            <td colspan="4">
                             <strong>Balance Forward</strong>
                            </td>
@@ -66,9 +66,13 @@
 
                                <strong t-esc="'{0:,.2f}'.format(balance_forward)" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
                            </td>
-                       </tr>
+                       </tr> -->
 
                        <t t-set="prevbal" t-value="0"/>
+
+                       <t t-set="total_invoiced" t-value="0"/>
+                       <t t-set="total_paid" t-value="0"/>
+                       <t t-set="total_due" t-value="0"/>
 
                        <tr t-foreach="lines(partner_id, property_id, date_from, date_to)" t-as="line" style="font-weight:bold">
 
@@ -120,12 +124,15 @@
                            </td>
                            <td class="text-right" nowrap='nowrap'>
                                <span t-esc="'{0:,.2f}'.format(line['amount_total'])" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                               <t t-set="total_invoiced" t-value="total_invoiced + line['amount_total']"/>
                            </td>
                            <td class="text-right" nowrap='nowrap'>
                                <span t-esc="'{0:,.2f}'.format(line['amount_residual'])" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                               <t t-set="total_paid" t-value="total_paid + line['amount_residual']"/>
                            </td>
                            <td class="text-right" nowrap='nowrap'>
                                <span t-esc="'{0:,.2f}'.format(line['amount_paid'])" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                               <t t-set="total_due" t-value="total_due + line['amount_paid']"/>
                            </td>
                            <!-- <td nowrap='nowrap'>
                                <span t-esc="'{0:,.2f}'.format(line['amount_currency'])" /> <span t-esc="line['currency_code']" />
@@ -134,18 +141,18 @@
                          </t>
                        </tr>
 
-                       <tr style="color:#D5D8DC;border-top:1px solid black">
-                         <td class="text-right" colspan="4">
-                           <strong>Balance on Date</strong>
+                       <tr style="color:#D5D8DC;border-top:1px solid black; color: #525050">
+                         <td colspan="4" class="text-right">
+                           <!-- <strong>Balance on Date</strong> -->
                          </td>
-                         <td class="text-right">
-                           <!-- <strong t-esc="'{0:,.2f}'.format(sum_partner(partner_id, property_id, date_from, date_to))" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
-                        --> </td>
-                         <td class="text-right">
-                           <!-- <strong t-esc="'{0:,.2f}'.format(sum_partner(partner_id, property_id, date_from, date_to))" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/> -->
+                         <td class="text-right" style="font-weight: bold">
+                           <strong t-esc="'{0:,.2f}'.format(total_invoiced)" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                        </td>
+                         <td class="text-right"  style="font-weight: bold">
+                           <strong t-esc="'{0:,.2f}'.format(total_paid)" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
                          </td>
-                         <td class="text-right">
-                           <strong t-esc="'{0:,.2f}'.format(current_balance)" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                         <td class="text-right"  style="font-weight: bold">
+                           <strong t-esc="'{0:,.2f}'.format(total_due)" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
                          </td>
                        </tr>
 

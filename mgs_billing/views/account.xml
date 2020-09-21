@@ -34,7 +34,7 @@
       <field name="arch" type="xml">
              <xpath expr="//sheet" position="inside">
                <notebook>
-                 <page string="Outstanding Invoices" attrs="{'invisible': [('partner_id', '=', False)]}">
+                 <page string="Outstanding Invoices" ttrs="{'invisible': [('partner_id', '=', False)]}">
                    <group>
                      <group>
                        <field name="reconcile_by" widget="radio" />
@@ -60,7 +60,7 @@
   </record> -->
 
 
-  <!-- <record id="invoice_filter_search" model="ir.ui.view">
+  <record id="invoice_filter_search" model="ir.ui.view">
       <field name="name">ACCOUNT MOVE SEARCH VIEW INHERIT</field>
       <field name="model">account.move</field>
       <field name="type">search</field>
@@ -75,7 +75,7 @@
              <filter string="Meter Reader" name="zone" context="{'group_by': 'meter_reader_id'}"/>
            </xpath>
       </field>
-  </record> -->
+  </record>
 
 
 
