@@ -1,0 +1,197 @@
+<odoo>
+  <record id="paperformat_fleet_addons" model="report.paperformat">
+    <field name="name">Custom Fleet A5 Reports</field>
+    <field name="default" eval="True"/>
+    <field name="format">A5</field>
+    <field name="page_height">0</field>
+    <field name="page_width">0</field>
+    <field name="orientation">Landscape</field>
+    <field name="margin_top">33</field>
+    <field name="margin_bottom">7</field>
+    <field name="margin_left">7</field>
+    <field name="margin_right">7</field>
+    <field name="header_line" eval="False"/>
+    <field name="header_spacing">25</field>
+    <field name="dpi">90</field>
+ </record>
+
+ <record id="fleet_fuel" model="ir.ui.view">
+     <field name="name">fleet.vehicle.log.fuel.form</field>
+     <field name="model">fleet.vehicle.log.fuel</field>
+     <field name="inherit_id" ref="fleet.fleet_vehicle_log_fuel_view_form" />
+     <field name="type">form</field>
+     <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='liter']" position="before">
+              <field name="fuel_type"  />
+            </xpath>
+     </field>
+ </record>
+
+ <record id="fleet_service" model="ir.ui.view">
+     <field name="name">fleet.vehicle.log.services.form</field>
+     <field name="model">fleet.vehicle.log.services</field>
+     <field name="inherit_id" ref="fleet.fleet_vehicle_log_services_view_form" />
+     <field name="type">form</field>
+     <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='cost_ids']" position="replace">
+              <field name="item_ids" readonly="0" nolabel="1" context="{'default_fleet_service_id':id}">
+                <tree editable="bottom">
+                  <field name = "name" string="Item" />
+                  <field name = "qty" sum="qty"/>
+                  <field name = "fleet_service_id" invisible="1"/>
+                </tree>
+              </field>
+            </xpath>
+     </field>
+ </record>
+
+  <report
+        id="action_fuel_order_report"
+        name="fleet_addons.log_fuel_report"
+        file="fleet_addons.log_fuel_report"
+        model="fleet.vehicle.log.fuel"
+        string="Fuel Order"
+        report_type="qweb-html"
+        paperformat="paperformat_fleet_addons"
+        />
+
+    <template id="log_fuel_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" >
+                      <h2 class="text-center">Fuel Order</h2>
+
+                      <div id="informations" class="row mt2 mb2">
+
+												<div class="col-auto mw-100 mb-2" t-if="doc.date" style="width: 20%; float: left;">
+													<strong>Date:</strong>
+													<p class="m-0" t-esc="doc.date"/>
+												</div>
+												<div class="col-auto mw-100 mb-2" t-if="doc.vendor_id.name" style="width: 20%; float: left;">
+													<strong>Vendor:</strong>
+													<p class="m-0" t-esc="doc.vendor_id.name"/>
+												</div>
+
+
+												<div class="col-auto mw-100 mb-2" t-if="doc.vehicle_id.license_plate" name="due_date" style="width: 20%; float: left;" >
+													<strong>Plate No.:</strong>
+													<p class="m-0" t-esc="doc.vehicle_id.license_plate"/>
+												</div>
+
+												<div class="col-auto mw-100 mb-2" t-if="doc.vehicle_id.driver_id" style="width: 20%; float: left;">
+													<strong>Driver:</strong>
+													<p class="m-0" t-esc="doc.vehicle_id.driver_id"/>
+												</div>
+											</div>
+
+                      <table style="margin-top: 52px; width: 100%;">
+                        <thead>
+                          <tr style="height: 32px">
+                            <td style="padding-left: 10px;">Description</td>
+                            <td style="padding-left: 10px;">Qty</td>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr style="height: 32px">
+                            <td style="padding-left: 10px;"><span t-field="doc.fuel_type" /></td>
+                            <td style="padding-left: 10px;"><span t-field="doc.liter" /></td>
+                          </tr>
+                          <tr style="height: 32px">
+                            <td style="padding-left: 10px;"></td>
+                            <td style="padding-left: 10px;border-top: 3px solid"><strong style="font-size: 14px; font-weight: bold;"><span t-field="doc.liter" /></strong></td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+                      <div id="informations" class="row mt2 mb2" style="margin-top: 40px">
+
+												<div class="col-auto mw-100 mb-2" style="width: 50%; float: left;">
+													<strong>Printed by:</strong>
+													<p class="m-0" t-esc="doc.create_uid.name"/>
+												</div>
+
+                      </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <report
+          id="action_service_order_report"
+          name="fleet_addons.log_services_report"
+          file="fleet_addons.log_services_report"
+          model="fleet.vehicle.log.services"
+          string="Service Order"
+          report_type="qweb-html"
+          paperformat="paperformat_fleet_addons"
+          />
+
+      <template id="log_services_report">
+          <t t-call="web.html_container">
+              <t t-foreach="docs" t-as="doc">
+                  <t t-call="web.external_layout">
+                      <div class="page" >
+                        <h2 class="text-center">Service Order</h2>
+
+                        <div id="informations" class="row mt2 mb2">
+
+  												<div class="col-auto mw-100 mb-2" t-if="doc.date" style="width: 20%; float: left;">
+  													<strong>Date:</strong>
+  													<p class="m-0" t-esc="doc.date"/>
+  												</div>
+  												<div class="col-auto mw-100 mb-2" t-if="doc.vendor_id.name" style="width: 20%; float: left;">
+  													<strong>Vendor:</strong>
+  													<p class="m-0" t-esc="doc.vendor_id.name"/>
+  												</div>
+
+
+  												<div class="col-auto mw-100 mb-2" t-if="doc.vehicle_id.license_plate" name="due_date" style="width: 20%; float: left;" >
+  													<strong>Plate No.:</strong>
+  													<p class="m-0" t-esc="doc.vehicle_id.license_plate"/>
+  												</div>
+
+  												<div class="col-auto mw-100 mb-2" t-if="doc.vehicle_id.driver_id" style="width: 20%; float: left;">
+  													<strong>Driver:</strong>
+  													<p class="m-0" t-esc="doc.vehicle_id.driver_id"/>
+  												</div>
+  											</div>
+
+                        <table style="margin-top: 52px; width: 100%;">
+                          <thead>
+                            <tr style="height: 32px">
+                              <td style="padding-left: 10px;">Description</td>
+                              <td style="padding-left: 10px;">Qty</td>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <t t-set="total_qty" t-value="1"/>
+                            <tr style="height: 32px" t-foreach="doc.item_ids" t-as="item">
+                              <td style="padding-left: 10px;"><span t-field="item.name" /></td>
+                              <td style="padding-left: 10px;"><span t-field="item.qty" /></td>
+                              <t t-set="total_qty" t-value="total_qty + item.qty"/>
+                            </tr>
+                            <tr style="height: 32px">
+                              <td style="padding-left: 10px;"></td>
+                              <td style="padding-left: 10px;border-top: 3px solid"><strong style="font-size: 14px; font-weight: bold;"><span t-esc="total_qty" /></strong></td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                        <div id="informations" class="row mt2 mb2" style="margin-top: 40px">
+
+  												<div class="col-auto mw-100 mb-2" style="width: 50%; float: left;">
+  													<strong>Printed by:</strong>
+  													<p class="m-0" t-esc="doc.create_uid.name"/>
+  												</div>
+
+                        </div>
+                      </div>
+                  </t>
+              </t>
+          </t>
+      </template>
+</odoo>

@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fleet_addons_service_items,fleet_addons.services_items,model_fleet_addons_services_items,account.group_account_manager,1,1,1,1
