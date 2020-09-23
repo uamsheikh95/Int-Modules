@@ -5,7 +5,7 @@
     <field name="format">A5</field>
     <field name="page_height">0</field>
     <field name="page_width">0</field>
-    <field name="orientation">Landscape</field>
+    <field name="orientation">Portrait</field>
     <field name="margin_top">33</field>
     <field name="margin_bottom">7</field>
     <field name="margin_left">7</field>
@@ -22,9 +22,14 @@
      <field name="type">form</field>
      <field name="arch" type="xml">
 
-            <xpath expr="//field[@name='liter']" position="before">
-              <field name="fuel_type"  />
-            </xpath>
+       <xpath expr="//field[@name='date']" position="after">
+           <field name='company_branch_id' invisible="1" groups="odoo_multi_branch.group_multi_branches" widget="selection" options="{'no_create': True}"/>
+       </xpath>
+
+      <xpath expr="//field[@name='liter']" position="before">
+        <field name="fuel_type"  />
+      </xpath>
+
      </field>
  </record>
 
@@ -34,6 +39,10 @@
      <field name="inherit_id" ref="fleet.fleet_vehicle_log_services_view_form" />
      <field name="type">form</field>
      <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='date']" position="after">
+    						<field name='company_branch_id' invisible="1" groups="odoo_multi_branch.group_multi_branches" widget="selection" options="{'no_create': True}"/>
+    				</xpath>
 
             <xpath expr="//field[@name='cost_ids']" position="replace">
               <field name="item_ids" readonly="0" nolabel="1" context="{'default_fleet_service_id':id}">
@@ -99,10 +108,10 @@
                             <td style="padding-left: 10px;"><span t-field="doc.fuel_type" /></td>
                             <td style="padding-left: 10px;"><span t-field="doc.liter" /></td>
                           </tr>
-                          <tr style="height: 32px">
+                          <!-- <tr style="height: 32px">
                             <td style="padding-left: 10px;"></td>
                             <td style="padding-left: 10px;border-top: 3px solid"><strong style="font-size: 14px; font-weight: bold;"><span t-field="doc.liter" /></strong></td>
-                          </tr>
+                          </tr> -->
                         </tbody>
                       </table>
 
@@ -110,7 +119,7 @@
 
 												<div class="col-auto mw-100 mb-2" style="width: 50%; float: left;">
 													<strong>Printed by:</strong>
-													<p class="m-0" t-esc="doc.create_uid.name"/>
+													<p class="m-0" t-esc="user.name"/>
 												</div>
 
                       </div>
@@ -174,10 +183,10 @@
                               <td style="padding-left: 10px;"><span t-field="item.qty" /></td>
                               <t t-set="total_qty" t-value="total_qty + item.qty"/>
                             </tr>
-                            <tr style="height: 32px">
+                            <!-- <tr style="height: 32px">
                               <td style="padding-left: 10px;"></td>
                               <td style="padding-left: 10px;border-top: 3px solid"><strong style="font-size: 14px; font-weight: bold;"><span t-esc="total_qty" /></strong></td>
-                            </tr>
+                            </tr> -->
                           </tbody>
                         </table>
 
@@ -185,7 +194,7 @@
 
   												<div class="col-auto mw-100 mb-2" style="width: 50%; float: left;">
   													<strong>Printed by:</strong>
-  													<p class="m-0" t-esc="doc.create_uid.name"/>
+  													<p class="m-0" t-esc="user.name"/>
   												</div>
 
                         </div>
