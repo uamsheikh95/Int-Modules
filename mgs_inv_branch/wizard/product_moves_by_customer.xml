@@ -4,7 +4,7 @@
 			<field name="name">mgs_inv_branch.pr_moves_customer.form</field>
 			<field name="model">mgs_inv_branch.pr_moves_customer</field>
 			<field name="arch" type="xml">
-			   <form>
+				 <form>
 					<sheet>
 						<group>
 							<group>
@@ -27,7 +27,7 @@
 					<button string="Cancel" special="cancel"/>
 				</footer>
 
-			   </form>
+				 </form>
 			</field>
 		</record>
 
@@ -44,6 +44,6 @@
 		</record>
 
 
-		<menuitem id="menu_pr_moves_customer" name="Product Moves By Customer" parent="mgs_moves_root" action="action_pr_moves_customer_form" sequence="2" />
+		<!--<menuitem id="menu_pr_moves_customer" name="Product Moves By Customer" parent="mgs_moves_root" action="action_pr_moves_customer_form" sequence="2" />-->
 
 </odoo>

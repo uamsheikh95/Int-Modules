@@ -6,4 +6,10 @@ class StockMoveLine(models.Model):
     _inherit = 'stock.move.line'
 
     stored_origin = fields.Char(related='move_id.origin', string='Source', store=True)
-    custom_partner_id = fields.Many2one('res.partner', string="Partner", related="move_id.partner_id.id")
+#     value = fields.Integer()
+#     value2 = fields.Float(compute="_value_pc", store=True)
+#     description = fields.Text()
+#
+#     @api.depends('value')
+#     def _value_pc(self):
+#         self.value2 = float(self.value) / 100

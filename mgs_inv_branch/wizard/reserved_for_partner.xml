@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-		<record id="pr_moves_history_form" model="ir.ui.view">
-			<field name="name">mgs_inv_branch.pr_moves_history.form</field>
-			<field name="model">mgs_inv_branch.pr_moves_history</field>
+		<record id="reserved_for_partner_form" model="ir.ui.view">
+			<field name="name">mgs_inv_branch.reserved_for_partner.form</field>
+			<field name="model">mgs_inv_branch.reserved_for_partner</field>
 			<field name="arch" type="xml">
 				 <form>
 					<sheet>
@@ -37,17 +37,17 @@
 
 
 
-		<record id="action_pr_moves_history_form" model="ir.actions.act_window">
-			<field name="name">Generate Product Moves History Report</field>
-			<field name="res_model">mgs_inv_branch.pr_moves_history</field>
+		<record id="action_reserved_for_partner_form" model="ir.actions.act_window">
+			<field name="name">Generate Reserved for Partner Report</field>
+			<field name="res_model">mgs_inv_branch.reserved_for_partner</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">form</field>
-			<field name="view_id" ref="pr_moves_history_form"/>
+			<field name="view_id" ref="reserved_for_partner_form"/>
 			<field name="target">new</field>
 		</record>
 
 
-		<menuitem id="menu_pr_moves_history" name="Product Moves History" parent="mgs_moves_root" action="action_pr_moves_history_form" sequence="1" />
+		<menuitem id="menu_reserved_for_partner" name="Reserved Items" parent="mgs_moves_root" action="action_reserved_for_partner_form" sequence="1" />
 
 </odoo>

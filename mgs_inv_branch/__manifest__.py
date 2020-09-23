@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'stock', 'odoo_multi_branch'],
+    'depends': ['base', 'stock', 'sale', 'odoo_multi_branch', 'saba_pickings'],
 
     # always loaded
     'data': [
@@ -33,11 +33,15 @@
         'views/report_product_moves_summary.xml',
         'views/report_product_transfer.xml',
         'views/report_product_moves_by_customer.xml',
+        'views/report_backorder_by_item.xml',
+        'views/report_reserved_for_partner.xml',
         'wizard/product_moves_history.xml',
         'wizard/product_moves_location.xml',
         'wizard/product_transfer.xml',
         'wizard/product_moves_summary.xml',
         'wizard/product_moves_by_customer.xml',
+        'wizard/backorder_by_item.xml',
+        'wizard/reserved_for_partner.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<report
+		 id="action_report_backorder_by_item"
+		 name="mgs_inv_branch.backorder_by_item_report"
+		 model="mgs_inv_branch.backorder_by_item_report"
+		 string="Backorders Report"
+		 report_type="qweb-html"
+		 paperformat="paperformat_custom"
+ />
+ <!--  paperformat="paperformat_custom" -->
+
+
+		<template id="backorder_by_item_report">
+				<t t-call="web.html_container">
+					<t t-foreach="docs" t-as="doc">
+						 <t t-call="web.internal_layout" t-lang="en_US">
+								<div class="page">
+										<div class="container" style="font-size:12px;font-family:Arial;margin-top:1px;">
+											<div class="text-center" style="margin-top:4px;font-size: 18px; font-weight: bold;">Back Orders</div>
+
+											<div id="informations" class="row mt2 mb2">
+
+												<div class="col-auto mw-100 mb-2" t-if="order_id" style="width: 20%; float: left;">
+													<strong>Order#:</strong>
+													<p class="m-0" t-esc="order_id"/>
+												</div>
+												<div class="col-auto mw-100 mb-2" t-if="product_id" style="width: 20%; float: left;">
+													<strong>Product:</strong>
+													<p class="m-0" t-esc="product_name"/>
+												</div>
+
+
+												<div class="col-auto mw-100 mb-2" t-if="date_to" name="due_date" style="width: 20%; float: left;" groups="base.group_multi_company">
+													<strong>Company:</strong>
+													<p class="m-0" t-esc="company_name"/>
+												</div>
+
+												<div class="col-auto mw-100 mb-2" t-if="company_branch_id" style="width: 20%; float: left;" groups="odoo_multi_branch.group_multi_branches">
+													<strong>Branch:</strong>
+													<p class="m-0" t-esc="company_branch_name"/>
+												</div>
+											</div>
+
+											<div class="row">
+												<table style="width:100%;">
+													<thead style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
+														<tr style="background-color: #F2F4F4;">
+															<th nowrap="nowrap">Picking Date</th>
+															<th nowrap="nowrap">Delivered Date</th>
+															<th nowrap="nowrap">Product</th>
+															<th nowrap="nowrap">Driver</th>
+															<th nowrap="nowrap">Plate No,</th>
+															<th nowrap="nowrap">From</th>
+															<th nowrap="nowrap">To</th>
+															<th nowrap="nowrap">Reference</th>
+															<th nowrap="nowrap">Source</th>
+															<th nowrap="nowrap">B.O From</th>
+
+															<th style="text-align:right" nowrap="nowrap">Balance Qty</th>
+															<th style="text-align:right" nowrap="nowrap">Qty out</th>
+
+															<!-- <th nowrap="nowrap" style="text-align:center">UOM</th>-->
+															 <th style="text-align:center" nowrap="nowrap">Status</th>
+
+														</tr>
+													</thead>
+
+													<tbody>
+
+
+															<t t-set="balance" t-value="ordered_qty(order_id, product_id)"/>
+
+
+															<tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd" t-foreach="lines(product_id, company_branch_id, stock_location_ids, order_id)" t-as="line">
+																	<td nowrap="nowrap">
+																		<span t-esc="line['date']"/>
+																	</td>
+
+																	<td nowrap="nowrap">
+																		<span t-esc="line['date_done']"/>
+																	</td>
+
+																	<td><t t-if="line['default_code']" >[<span t-esc="line['default_code']"/>]</t><span t-esc="line['product_id']"/></td>
+																	<td><span t-esc="line['driver_id']"/></td>
+																	<td><span t-esc="line['plate_no']"/></td>
+																	<td><span t-esc="line['location_id']"/></td>
+																	<td><span t-esc="line['location_dest_id']"/></td>
+																	<td><span t-esc="line['picking_id']"/></td>
+																	<td><span t-esc="line['stored_origin']"/></td>
+																	<td><span t-esc="line['backorder_id']"/></td>
+
+																	 <td style="text-align:right">
+
+																				<span t-esc="'{0:,.2f}'.format(balance)" />
+																				<t t-set="balance" t-value="balance - line['qty_done']"/>
+
+																	</td>
+
+																	<td style="text-align:right">
+																			<span t-esc="line['qty_done']" t-if="line['qty_done']"/>
+																	</td>
+
+																<td style="text-align: center;"><span t-esc="line['state']"/></td>
+															</tr>
+
+															<tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd" >
+																<td colspan="10"></td>
+																<td style="text-align: right; border-top: 1px solid #656464;"><span t-esc="'{0:,.2f}'.format(balance)" style="font-weight: bold" /></td>
+																<td colspan="2"></td>
+															</tr>
+
+													</tbody>
+												</table>
+											</div> <!--tow-->
+
+
+										</div> <!--container-->
+								</div> <!--page-->
+							</t> <!--web.external_layout-->
+						</t>
+				</t> <!--web.html_container-->
+		</template>
+</odoo>

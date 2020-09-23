@@ -54,6 +54,6 @@
 		</record>
 
 
-		<menuitem id="menu_product_transfer" name="Product Tranfers" parent="mgs_moves_root" action="action_product_transfer_form" sequence="11" />
+		<!-- <menuitem id="menu_product_transfer" name="Product Tranfers" parent="mgs_moves_root" action="action_product_transfer_form" sequence="11" /> -->
 
 </odoo>

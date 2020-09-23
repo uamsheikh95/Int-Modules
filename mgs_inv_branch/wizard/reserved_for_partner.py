@@ -1,15 +1,15 @@
 from datetime import datetime, timedelta, date
 from odoo import models, fields, api
 
-class ProductMovesHistory(models.TransientModel):
-    _name = 'mgs_inv_branch.pr_moves_history'
-    _description = 'Product Moves History'
+class ReservedForCustomerHistory(models.TransientModel):
+    _name = 'mgs_inv_branch.reserved_for_partner'
+    _description = 'Reserved for customer History'
     stock_location_ids = fields.Many2many('stock.location', domain=[('usage','=','internal')],required=True)
     partner_id = fields.Many2one('res.partner', string="Partner")
     product_id = fields.Many2one('product.product', required=True)
     date_from = fields.Datetime('From', default=datetime.today().replace(day=1, hour=00, minute=00, second=00))
     date_to = fields.Datetime('To', default=fields.Datetime.now)
-    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env['res.company']._company_default_get('mgs_inv_branch.pr_moves_history'))
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env['res.company']._company_default_get('mgs_inv_branch.reserved_for_partner'))
     view = fields.Selection([ ('all', 'All Products'),('active', 'Active Products'), ('inactive', 'Inactive Products')], string='View', default='all')
     include_reserved = fields.Boolean(default=False, string="Include Reserved")
     show_reserved_only = fields.Boolean(default=False, string="Show Reserved Only")
@@ -64,9 +64,9 @@ class ProductMovesHistory(models.TransientModel):
         return self.env.ref('mgs_inv_branch.action_report_product_moves').report_action(self, data=data)
 
 
-class ProductMovesHistoryReport(models.AbstractModel):
-    _name = 'report.mgs_inv_branch.pr_moves_history_report'
-    _description = 'Product Moves History Report'
+class ReservedForCustomerHistoryReport(models.AbstractModel):
+    _name = 'report.mgs_inv_branch.reserved_for_partner_report'
+    _description = 'Reserved for customer History Report'
 
     def _lines(self, product_id, date_from, date_to, company_branch_id,stock_location_ids,partner_id,include_reserved,show_reserved_only,order_id):
         full_move = []
