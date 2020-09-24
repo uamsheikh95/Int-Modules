@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<report
+		 id="action_report_product_moves"
+		 name="mgs_inv_branch.current_stock_report"
+		 model="mgs_inv_branch.current_stock_report"
+		 string="Current Stock Report"
+		 report_type="qweb-html"
+		 paperformat="paperformat_custom"
+ />
+ <!--  paperformat="paperformat_custom" -->
+
+
+		<template id="current_stock_report">
+				<t t-call="web.html_container">
+					<t t-foreach="docs" t-as="doc">
+						 <t t-call="web.internal_layout" t-lang="en_US">
+								<div class="page">
+										<div class="container" style="font-size:12px;font-family:Arial;margin-top:1px;">
+											<div class="text-center" style="margin-top:4px;font-size: 18px; font-weight: bold;">Current Stock Report</div>
+
+											<div id="informations" class="row mt2 mb2">
+                        <div class="col-auto mw-100 mb-2" t-if="product_id" style="width: 20%; float: left;" groups="base.group_multi_company">
+													<strong>Product:</strong>
+													<p class="m-0" t-esc="product_id"/>
+												</div>
+
+                        <!-- <div class="col-auto mw-100 mb-2" t-if="product_id" style="width: 20%; float: left;" groups="base.group_multi_company">
+													<strong>Location(s):</strong>
+													<t t-foreach="stock_location_ids" t-as="location">
+                            <span t-esc="location.name" />,
+                          </t>
+												</div> -->
+
+												<div class="col-auto mw-100 mb-2" t-if="company_id" style="width: 20%; float: left;" groups="base.group_multi_company">
+													<strong>Company:</strong>
+													<p class="m-0" t-esc="company_id"/>
+												</div>
+
+												<div class="col-auto mw-100 mb-2" t-if="company_branch_id" style="width: 20%; float: left;" groups="odoo_multi_branch.group_multi_branches">
+													<strong>Branch:</strong>
+													<p class="m-0" t-esc="company_branch_id"/>
+												</div>
+											</div>
+
+											<div class="row">
+												<table style="width:100%;">
+													<thead style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
+														<tr style="background-color: #F2F4F4;">
+                              <th style="width: 7%"></th>
+                              <th style="width: 7%"></th>
+															<th style="width: 76%" nowrap="nowrap">Item</th>
+															<th style="text-align:right;width: 10%" nowrap="nowrap">Qty</th>
+														</tr>
+													</thead>
+
+													<tbody>
+														<t t-set="total_qty_all" t-value="0" />
+
+														<t t-foreach="category_list" t-as="category">
+                              <t t-set="total_qty_categ" t-value="0" />
+															<tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
+                                <td style="width: 7%"></td>
+																<td colspan="3"><p style="font-weight:bold;margin-bottom:0;font-size: 16px;color:black"><span t-esc="category.name"/></p></td>
+															</tr> <!--Category Name-->
+
+                              <t t-foreach="product_list" t-as="product">
+                                <t t-set="total_qty_product" t-value="0" />
+                                <t t-if="product.categ_id.id == category.id">
+
+                                  <t t-foreach="lines" t-as="line">
+                                    <t t-if="line.product_id.id == product.id">
+                                      <t t-set="total_qty_product" t-value="total_qty_product + line.quantity" />
+                                    </t>
+                                  </t>
+
+                                  <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
+                                    <td style="width: 7%"></td>
+                                    <td style="width: 7%"></td>
+    																<td colspan="1"><p style="font-weight:bold;margin-bottom:0;font-size: 16px;color:black">
+                                      <span t-if="product.default_code">[<span t-esc="product.default_code"/>]</span><span t-esc="product.name"/></p>
+                                    </td>
+                                    <td style="text-align:right;width: 10%" nowrap="nowrap">
+                                      <span t-esc="total_qty_product"/>
+                                      <t t-set="total_qty_categ" t-value="total_qty_categ + total_qty_product" />
+                                    </td>
+    															</tr> <!--Product Name-->
+                                </t>
+                              </t> <!-- product_list -->
+                              <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
+                                <td style="width: 7%"></td>
+																<td colspan="2"><p style="font-weight:bold;margin-bottom:0;font-size: 16px;color:black"><span t-esc="category.name"/></p></td>
+                                <td style="text-align:right;width: 10%" nowrap="nowrap">
+                                  <span t-esc="total_qty_categ"/>
+                                  <t t-set="total_qty_all" t-value="total_qty_all + total_qty_categ" />
+                                </td>
+															</tr> <!--Category Name-->
+                            </t> <!-- category_list -->
+                            <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
+                              <td style="width: 7%"></td>
+                              <td colspan="2"></td>
+                              <td style="text-align:right;width: 10%" nowrap="nowrap">
+                                <span t-esc="total_qty_all"/>
+                              </td>
+                            </tr>
+													</tbody>
+												</table>
+											</div> <!--tow-->
+
+
+										</div> <!--container-->
+								</div> <!--page-->
+							</t> <!--web.external_layout-->
+						</t>
+				</t> <!--web.html_container-->
+		</template>
+</odoo>
