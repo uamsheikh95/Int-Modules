@@ -23,87 +23,107 @@
 											<div id="informations" class="row mt2 mb2">
                         <div class="col-auto mw-100 mb-2" t-if="product_id" style="width: 20%; float: left;" groups="base.group_multi_company">
 													<strong>Product:</strong>
-													<p class="m-0" t-esc="product_id"/>
+													<p class="m-0" t-esc="product_name"/>
 												</div>
 
-                        <!-- <div class="col-auto mw-100 mb-2" t-if="product_id" style="width: 20%; float: left;" groups="base.group_multi_company">
-													<strong>Location(s):</strong>
-													<t t-foreach="stock_location_ids" t-as="location">
-                            <span t-esc="location.name" />,
+												<div class="col-auto mw-100 mb-2" t-if="categ_id" style="width: 20%; float: left;" groups="base.group_multi_company">
+													<strong>Category:</strong>
+													<p class="m-0" t-esc="categ_name"/>
+												</div>
+
+                        <div class="col-auto mw-100 mb-2" t-if="stock_location_ids" style="width: 20%; float: left;">
+													<strong>Location:</strong>
+													<t t-foreach="location_ids" t-as="location">
+                            <span t-esc="location.name" /><br/>
                           </t>
-												</div> -->
+												</div>
 
 												<div class="col-auto mw-100 mb-2" t-if="company_id" style="width: 20%; float: left;" groups="base.group_multi_company">
 													<strong>Company:</strong>
 													<p class="m-0" t-esc="company_id"/>
 												</div>
 
-												<div class="col-auto mw-100 mb-2" t-if="company_branch_id" style="width: 20%; float: left;" groups="odoo_multi_branch.group_multi_branches">
-													<strong>Branch:</strong>
-													<p class="m-0" t-esc="company_branch_id"/>
-												</div>
 											</div>
 
 											<div class="row">
 												<table style="width:100%;">
-													<thead style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
-														<tr style="background-color: #F2F4F4;">
-                              <th style="width: 7%"></th>
-                              <th style="width: 7%"></th>
-															<th style="width: 76%" nowrap="nowrap">Item</th>
-															<th style="text-align:right;width: 10%" nowrap="nowrap">Qty</th>
+													<thead style="border-bottom:1px solid #000000;border-top:1px solid #000000">
+														<tr style="font-size: 17px; border-top: 2px solid #000000; border-bottom: 2px solid #000000">
+                              <th style="width: 3%"></th>
+															<th style="width: 3%"></th>
+															<th style="width: 80%" nowrap="nowrap">Item</th>
+															<th style="text-align:right;width: 14%" nowrap="nowrap">Qty</th>
 														</tr>
 													</thead>
 
 													<tbody>
 														<t t-set="total_qty_all" t-value="0" />
+														<t t-foreach="location_ids" t-as="location">
+															<t t-set="total_qty_location" t-value="0" />
+															<tr style="border-bottom:1px solid #000000;border-top:1px solid #000000">
+																<td colspan="4">
+																	<p style="font-weight:bold;margin-bottom:0;font-size: 15px;color:blue"><span t-esc="location.name"/></p>
+																</td>
+															</tr>
 
-														<t t-foreach="category_list" t-as="category">
-                              <t t-set="total_qty_categ" t-value="0" />
-															<tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
-                                <td style="width: 7%"></td>
-																<td colspan="3"><p style="font-weight:bold;margin-bottom:0;font-size: 16px;color:black"><span t-esc="category.name"/></p></td>
-															</tr> <!--Category Name-->
+															<t t-foreach="category_list(categ_id, product_id, location.id, company_id)" t-as="category">
+															<t t-set="total_qty_category" t-value="0" />
+																<tr style="border-bottom:1px solid #000000;border-top:1px solid #000000">
+																	<td></td>
+																	<td colspan="3">
+																		<p style="font-weight:bold;margin-bottom:0;font-size: 14px;color:red"><span t-esc="category.name"/></p>
+																	</td>
+																</tr>
 
-                              <t t-foreach="product_list" t-as="product">
-                                <t t-set="total_qty_product" t-value="0" />
-                                <t t-if="product.categ_id.id == category.id">
+																<t t-foreach="product_list(product_id, category.id, location.id, company_id)" t-as="product">
 
-                                  <t t-foreach="lines" t-as="line">
-                                    <t t-if="line.product_id.id == product.id">
-                                      <t t-set="total_qty_product" t-value="total_qty_product + line.quantity" />
-                                    </t>
+																	<t t-set="total_qty_product" t-value="0"/>
+
+																	<t t-foreach="lines(product.id, location.id, company_id)" t-as="line">
+                                    <t t-set="total_qty_product" t-value="total_qty_product + line.quantity" />
                                   </t>
 
-                                  <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
-                                    <td style="width: 7%"></td>
-                                    <td style="width: 7%"></td>
-    																<td colspan="1"><p style="font-weight:bold;margin-bottom:0;font-size: 16px;color:black">
-                                      <span t-if="product.default_code">[<span t-esc="product.default_code"/>]</span><span t-esc="product.name"/></p>
-                                    </td>
-                                    <td style="text-align:right;width: 10%" nowrap="nowrap">
-                                      <span t-esc="total_qty_product"/>
-                                      <t t-set="total_qty_categ" t-value="total_qty_categ + total_qty_product" />
-                                    </td>
-    															</tr> <!--Product Name-->
-                                </t>
-                              </t> <!-- product_list -->
-                              <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
-                                <td style="width: 7%"></td>
-																<td colspan="2"><p style="font-weight:bold;margin-bottom:0;font-size: 16px;color:black"><span t-esc="category.name"/></p></td>
-                                <td style="text-align:right;width: 10%" nowrap="nowrap">
-                                  <span t-esc="total_qty_categ"/>
-                                  <t t-set="total_qty_all" t-value="total_qty_all + total_qty_categ" />
-                                </td>
-															</tr> <!--Category Name-->
-                            </t> <!-- category_list -->
-                            <tr style="border-bottom:1px solid #dddddd;border-top:1px solid #dddddd">
-                              <td style="width: 7%"></td>
-                              <td colspan="2"></td>
-                              <td style="text-align:right;width: 10%" nowrap="nowrap">
-                                <span t-esc="total_qty_all"/>
-                              </td>
-                            </tr>
+																	<tr style="border-bottom:1px solid #000000;border-top:1px solid #000000;font-size: 13px">
+	                                    <td></td>
+	                                    <td></td>
+	    																<td colspan="1"><p style="font-weight:bold;margin-bottom:0;color:black">
+	                                      <span t-if="product.default_code">[<span t-esc="product.default_code"/>]</span><span t-esc="product.name"/></p>
+	                                    </td>
+	                                    <td class="text-right" style="text-align:right;width: 10%" nowrap="nowrap">
+	                                      <p style="font-weight:bold;margin-bottom:0;color:black" t-esc="'{0:,.2f}'.format(total_qty_product)"/>
+	                                      <t t-set="total_qty_category" t-value="total_qty_category + total_qty_product" />
+	                                    </td>
+																	</tr> <!--Product Name-->
+
+																</t>
+
+																<tr style="border-bottom:1px solid #000000;border-top:1px solid #000000">
+																	<td></td>
+																	<td colspan="2">
+																		<p style="font-weight:bold;margin-bottom:0;font-size: 14px;color:red">Total <span t-esc="category.name"/></p>
+																	</td>
+																	<td class="text-right" style="border-top: 1px solid #000000"><p t-esc="'{0:,.2f}'.format(total_qty_category)" style="font-weight:bold;margin-bottom:0;font-size: 15px;color:red"/></td>
+																	<t t-set="total_qty_location" t-value="total_qty_location + total_qty_category" />
+																</tr>
+
+															</t>
+
+															<tr style="border-bottom:1px solid #000000;border-top:1px solid #000000">
+																<td colspan="3">
+																	<p style="font-weight:bold;margin-bottom:0;font-size: 15px;color:blue">Total <span t-esc="location.name"/></p>
+																</td>
+																<td class="text-right" style="border-top: 1px solid #000000"><p t-esc="'{0:,.2f}'.format(total_qty_location)" style="font-weight:bold;margin-bottom:0;font-size: 16px;color:blue"/></td>
+																<t t-set="total_qty_all" t-value="total_qty_all + total_qty_location" />
+															</tr>
+
+														</t>
+
+														<tr style="border-bottom:1px solid #000000;border-top:1px solid #000000">
+															<td colspan="3">
+																<p style="font-weight:bold;margin-bottom:0;font-size: 16px;color:000000"></p>
+															</td>
+															<td class="text-right" style="border-top: 2px solid #000000"><p t-esc="'{0:,.2f}'.format(total_qty_all)" style="font-weight:bold;margin-bottom:0;font-size: 16px;color:#000000"/></td>
+														</tr>
 													</tbody>
 												</table>
 											</div> <!--tow-->
