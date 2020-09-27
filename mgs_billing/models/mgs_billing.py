@@ -28,6 +28,8 @@ class Zone(models.Model):
         if self.env['mgs_billing.property'].search([('zone_id', '=', self._origin.id)]):
             raise UserError("You cannot delete a Zone which has related Property(ies).")
 
+        return super(Zone, self).unlink()
+
 
 class Property(models.Model):
     _name = 'mgs_billing.property'
@@ -48,6 +50,7 @@ class Property(models.Model):
     def unlink(self):
         if self.house_tenant_ids:
             raise UserError("You cannot delete a Property which has related House Tenant(s).")
+        return super(Property, self).unlink()
 
 class HouseTenant(models.Model):
     _name = 'mgs_billing.house_tenant'
@@ -80,9 +83,10 @@ class MeterReading(models.Model):
     current_reading = fields.Integer(string="Current Reading", required=True)
     last_reading = fields.Integer(string="Last Reading", readonly=True, compute="_compute_last_reading")
     difference = fields.Integer(string='Difference', compute='_compute_difference')
-    price_per_meter = fields.Float(string='Price Per Meter', required=True)
+    price_per_meter = fields.Float(string='Price Per Meter', readonly=True)
     total = fields.Monetary(string='Total', compute='_compute_total')
     property_id = fields.Many2one('mgs_billing.property', string='Property', required=True , track_visibility='onchange')
+    current_tenant_id = fields.Many2one('mgs_billing.house_tenant', string='Current Tenant', readonly=True , track_visibility='onchange')
     move_id = fields.Many2one('account.move', string='Invoice')
     partner_id = fields.Many2one('res.partner', string="Partner")
     journal_id = fields.Many2one('account.journal', string='Journal')
@@ -95,14 +99,22 @@ class MeterReading(models.Model):
     residual = fields.Monetary(string="Amount Due", related='move_id.amount_residual')
     amount_paid = fields.Monetary(string='Amount Paid', compute='_compute_amount_paid')
     state = fields.Selection([('draft', 'Not Invoiced'),('invoiced', 'Invoiced'), ('cancel', 'Cancelled')], default='draft')
-    meter_reader_id = fields.Many2one('res.partner', string='Meter Reader', domain=[('meter_reader', '=', True)], required=True)
+    meter_reader_id = fields.Many2one('res.partner', string='Meter Reader', domain=[('meter_reader', '=', True)])
     invoice_is_set = fields.Boolean(compute='_check_if_the_invoice_is_created')
     terms_conditions = fields.Text('Terms & Conditions')
+    auto_generate_invoice = fields.Boolean('Auto Generate Invoice')
+    if_is_less_than = fields.Float('If is Less Than', default_model='mgs_billing.meter_reading')
+    make_the_price = fields.Float('Make the Price', default_model='mgs_billing.meter_reading')
 
     @api.model
     def create(self, vals):
         vals['name'] = self.env['ir.sequence'].next_by_code('mgs_billing.meter_reading')
         result = super(MeterReading, self).create(vals)
+
+        if vals['auto_generate_invoice'] == True:
+            result.action_invoice_create()
+            if result.move_id:
+                result.move_id.action_post()
         return result
 
     @api.depends('move_id')
@@ -122,6 +134,7 @@ class MeterReading(models.Model):
         for r in self:
             if r.move_id or r.state == 'invoiced':
                 raise UserError("You cannot delete an entry which has been posted once.")
+        return super(MeterReading, self).unlink()
 
 
     @api.depends('property_id')
@@ -165,6 +178,7 @@ class MeterReading(models.Model):
                 for tenant in r.property_id.house_tenant_ids:
                     if tenant.current:
                         has_current_tenant = True
+                        r.current_tenant_id = tenant.id
 
                 if not has_current_tenant:
                     raise ValidationError('''There is no current Tenant for this property!
@@ -204,10 +218,16 @@ class MeterReading(models.Model):
 
             journal_id = default_journal_id
 
-            date = r.date
+
             price_per_meter = r.price_per_meter
-            product_id = r.property_id.product_id
             difference = r.difference
+
+            if difference < r.if_is_less_than:
+                difference = 1
+                price_per_meter = r.make_the_price
+
+            product_id = r.property_id.product_id
+            date = r.date
             account_id = (r.property_id.product_id.property_account_income_id or r.property_id.product_id.categ_id.property_account_income_categ_id).id
             property_id = r.property_id.id
             meter_reader_id = r.meter_reader_id.id
@@ -294,6 +314,9 @@ class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
     default_terms_conditions = fields.Text('Terms & Conditions', default_model='mgs_billing.meter_reading')
+    default_auto_generate_invoice = fields.Boolean('Auto Invoice', default_model='mgs_billing.meter_reading')
+    default_if_is_less_than = fields.Float('If is Less Than', default_model='mgs_billing.meter_reading')
+    default_make_the_price = fields.Float('Make the Price', default_model='mgs_billing.meter_reading')
     # default_product_id = fields.Many2one('product.product', string='Product', default_model='mgs_billing.meter_reading')
 #     default_journal_id = fields.Many2one('account.journal', string='Default Invoice Journal', default_model='mgs_billing.meter_reading')
 #     default_price_per_meter = fields.Float(string='Product', default_model='mgs_billing.meter_reading')
