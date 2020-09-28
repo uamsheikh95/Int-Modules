@@ -9,7 +9,7 @@
                     <p>This Wizard will Create Purchase Order for Selected Vendors / Suppliers.</p>
                     <notebook>
                         <page string="Vendors / Suppliers">
-                            <field name="supplier_ids" domain="[('supplier','=',True)]"></field>
+                            <field name="supplier_ids"></field> <!-- domain="[('supplier','=',True)]" -->
                         </page>
                         <page string="Select Products">
                             <field name="product_line_ids" nolabel="1">

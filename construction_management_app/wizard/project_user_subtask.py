@@ -23,7 +23,8 @@ class ProjectUserSubtask(models.TransientModel):
             copy_task_vals.description = subtask.description
             copy_task_vals.user_id = subtask.user_id
             copy_task_vals.name = subtask.name
-            copy_task_vals.parent_task_id = task.id
+            # copy_task_vals.parent_task_id = task.id
+            copy_task_vals.project_id = task.project_id.subtask_project_id.id
             subtask_ids.append(copy_task_vals.id)
         if subtask_ids:
             result = self.env.ref('construction_management_app.action_view_task_subtask')
