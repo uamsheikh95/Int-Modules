@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'stock'],
+    'depends': ['base', 'stock', 'sale'],
 
     # always loaded
     'data': [
@@ -29,13 +29,9 @@
         'views/report_template.xml',
         'wizard/mgs_inv_menu_root.xml',
         'views/report_product_moves_history.xml',
-        'views/report_moves_location.xml',
-        'views/report_product_moves_summary.xml',
-        'views/report_product_transfer.xml',
+        'views/report_current_stock.xml',
         'wizard/product_moves_history.xml',
-        'wizard/product_moves_location.xml',
-        'wizard/product_transfer.xml',
-        'wizard/product_moves_summary.xml'
+        'wizard/current_stock.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
