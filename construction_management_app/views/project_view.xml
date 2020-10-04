@@ -1,11 +1,18 @@
 <odoo>
     <data>
-    
+
     <record id="edit_project_inherit_construction" model="ir.ui.view">
         <field name="name">project.project.form</field>
         <field name="model">project.project</field>
         <field name="inherit_id" ref="project.edit_project"/>
         <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button type="object"  name="bill_create" class="oe_stat_button" icon="fa-pencil-square-o">
+                    <field name="bill_count" widget="statinfo" string="Bills" />
+                    <field name='bill_ids' invisible="1"/>
+                </button>
+            </xpath>
+
             <xpath expr="//form/sheet/notebook" position="inside">
                 <page name="construction_sites" string="Construction Site Detail">
                     <group>
@@ -25,7 +32,7 @@
             </xpath>
         </field>
     </record>
-    
+
     <record id="action_view_task_subtask" model="ir.actions.act_window">
             <field name="name">Tasks</field>
             <field name="res_model">project.task</field>
@@ -37,19 +44,19 @@
                 </p>
             </field>
     </record>
-    
+
     <record id="open_view_task_list_kanban_subtask" model="ir.actions.act_window.view">
         <field name="sequence" eval="0"/>
         <field name="view_mode">kanban</field>
         <field name="act_window_id" ref="action_view_task_subtask"/>
     </record>
-    
+
     <record id="open_view_task_list_tree_subtask" model="ir.actions.act_window.view">
         <field name="sequence" eval="1"/>
         <field name="view_mode">tree</field>
         <field name="act_window_id" ref="action_view_task_subtask"/>
     </record>
-    
+
     <record model="ir.ui.view" id="view_task_form2_inherit_subtask">
         <field name="name">project.task.view</field>
         <field name="model">project.task</field>
@@ -69,7 +76,7 @@
             </field>
         </field>
      </record>
-     
+
      <record model="ir.ui.view" id="view_task_search_form_inherit_parenttask">
         <field name="name">project.task.view</field>
         <field name="model">project.task</field>
@@ -83,6 +90,6 @@
              </xpath>
         </field>
      </record>
-    
+
     </data>
 </odoo>

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from . import account
 from . import stock_picking
 from . import task
 from . import project
